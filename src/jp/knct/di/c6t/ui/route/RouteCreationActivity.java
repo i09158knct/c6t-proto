@@ -30,8 +30,8 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_route_creation);
 
 		setOnClickListeners();
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(
-				R.id.route_creation_map)).getMap();
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.route_creation_map))
+				.getMap();
 		mMap.setMyLocationEnabled(true);
 
 		updateMap();
@@ -39,13 +39,18 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 
 	private MarkerOptions createStartPointMarker(Route route) {
 		LatLng startLocation = route.getStartLocation();
-		return new MarkerOptions().position(startLocation).title("スタートポイント");
+		return new MarkerOptions()
+				.position(startLocation)
+				.title("スタートポイント");
 	}
 
 	private MarkerOptions createQuestPointMarker(Quest quest, int questNumber) {
 		LatLng location = quest.getLocation();
 		String title = "クエストポイント" + questNumber + ": " + quest.getTitle();
-		return new MarkerOptions().position(location).title(title).snippet(quest.getMission());
+		return new MarkerOptions()
+				.position(location)
+				.title(title)
+				.snippet(quest.getMission()); // TODO
 	}
 
 	private void updateMap() {
