@@ -65,21 +65,25 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST) {
-			if (resultCode == RESULT_CANCELED) {/* do nothing */}
-			else if (resultCode == RESULT_OK) {
-				Quest quest = data.getParcelableExtra(IntentData.EXTRA_KEY_BASE_QUEST);
-				mRoute.addQuest(quest);
+		if (requestCode == RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST &&
+				resultCode == RESULT_OK) {
+			Quest quest = data.getParcelableExtra(IntentData.EXTRA_KEY_BASE_QUEST);
+			mRoute.addQuest(quest);
 
-				if (mRoute.getQuests().size() == 5) {
-					Toast.makeText(this, "I—¹", 0).show();
-					// TODO
-				}
-				else if (mRoute.getQuests().size() > 5) {
-					// TODO
-
-				}
+			if (mRoute.getQuests().size() == 5) {
+				Toast.makeText(this, "I—¹", 0).show();
+				// TODO
 			}
+			else if (mRoute.getQuests().size() > 5) {
+				// TODO
+
+			}
+		}
+
+		if (requestCode == RouteCreationDetailFormActivity.REQUEST_CODE_EDIT_ROUTE_DETAIL &&
+				resultCode == RESULT_OK) {
+			finish();
+			return;
 		}
 
 		updateMap();
@@ -123,7 +127,7 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 		case R.id.route_creation_finish:
 			intent = new Intent(this, RouteCreationDetailFormActivity.class)
 					.putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
-			startActivity(intent);
+			startActivityForResult(intent, RouteCreationDetailFormActivity.REQUEST_CODE_EDIT_ROUTE_DETAIL);
 			break;
 
 		// case R.id.route_creation_debug_route_creation_updatequests:
