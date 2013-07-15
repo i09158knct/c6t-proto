@@ -33,8 +33,9 @@ public class Route implements Parcelable {
 	private String name;
 	private String description;
 	private List<Quest> quests;
-	private double latitude;
-	private double longitude;
+	private double latitude = INITIAL_LAT_LNG_VALUE;
+	private double longitude = INITIAL_LAT_LNG_VALUE;
+	private static double INITIAL_LAT_LNG_VALUE = 0xfffff;
 
 	public Route(LatLng startLocation, String name, String description, List<Quest> quests) {
 		this.setStartLocation(startLocation);
@@ -64,12 +65,21 @@ public class Route implements Parcelable {
 	}
 
 	public LatLng getStartLocation() {
+		if (latitude == INITIAL_LAT_LNG_VALUE || longitude == INITIAL_LAT_LNG_VALUE) {
+			return null;
+		}
 		return new LatLng(latitude, longitude);
 	}
 
 	public void setStartLocation(LatLng startLocation) {
-		latitude = startLocation.latitude;
-		longitude = startLocation.longitude;
+		if (startLocation == null) {
+			latitude = INITIAL_LAT_LNG_VALUE;
+			longitude = INITIAL_LAT_LNG_VALUE;
+		}
+		else {
+			latitude = startLocation.latitude;
+			longitude = startLocation.longitude;
+		}
 	}
 
 	public List<Quest> getQuests() {
