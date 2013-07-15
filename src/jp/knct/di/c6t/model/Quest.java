@@ -7,11 +7,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Quest {
+public class Quest implements Parcelable {
 
 	private static final String IMAGE = "image";
 	private static final String MISSION = "mission";
@@ -60,11 +62,12 @@ public class Quest {
 		return new Quest(location, title, pose, mission, image);
 	}
 
-	private LatLng location;
 	private String title;
 	private String pose;
 	private String mission;
 	private String image;
+	private double latitude;
+	private double longitude;
 
 	public Quest(LatLng location, String title, String pose, String mission, String image) {
 		this.setLocation(location);
@@ -87,11 +90,12 @@ public class Quest {
 	}
 
 	public LatLng getLocation() {
-		return location;
+		return new LatLng(latitude, longitude);
 	}
 
 	public void setLocation(LatLng location) {
-		this.location = location;
+		latitude = location.latitude;
+		longitude = location.longitude;
 	}
 
 	public String getPose() {
@@ -135,5 +139,41 @@ public class Quest {
 	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(getTitle());
+		dest.writeDouble(getLocation().latitude);
+		dest.writeDouble(getLocation().longitude);
+		dest.writeString(getPose());
+		dest.writeString(getMission());
+		dest.writeString(getImage());
+	};
+
+	public static final Parcelable.Creator<Quest> CREATOR = new Parcelable.Creator<Quest>() {
+		@Override
+		public Quest createFromParcel(Parcel source) {
+			String title = source.readString();
+			Double latitude = source.readDouble();
+			Double longitude = source.readDouble();
+			String pose = source.readString();
+			String mission = source.readString();
+			String image = source.readString();
+			LatLng location = new LatLng(latitude, longitude);
+			return new Quest(location, title, pose, mission, image);
+		}
+
+		@Override
+		public Quest[] newArray(int size) {
+			// TODO Auto-generated method stub
+			return new Quest[size];
+		}
 	};
 }
