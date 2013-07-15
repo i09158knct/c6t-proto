@@ -2,9 +2,6 @@ package jp.knct.di.c6t.ui.route;
 
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
-
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,28 +24,12 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_route_creation_quest_form);
 
-		setQuestNumber(getIntent());
-
-		try {
-			Quest quest = extractQuestFromIntent(getIntent());
-			mQuestLocation = quest.getLocation();
-			putQuestDataIntoEditForms(quest);
-		}
-		catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mQuestNumber = getIntent().getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
+		Quest quest = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_BASE_QUEST);
+		mQuestLocation = quest.getLocation();
+		putQuestDataIntoEditForms(quest);
 
 		setOnClickListeners();
-	}
-
-	private void setQuestNumber(Intent intent) {
-		mQuestNumber = intent.getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, 1);
-	}
-
-	private static Quest extractQuestFromIntent(Intent intent) throws JSONException {
-		String questJSON = intent.getStringExtra(IntentData.EXTRA_KEY_JSON_BASE_QUEST);
-		return Quest.parseJSONString(questJSON);
 	}
 
 	private Quest createQuestFromEditForms() {
@@ -102,9 +83,8 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		case R.id.route_creation_quest_form_ok:
 			Quest quest = createQuestFromEditForms();
 			if (quest.isValid()) {
-				String json = quest.toJSON().toString();
 				Intent intent = new Intent()
-						.putExtra(IntentData.EXTRA_KEY_JSON_BASE_QUEST, json)
+						.putExtra(IntentData.EXTRA_KEY_BASE_QUEST, quest)
 						.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mQuestNumber);
 				setResult(RESULT_OK, intent);
 				finish();

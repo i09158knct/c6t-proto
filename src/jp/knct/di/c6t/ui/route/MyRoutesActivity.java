@@ -31,9 +31,9 @@ public class MyRoutesActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		String routeJSON = mRoutes.get(position).toJSON().toString();
+		Route targetRoute = mRoutes.get(position);
 		Intent intent = new Intent(this, RouteActivity.class)
-				.putExtra(IntentData.EXTRA_KEY_JSON_ROUTE, routeJSON);
+				.putExtra(IntentData.EXTRA_KEY_ROUTE, targetRoute);
 		startActivity(intent);
 		finish();
 	}

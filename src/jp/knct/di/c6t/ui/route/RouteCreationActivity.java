@@ -3,13 +3,9 @@ package jp.knct.di.c6t.ui.route;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.Route;
-
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -39,8 +35,8 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 
 	private MarkerOptions createStartPointMarker(Route route) {
 		LatLng startLocation = route.getStartLocation();
-		return new MarkerOptions()
-				.position(startLocation)
+		return new MarkerOptions().
+				position(startLocation)
 				.title("スタートポイント");
 	}
 
@@ -72,23 +68,16 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 		if (requestCode == RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST) {
 			if (resultCode == RESULT_CANCELED) {/* do nothing */}
 			else if (resultCode == RESULT_OK) {
-				try {
-					String questJSON = data.getStringExtra(IntentData.EXTRA_KEY_JSON_BASE_QUEST);
-					Log.d("quest", questJSON);
-					Quest quest = Quest.parseJSONString(questJSON);
-					mRoute.addQuest(quest);
+				Quest quest = data.getParcelableExtra(IntentData.EXTRA_KEY_BASE_QUEST);
+				mRoute.addQuest(quest);
 
-					if (mRoute.getQuests().size() == 5) {
-						Toast.makeText(this, "終了", 0).show();
-						// TODO
-					}
-					else if (mRoute.getQuests().size() > 5) {
-						// TODO
-					}
+				if (mRoute.getQuests().size() == 5) {
+					Toast.makeText(this, "終了", 0).show();
+					// TODO
 				}
-				catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				else if (mRoute.getQuests().size() > 5) {
+					// TODO
+
 				}
 			}
 		}
@@ -121,9 +110,9 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.route_creation_create_new_quest:
-			String questJSON = new Quest(getCurrentLocation()).toJSON().toString();
+			Quest newQuest = new Quest(getCurrentLocation());
 			intent = new Intent(this, RouteCreationQuestFormActivity.class)
-					.putExtra(IntentData.EXTRA_KEY_JSON_BASE_QUEST, questJSON);
+					.putExtra(IntentData.EXTRA_KEY_BASE_QUEST, newQuest);
 			startActivityForResult(intent, RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST);
 			break;
 
@@ -132,9 +121,8 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.route_creation_finish:
-			String routeJSON = mRoute.toJSON().toString();
 			intent = new Intent(this, RouteCreationDetailFormActivity.class)
-					.putExtra(IntentData.EXTRA_KEY_JSON_ROUTE, routeJSON);
+					.putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
 			startActivity(intent);
 			break;
 

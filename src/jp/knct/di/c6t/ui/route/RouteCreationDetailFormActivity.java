@@ -2,9 +2,6 @@ package jp.knct.di.c6t.ui.route;
 
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Route;
-
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,20 +19,8 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_route_creation_detail_form);
 
-		try {
-			mRoute = extractRouteFromIntent(getIntent());
-		}
-		catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		mRoute = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_ROUTE);
 		setOnClickListeners();
-	}
-
-	private static Route extractRouteFromIntent(Intent intent) throws JSONException {
-		String routeJSON = intent.getStringExtra(IntentData.EXTRA_KEY_JSON_ROUTE);
-		return Route.parseJSONString(routeJSON);
 	}
 
 	private void setOnClickListeners() {
@@ -59,10 +44,9 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 		case R.id.route_creation_detail_form_ok:
 			setDetailsFromEditForms(mRoute);
 			if (mRoute.isValid()) {
-				String routeJSON = mRoute.toJSON().toString();
 				Intent intent = new Intent()
-						.putExtra(IntentData.EXTRA_KEY_JSON_ROUTE, routeJSON);
-				Log.d("finish", routeJSON); // TODO
+						.putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
+				Log.d("finish", mRoute.toJSON().toString()); // TODO: save route and return home activity
 				finish();
 			}
 			break;
