@@ -71,11 +71,11 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".ui.route.ExplorationHomeActivity"
+            android:name=".ui.exploration.ExplorationHomeActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".ui.route.NewExplorationActivity"
+            android:name=".ui.exploration.NewExplorationActivity"
             android:label="@string/app_name" >
         </activity>
     </application>
