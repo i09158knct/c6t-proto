@@ -70,11 +70,11 @@ public class Quest implements Parcelable {
 	private double longitude;
 
 	public Quest(LatLng location, String title, String pose, String mission, String image) {
-		this.setLocation(location);
-		this.setTitle(title);
-		this.setPose(pose);
-		this.setMission(mission);
-		this.setImage(image); // FIXME: image type
+		setLocation(location);
+		setTitle(title);
+		setPose(pose);
+		setMission(mission);
+		setImage(image); // FIXME: image type
 	}
 
 	public Quest(LatLng location) {
@@ -126,7 +126,8 @@ public class Quest implements Parcelable {
 		try {
 			return new JSONObject().put(TITLE, getTitle())
 					.put(LOCATION, serializeLocation(getLocation()))
-					.put(POSE, getPose()).put(MISSION, getMission())
+					.put(POSE, getPose())
+					.put(MISSION, getMission())
 					.put(IMAGE, getImage());
 		}
 		catch (JSONException e) {

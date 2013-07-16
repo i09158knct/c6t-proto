@@ -9,9 +9,9 @@ public class User implements Parcelable {
 	private String area;
 
 	public User(int id, String name, String area) {
-		this.setId(id);
-		this.setName(name);
-		this.setArea(area);
+		setId(id);
+		setName(name);
+		setArea(area);
 	}
 
 	public int getId() {

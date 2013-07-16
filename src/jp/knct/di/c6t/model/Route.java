@@ -38,10 +38,10 @@ public class Route implements Parcelable {
 	private static double INITIAL_LAT_LNG_VALUE = 0xfffff;
 
 	public Route(LatLng startLocation, String name, String description, List<Quest> quests) {
-		this.setStartLocation(startLocation);
-		this.setName(name);
-		this.setDescription(description);
-		this.setQuests(quests);
+		setStartLocation(startLocation);
+		setName(name);
+		setDescription(description);
+		setQuests(quests);
 	}
 
 	public Route() {
