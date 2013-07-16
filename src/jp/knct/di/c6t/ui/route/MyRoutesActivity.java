@@ -24,7 +24,7 @@ public class MyRoutesActivity extends ListActivity {
 
 		Client client = new DebugSharedPreferencesClient();
 
-		mRoutes = client.getRoutes(new User(0, "user", "tokyo"));
+		mRoutes = client.getRoutes(new User(0, "user", "tokyo")); // TODO
 		RoutesAdapter adapter = new RoutesAdapter(this, mRoutes);
 		setListAdapter(adapter);
 	}

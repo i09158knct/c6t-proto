@@ -3,6 +3,7 @@ package jp.knct.di.c6t.ui.route;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.Route;
+import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +26,14 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_route_creation);
 
-		setOnClickListeners();
+		ActivityUtil.setOnClickListener(this, this, new int[] {
+				R.id.route_creation_start,
+				R.id.route_creation_create_new_quest,
+				R.id.route_creation_quests,
+				R.id.route_creation_finish,
+				// R.id.debug_route_creation_update,
+		});
+
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.route_creation_map))
 				.getMap();
 		mMap.setMyLocationEnabled(true);
@@ -87,20 +95,6 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 		}
 
 		updateMap();
-	}
-
-	private void setOnClickListeners() {
-		int[] ids = {
-				R.id.route_creation_start,
-				R.id.route_creation_create_new_quest,
-				R.id.route_creation_quests,
-				R.id.route_creation_finish,
-				// R.id.debug_route_creation_update,
-		};
-
-		for (int id : ids) {
-			findViewById(id).setOnClickListener(this);
-		}
 	}
 
 	@Override

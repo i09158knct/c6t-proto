@@ -2,6 +2,7 @@ package jp.knct.di.c6t.ui.route;
 
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Route;
+import jp.knct.di.c6t.util.ActivityUtil;
 
 import org.json.JSONException;
 
@@ -10,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.Toast;
 
 public class RouteCreationDetailFormActivity extends Activity implements OnClickListener {
@@ -24,18 +24,10 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 		setContentView(R.layout.activity_route_creation_detail_form);
 
 		mRoute = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_ROUTE);
-		setOnClickListeners();
-	}
-
-	private void setOnClickListeners() {
-		int[] ids = {
+		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.route_creation_detail_form_cancel,
 				R.id.route_creation_detail_form_ok,
-		};
-
-		for (int id : ids) {
-			findViewById(id).setOnClickListener(this);
-		}
+		});
 	}
 
 	@Override
@@ -66,10 +58,10 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 	}
 
 	private void setDetailsFromEditForms(Route route) {
-		String name = ((EditText) findViewById(R.id.route_creation_detail_form_name)).getText().toString();
-		String description = ((EditText) findViewById(R.id.route_creation_detail_form_description)).getText().toString();
+		ActivityUtil getter = new ActivityUtil(this);
+		String name = getter.getText(R.id.route_creation_detail_form_name);
+		String description = getter.getText(R.id.route_creation_detail_form_description);
 		route.setName(name);
 		route.setDescription(description);
 	}
-
 }

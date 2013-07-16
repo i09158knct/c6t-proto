@@ -2,12 +2,12 @@ package jp.knct.di.c6t.ui.route;
 
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
+import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -29,43 +29,27 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		mQuestLocation = quest.getLocation();
 		putQuestDataIntoEditForms(quest);
 
-		setOnClickListeners();
-	}
-
-	private Quest createQuestFromEditForms() {
-		String mission = getTextFromEditForm(R.id.route_creation_quest_form_mission);
-		String pose = getTextFromEditForm(R.id.route_creation_quest_form_pose);
-		String title = getTextFromEditForm(R.id.route_creation_quest_form_title);
-		return new Quest(mQuestLocation, title, pose, mission, ""); // TODO image
-	}
-
-	private String getTextFromEditForm(int id) {
-		TextView textView = (TextView) findViewById(id);
-		return textView.getText().toString();
-	}
-
-	private void putQuestDataIntoEditForms(Quest quest) {
-		setText(R.id.route_creation_quest_form_location, quest.getLocation().toString());
-		setText(R.id.route_creation_quest_form_mission, quest.getMission());
-		setText(R.id.route_creation_quest_form_pose, quest.getPose());
-		setText(R.id.route_creation_quest_form_title, quest.getTitle());
-	}
-
-	private void setText(int id, String text) {
-		TextView textView = (TextView) findViewById(id);
-		textView.setText(text);
-	}
-
-	private void setOnClickListeners() {
-		int[] ids = {
+		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.route_creation_quest_form_camera,
 				R.id.route_creation_quest_form_cancel,
 				R.id.route_creation_quest_form_ok,
-		};
+		});
+	}
 
-		for (int id : ids) {
-			findViewById(id).setOnClickListener(this);
-		}
+	private Quest createQuestFromEditForms() {
+		ActivityUtil getter = new ActivityUtil(this);
+		String mission = getter.getText(R.id.route_creation_quest_form_mission);
+		String pose = getter.getText(R.id.route_creation_quest_form_pose);
+		String title = getter.getText(R.id.route_creation_quest_form_title);
+		return new Quest(mQuestLocation, title, pose, mission, ""); // TODO image
+	}
+
+	private void putQuestDataIntoEditForms(Quest quest) {
+		new ActivityUtil(this)
+				.setText(R.id.route_creation_quest_form_location, quest.getLocation().toString())
+				.setText(R.id.route_creation_quest_form_mission, quest.getMission())
+				.setText(R.id.route_creation_quest_form_pose, quest.getPose())
+				.setText(R.id.route_creation_quest_form_title, quest.getTitle());
 	}
 
 	@Override

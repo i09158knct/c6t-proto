@@ -1,6 +1,8 @@
 package jp.knct.di.c6t.ui;
 
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.ui.exploration.ExplorationHomeActivity;
+import jp.knct.di.c6t.ui.route.MyRoutesActivity;
 import jp.knct.di.c6t.ui.route.RouteCreationActivity;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,24 +27,25 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
-		ActivityLink[] activityLinks = {
+		setJumper(new ActivityLink[] {
+				new ActivityLink(R.id.home_collection, null), // TODO
+				new ActivityLink(R.id.home_ranking, null), // TODO
+				new ActivityLink(R.id.home_schedule, null), // TODO
+				new ActivityLink(R.id.home_exploration, ExplorationHomeActivity.class),
+				new ActivityLink(R.id.home_my_routes, MyRoutesActivity.class),
 				new ActivityLink(R.id.home_creation, RouteCreationActivity.class),
-		};
-
-		for (ActivityLink activityLink : activityLinks) {
-			setJumper(activityLink);
-		}
-
-	}
-
-	private void setJumper(final ActivityLink activityLink) {
-		findViewById(activityLink.id).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this, activityLink.target);
-				startActivity(intent);
-			}
 		});
 	}
 
+	private void setJumper(ActivityLink... activityLinks) {
+		for (final ActivityLink activityLink : activityLinks) {
+			findViewById(activityLink.id).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(HomeActivity.this, activityLink.target);
+					startActivity(intent);
+				}
+			});
+		}
+	}
 }

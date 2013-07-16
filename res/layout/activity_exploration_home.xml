@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/exploration_home_create_new_exploration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新しい探検の予定を作成する" />
+
+    <Button
+        android:id="@+id/exploration_home_join_exploration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="他のユーザーの探検に参加する" />
+
+    <ListView
+        android:id="@+id/my_explorations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>
