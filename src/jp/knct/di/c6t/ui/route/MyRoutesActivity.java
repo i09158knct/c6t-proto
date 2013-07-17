@@ -22,9 +22,9 @@ public class MyRoutesActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_routes);
 
-		Client client = new DebugSharedPreferencesClient();
+		Client client = new DebugSharedPreferencesClient(this);
 
-		mRoutes = client.getRoutes(new User(0, "user", "tokyo")); // TODO
+		mRoutes = client.getRoutes(client.getMyUserData()); // TODO
 		RoutesAdapter adapter = new RoutesAdapter(this, mRoutes);
 		setListAdapter(adapter);
 	}
