@@ -4,10 +4,32 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class Exploration implements Parcelable {
+
+	private static final String HOST = "host";
+	private static final String ROUTE = "route";
+	private static final String START_TIME = "start_time";
+	private static final String DESCRIPTION = "description";
+
+	public static Exploration parseJSONString(String explorationString) throws JSONException, ParseException {
+		return parseJSON(new JSONObject(explorationString));
+	}
+
+	public static Exploration parseJSON(JSONObject exploration) throws JSONException, ParseException {
+		User host = User.parseJSON(exploration.getJSONObject(HOST));
+		Route route = Route.parseJSON(exploration.getJSONObject(ROUTE));
+		Date startTime = new SimpleDateFormat().parse(exploration.getString(START_TIME));
+		String description = exploration.getString(DESCRIPTION);
+		return new Exploration(host, route, startTime, description);
+	}
+
 	private User host;
 	private Route route;
 	private Date startTime;
@@ -54,6 +76,26 @@ public class Exploration implements Parcelable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	// private static final String HOST = "host";
+	// private static final String ROUTE = "route";
+	// private static final String START_TIME = "start_time";
+	// private static final String DESCRIPTION = "description";
+
+	public JSONObject toJSON() {
+		try {
+			return new JSONObject()
+					.put(HOST, getHost().toJSON())
+					.put(ROUTE, getRoute().toJSON())
+					.put(START_TIME, getStartTime().toString())
+					.put(DESCRIPTION, getDescription());
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+			Log.d("Quest", "JSON Error!!!!!!!!!!!!!!!!");
+			return null;
+		}
 	}
 
 	public boolean isValid() {
