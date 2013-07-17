@@ -124,7 +124,8 @@ public class Quest implements Parcelable {
 
 	public JSONObject toJSON() {
 		try {
-			return new JSONObject().put(TITLE, getTitle())
+			return new JSONObject()
+					.put(TITLE, getTitle())
 					.put(LOCATION, serializeLocation(getLocation()))
 					.put(POSE, getPose())
 					.put(MISSION, getMission())
