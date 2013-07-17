@@ -1,17 +1,13 @@
 package jp.knct.di.c6t.ui.route;
 
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.util.ActivityUtil;
-
-import org.json.JSONException;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 public class RouteCreationDetailFormActivity extends Activity implements OnClickListener {
 
@@ -41,12 +37,7 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 		case R.id.route_creation_detail_form_ok:
 			setDetailsFromEditForms(mRoute);
 			if (mRoute.isValid()) {
-				Intent intent = new Intent()
-						.putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
-				try {
-					Toast.makeText(this, mRoute.toJSON().toString(2), 1).show(); // TODO: save route
-				}
-				catch (JSONException e) {}
+				new DebugSharedPreferencesClient(this).saveRoute(mRoute); // TODO use http client
 				setResult(RESULT_OK);
 				finish();
 			}
