@@ -35,4 +35,10 @@
         android:lines="3" >
     </EditText>
 
+    <Button
+        android:id="@+id/new_exploration_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="作成する" />
+
 </LinearLayout>
