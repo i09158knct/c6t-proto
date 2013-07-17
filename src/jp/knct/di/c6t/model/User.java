@@ -1,9 +1,25 @@
 package jp.knct.di.c6t.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class User implements Parcelable {
+
+	private static final String ID = "id";
+	private static final String NAME = "name";
+	private static final String AREA = "area";
+
+	public static User parseJSON(JSONObject user) throws JSONException {
+		int id = user.getInt(ID);
+		String name = user.getString(NAME);
+		String area = user.getString(AREA);
+		return new User(id, name, area);
+	}
+
 	private int id;
 	private String name;
 	private String area;
@@ -36,6 +52,20 @@ public class User implements Parcelable {
 
 	public void setArea(String area) {
 		this.area = area;
+	}
+
+	public JSONObject toJSON() {
+		try {
+			return new JSONObject()
+					.put(ID, getId())
+					.put(NAME, getName())
+					.put(AREA, getArea());
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+			Log.d("Quest", "JSON Error!!!!!!!!!!!!!!!!");
+			return null;
+		}
 	}
 
 	@Override
