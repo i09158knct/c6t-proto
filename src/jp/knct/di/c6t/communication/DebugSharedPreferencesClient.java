@@ -41,15 +41,17 @@ public class DebugSharedPreferencesClient implements Client {
 			}
 			return explorations;
 
-		} catch (JSONException e) {
+		}
+		catch (JSONException e) {
 			e.printStackTrace();
 			return null;
-		} catch (ParseException e) {
+		}
+		catch (ParseException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	@Override
 	public List<Route> getRoutes(String searchText) {
 		// TODO
@@ -61,7 +63,6 @@ public class DebugSharedPreferencesClient implements Client {
 		// TODO: get other user's routes
 		String routesJSON = mPreferences.getString(KEY_MY_ROUTES, "[]");
 		List<Route> routes = new LinkedList<Route>();
-
 		try {
 			JSONArray routesArray = new JSONArray(routesJSON);
 			for (int i = 0; i < routesArray.length(); i++) {
@@ -70,8 +71,8 @@ public class DebugSharedPreferencesClient implements Client {
 				routes.add(route);
 			}
 			return routes;
-
-		} catch (JSONException e) {
+		}
+		catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -82,14 +83,14 @@ public class DebugSharedPreferencesClient implements Client {
 		List<Exploration> explorations = getExplorations(getMyUserData());
 		explorations.add(exploration);
 		JSONArray explorationsArray = new JSONArray();
-		
+
 		for (Exploration e : explorations) {
 			explorationsArray.put(e.toJSON());
 		}
-		
+
 		mPreferences.edit()
-		.putString(KEY_MY_EXPLORATIONS, explorationsArray.toString())
-		.commit();
+				.putString(KEY_MY_EXPLORATIONS, explorationsArray.toString())
+				.commit();
 	}
 
 	@Override
@@ -97,14 +98,14 @@ public class DebugSharedPreferencesClient implements Client {
 		List<Route> routes = getRoutes(getMyUserData());
 		routes.add(route);
 		JSONArray routesArray = new JSONArray();
-		
+
 		for (Route r : routes) {
 			routesArray.put(r.toJSON());
 		}
-		
+
 		mPreferences.edit()
-			.putString(KEY_MY_ROUTES, routesArray.toString())
-			.commit();
+				.putString(KEY_MY_ROUTES, routesArray.toString())
+				.commit();
 	}
 
 	@Override
