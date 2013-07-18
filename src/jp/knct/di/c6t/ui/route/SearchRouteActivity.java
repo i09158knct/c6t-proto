@@ -21,7 +21,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_routes);
+		setContentView(R.layout.activity_search_route);
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.search_route_search,
@@ -40,15 +40,15 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.search_route_search:
-			List<Route> routes = fetchRoutes();
-			setRoutes(routes);
+			mRoutes = fetchRoutes();
+			setRoutes(mRoutes);
 			break;
 
 		default:
 			break;
 		}
 	}
-	
+
 	// TODO
 	private List<Route> fetchRoutes() {
 		String searchText = ActivityUtil.getText(this, R.id.search_route_name);
@@ -57,7 +57,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	}
 
 	private void setRoutes(List<Route> routes) {
-		RoutesAdapter adapter = new RoutesAdapter(this, mRoutes);
+		RoutesAdapter adapter = new RoutesAdapter(this, routes);
 		setListAdapter(adapter);
 	}
 }
