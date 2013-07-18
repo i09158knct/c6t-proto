@@ -78,6 +78,10 @@
             android:name=".ui.exploration.NewExplorationActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".ui.route.SearchRouteActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>
