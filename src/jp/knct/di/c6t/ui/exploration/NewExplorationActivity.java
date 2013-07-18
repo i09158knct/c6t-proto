@@ -43,7 +43,7 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 			Exploration exploration = createExplorationFromForms();
 			new DebugSharedPreferencesClient(this).saveExploration(exploration);
 			try {
-				Toast.makeText(this, exploration.toJSON().toString(2), 1);
+				Toast.makeText(this, exploration.toJSON().toString(2), 1).show(); // TODO
 			}
 			catch (JSONException e) {}
 
