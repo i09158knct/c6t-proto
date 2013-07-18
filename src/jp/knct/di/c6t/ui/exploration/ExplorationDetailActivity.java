@@ -22,7 +22,7 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 		putExplorationDataIntoComponents(mExploration);
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
-				R.id.route_create_new_exploration,
+				R.id.exploration_detail_join,
 				R.id.exploration_detail_calender,
 				R.id.exploration_detail_share,
 		});
@@ -31,10 +31,10 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 
 	private void putExplorationDataIntoComponents(Exploration exploration) {
 		new ActivityUtil(this)
-			.setText(R.id.exploration_detail_name, exploration.getRoute().getName())
-			.setText(R.id.exploration_detail_host, exploration.getHost().getName())
-			.setText(R.id.exploration_detail_start_location, exploration.getRoute().getStartLocation().toString())
-			.setText(R.id.exploration_detail_description, exploration.getDescription());
+				.setText(R.id.exploration_detail_name, exploration.getRoute().getName())
+				.setText(R.id.exploration_detail_host, exploration.getHost().getName())
+				.setText(R.id.exploration_detail_start_location, exploration.getRoute().getStartLocation().toString())
+				.setText(R.id.exploration_detail_description, exploration.getDescription());
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 		switch (v.getId()) {
 		case R.id.exploration_detail_join:
 			Intent intent = new Intent(this, ExplorationStartActivity.class)
-				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
 			startActivity(intent);
 			break;
 
