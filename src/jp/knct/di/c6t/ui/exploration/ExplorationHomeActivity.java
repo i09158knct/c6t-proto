@@ -1,8 +1,10 @@
 package jp.knct.di.c6t.ui.exploration;
 
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.ui.route.SearchRouteActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,9 +26,8 @@ public class ExplorationHomeActivity extends Activity implements OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.exploration_home_create_new_exploration:
-			// TODO
-			// Intent intent = new Intent(this, .class);
-			// startActivity(intent);
+			Intent intent = new Intent(this, SearchRouteActivity.class);
+			startActivity(intent);
 			break;
 
 		case R.id.exploration_home_join_exploration:
