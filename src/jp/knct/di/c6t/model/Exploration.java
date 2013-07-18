@@ -88,7 +88,7 @@ public class Exploration implements Parcelable {
 			return new JSONObject()
 					.put(HOST, getHost().toJSON())
 					.put(ROUTE, getRoute().toJSON())
-					.put(START_TIME, getStartTime().toString())
+					.put(START_TIME, new SimpleDateFormat().format(getStartTime()))
 					.put(DESCRIPTION, getDescription());
 		}
 		catch (JSONException e) {
@@ -113,7 +113,7 @@ public class Exploration implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeParcelable(getHost(), -1);
 		dest.writeParcelable(getRoute(), -1);
-		dest.writeString(getStartTime().toString());
+		dest.writeString(new SimpleDateFormat().format(startTime));
 		dest.writeString(getDescription());
 	}
 
