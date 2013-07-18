@@ -82,6 +82,10 @@
             android:name=".ui.route.SearchRouteActivity"
             android:label="@string/app_name" >
         </activity>
-    </application>
+        <activity
+            android:name=".ui.exploration.ExplorationDetailActivity"
+            android:label="@string/app_name" >
+        </activity>
+        </application>
 
 </manifest>
