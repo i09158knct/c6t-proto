@@ -7,7 +7,6 @@ import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.Client;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Exploration;
-import jp.knct.di.c6t.ui.route.SearchRouteActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -16,23 +15,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
-public class ExplorationHomeActivity extends ListActivity implements OnClickListener {
+public class SearchExplorationActivity extends ListActivity implements OnClickListener {
 	private List<Exploration> mExplorations;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_exploration_home);
+		setContentView(R.layout.activity_search_exploration);
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
-				R.id.exploration_home_create_new_exploration,
-				R.id.exploration_home_join_exploration,
+				R.id.search_exploration_search,
 		});
-
-		Client client = new DebugSharedPreferencesClient(this);
-		mExplorations = client.getExplorations(client.getMyUserData());
-		ExplorationsAdapter adapter = new ExplorationsAdapter(this, mExplorations);
-		setListAdapter(adapter);
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -45,20 +38,26 @@ public class ExplorationHomeActivity extends ListActivity implements OnClickList
 
 	@Override
 	public void onClick(View v) {
-		Intent intent;
 		switch (v.getId()) {
-		case R.id.exploration_home_create_new_exploration:
-			intent = new Intent(this, SearchRouteActivity.class);
-			startActivity(intent);
-			break;
-
-		case R.id.exploration_home_join_exploration:
-			intent = new Intent(this, SearchExplorationActivity.class);
-			startActivity(intent);
+		case R.id.search_exploration_search:
+			mExplorations = fetchExplorations();
+			setExplorations(mExplorations);
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	// TODO
+	private List<Exploration> fetchExplorations() {
+		String searchText = ActivityUtil.getText(this, R.id.search_exploration_name);
+		Client client = new DebugSharedPreferencesClient(this);
+		return client.getExplorations(searchText);
+	}
+
+	private void setExplorations(List<Exploration> explorations) {
+		ExplorationsAdapter adapter = new ExplorationsAdapter(this, explorations);
+		setListAdapter(adapter);
 	}
 }

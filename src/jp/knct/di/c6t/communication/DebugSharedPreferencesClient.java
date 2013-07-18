@@ -28,6 +28,12 @@ public class DebugSharedPreferencesClient implements Client {
 	}
 
 	@Override
+	public List<Exploration> getExplorations(String searchText) {
+		// TODO
+		return getExplorations(getMyUserData());
+	}
+
+	@Override
 	public List<Exploration> getExplorations(User user) {
 		String explorationsJSON = mPreferences.getString(KEY_MY_EXPLORATIONS, "[]");
 		List<Exploration> explorations = new LinkedList<Exploration>();
