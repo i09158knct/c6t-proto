@@ -3,12 +3,12 @@ package jp.knct.di.c6t.ui.exploration;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.model.User;
-import jp.knct.di.c6t.ui.route.IntentData;
 import jp.knct.di.c6t.util.ActivityUtil;
 
 import org.json.JSONException;

@@ -11,10 +11,10 @@ public interface Client {
 	List<Exploration> getExplorations(User user);
 
 	List<Route> getRoutes(User user);
+	List<Route> getRoutes(String searchText);
 
 	void saveExploration(Exploration exploration);
 	void saveRoute(Route route);
 	
-	User getMyUserData();
-	
+	User getMyUserData();	
 }

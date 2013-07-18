@@ -1,5 +1,6 @@
 package jp.knct.di.c6t.ui.route;
 
+import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.Route;
@@ -43,8 +44,8 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 
 	private MarkerOptions createStartPointMarker(Route route) {
 		LatLng startLocation = route.getStartLocation();
-		return new MarkerOptions().
-				position(startLocation)
+		return new MarkerOptions()
+				.position(startLocation)
 				.title("スタートポイント");
 	}
 

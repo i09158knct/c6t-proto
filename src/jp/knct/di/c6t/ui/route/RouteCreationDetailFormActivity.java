@@ -1,5 +1,6 @@
 package jp.knct.di.c6t.ui.route;
 
+import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Route;

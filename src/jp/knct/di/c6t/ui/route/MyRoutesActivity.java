@@ -2,6 +2,7 @@ package jp.knct.di.c6t.ui.route;
 
 import java.util.List;
 
+import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.Client;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;

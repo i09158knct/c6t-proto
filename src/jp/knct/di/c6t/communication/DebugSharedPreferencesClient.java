@@ -49,6 +49,12 @@ public class DebugSharedPreferencesClient implements Client {
 			return null;
 		}
 	}
+	
+	@Override
+	public List<Route> getRoutes(String searchText) {
+		// TODO
+		return getRoutes(getMyUserData());
+	}
 
 	@Override
 	public List<Route> getRoutes(User user) {

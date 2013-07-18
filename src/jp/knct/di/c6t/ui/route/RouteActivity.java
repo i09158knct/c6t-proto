@@ -1,5 +1,6 @@
 package jp.knct.di.c6t.ui.route;
 
+import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.ui.exploration.NewExplorationActivity;
@@ -16,7 +17,7 @@ public class RouteActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_route_creation_detail_form);
+		setContentView(R.layout.activity_route);
 
 		mRoute = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_ROUTE);
 		putRouteDataIntoComponents(mRoute);
