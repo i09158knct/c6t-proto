@@ -14,6 +14,7 @@ import jp.knct.di.c6t.util.ActivityUtil;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,10 +48,9 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 			}
 			catch (JSONException e) {}
 
-			// TODO
-			// Intent intent = new Intent()
-			// .putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
-			// startActivity(intent);
+			Intent intent = new Intent(this, ExplorationDetailActivity.class)
+					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, exploration);
+			startActivity(intent);
 			break;
 
 		default:
