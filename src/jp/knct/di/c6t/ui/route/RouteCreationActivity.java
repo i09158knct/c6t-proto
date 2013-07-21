@@ -11,6 +11,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,14 +20,48 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class RouteCreationActivity extends Activity
 		implements OnClickListener,
 		ConnectionCallbacks,
 		OnConnectionFailedListener {
+
+	class QuestInfoWindowAdapter implements InfoWindowAdapter {
+		private View mContents;
+		private TextView mTitle;
+		private ImageView mImage;
+
+		private QuestInfoWindowAdapter() {
+			mContents = getLayoutInflater().inflate(R.layout.info_content_route_creation_quest, null);
+			mTitle = (TextView) mContents.findViewById(R.id.info_content_route_creation_quest_title);
+			mImage = (ImageView) mContents.findViewById(R.id.info_content_route_creation_quest_image);
+		}
+
+		@Override
+		public View getInfoContents(Marker marker) {
+			if (marker.getTitle() != null) {
+				return null;
+			}
+
+			int questNumber = Integer.parseInt(marker.getSnippet());
+			Quest targetQuest = mRoute.getQuests().get(questNumber - 1);
+
+			mTitle.setText(questNumber + ". " + targetQuest.getTitle());
+
+			return mContents;
+		}
+
+		@Override
+		public View getInfoWindow(Marker marker) {
+			return null;
+		}
+	}
+
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
 	private Route mRoute = new Route();
@@ -45,6 +81,7 @@ public class RouteCreationActivity extends Activity
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.route_creation_map))
 				.getMap();
 		mMap.setMyLocationEnabled(true);
+		mMap.setInfoWindowAdapter(new QuestInfoWindowAdapter());
 
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationClient.connect();
@@ -61,11 +98,9 @@ public class RouteCreationActivity extends Activity
 
 	private MarkerOptions createQuestPointMarker(Quest quest, int questNumber) {
 		LatLng location = quest.getLocation();
-		String title = "クエストポイント" + questNumber + ": " + quest.getTitle();
 		return new MarkerOptions()
 				.position(location)
-				.title(title)
-				.snippet(quest.getMission()); // TODO
+				.snippet("" + questNumber); // for QuestInfoWindowAdapter
 	}
 
 	private void updateMap() {
@@ -164,5 +199,4 @@ public class RouteCreationActivity extends Activity
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
 	}
-
 }
