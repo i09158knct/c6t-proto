@@ -19,9 +19,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -30,6 +33,9 @@ public class RouteCreationActivity extends Activity
 		implements OnClickListener,
 		ConnectionCallbacks,
 		OnConnectionFailedListener {
+
+	private static final LatLng TOKYO = new LatLng(35.4138, 139.4505);
+	private static final CameraPosition INITIAL_CAMERA_POSITION = new CameraPosition(TOKYO, 0, 0, 0);
 
 	class QuestInfoWindowAdapter implements InfoWindowAdapter {
 		private View mContents;
@@ -78,15 +84,24 @@ public class RouteCreationActivity extends Activity
 				R.id.route_creation_finish,
 		});
 
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.route_creation_map))
-				.getMap();
-		mMap.setMyLocationEnabled(true);
-		mMap.setInfoWindowAdapter(new QuestInfoWindowAdapter());
+		setUpMap();
 
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationClient.connect();
 
 		updateMap();
+	}
+
+	private void setUpMap() {
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.route_creation_map))
+				.getMap();
+		mMap.setMyLocationEnabled(true);
+		mMap.setInfoWindowAdapter(new QuestInfoWindowAdapter());
+
+		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(INITIAL_CAMERA_POSITION));
+
+		// TODO
+		// mMap.setOnInfoWindowClickListener(this);
 	}
 
 	private MarkerOptions createStartPointMarker(Route route) {
@@ -187,7 +202,11 @@ public class RouteCreationActivity extends Activity
 
 	@Override
 	public void onConnected(Bundle bundle) {
-		// TODO Auto-generated method stub
+		CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+				.target(getCurrentLocation())
+				.zoom(mMap.getMaxZoomLevel())
+				.build());
+		mMap.animateCamera(update, 0, null);
 	}
 
 	@Override
