@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="スタートポイントまで移動してください" />
+
     <fragment
         android:id="@+id/exploration_start_map"
         android:name="com.google.android.gms.maps.MapFragment"
