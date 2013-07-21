@@ -35,6 +35,9 @@ public class RouteCreationActivity extends Activity
 		ConnectionCallbacks,
 		OnConnectionFailedListener {
 
+	private static final LatLng TOKYO = new LatLng(35.4138, 139.4505);
+	private static final CameraPosition INITIAL_CAMERA_POSITION = new CameraPosition(TOKYO, 0, 0, 0);
+
 	class QuestInfoWindowAdapter implements InfoWindowAdapter {
 		private View mContents;
 		private TextView mTitle;
