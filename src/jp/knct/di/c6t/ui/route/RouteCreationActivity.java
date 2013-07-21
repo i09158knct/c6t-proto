@@ -7,19 +7,27 @@ import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class RouteCreationActivity extends Activity implements OnClickListener {
+public class RouteCreationActivity extends Activity
+		implements OnClickListener,
+		ConnectionCallbacks,
+		OnConnectionFailedListener {
 	private GoogleMap mMap;
+	private LocationClient mLocationClient;
 	private Route mRoute = new Route();
 
 	@Override
@@ -32,12 +40,14 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 				R.id.route_creation_create_new_quest,
 				R.id.route_creation_quests,
 				R.id.route_creation_finish,
-				// R.id.debug_route_creation_update,
 		});
 
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.route_creation_map))
 				.getMap();
 		mMap.setMyLocationEnabled(true);
+
+		mLocationClient = new LocationClient(this, this, this);
+		mLocationClient.connect();
 
 		updateMap();
 	}
@@ -134,9 +144,25 @@ public class RouteCreationActivity extends Activity implements OnClickListener {
 	}
 
 	private LatLng getCurrentLocation() {
-		double latitude = Double.parseDouble(((EditText) findViewById(R.id.debug_route_creation_lat)).getText().toString());
-		double longitude = Double.parseDouble(((EditText) findViewById(R.id.debug_route_creation_lng)).getText().toString());
+		Location lastLocation = mLocationClient.getLastLocation();
+		double latitude = lastLocation.getLatitude();
+		double longitude = lastLocation.getLongitude();
 		return new LatLng(latitude, longitude);
+	}
+
+	@Override
+	public void onConnected(Bundle bundle) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		// TODO Auto-generated method stub
 	}
 
 }
