@@ -5,6 +5,7 @@ import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.util.ActivityUtil;
+import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -33,9 +34,6 @@ public class RouteCreationActivity extends Activity
 		implements OnClickListener,
 		ConnectionCallbacks,
 		OnConnectionFailedListener {
-
-	private static final LatLng TOKYO = new LatLng(35.4138, 139.4505);
-	private static final CameraPosition INITIAL_CAMERA_POSITION = new CameraPosition(TOKYO, 0, 0, 0);
 
 	class QuestInfoWindowAdapter implements InfoWindowAdapter {
 		private View mContents;
@@ -98,7 +96,7 @@ public class RouteCreationActivity extends Activity
 		mMap.setMyLocationEnabled(true);
 		mMap.setInfoWindowAdapter(new QuestInfoWindowAdapter());
 
-		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(INITIAL_CAMERA_POSITION));
+		mMap.moveCamera(MapUtil.INITIAL_CAMERA_UPDATE);
 
 		// TODO
 		// mMap.setOnInfoWindowClickListener(this);
