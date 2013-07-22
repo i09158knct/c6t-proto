@@ -9,13 +9,13 @@ import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,9 +27,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ExplorationStartActivity extends Activity
-		implements OnClickListener,
-		ConnectionCallbacks,
-		OnConnectionFailedListener {
+		implements ConnectionCallbacks,
+		OnConnectionFailedListener,
+		LocationListener {
 	private GoogleMap mMap;
 	private Exploration mExploration;
 	private LocationClient mLocationClient;
@@ -40,8 +40,6 @@ public class ExplorationStartActivity extends Activity
 		setContentView(R.layout.activity_exploration_start);
 
 		mExploration = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
-
-		ActivityUtil.setOnClickListener(this, this, new int[] {});
 
 		setUpMap();
 
@@ -75,12 +73,7 @@ public class ExplorationStartActivity extends Activity
 		return new LatLng(latitude, longitude);
 	}
 
-	@Override
-	public void onClick(View v) {
-	}
-
-	@Override
-	public void onConnected(Bundle bundle) {
+	private void moveCameraPosition() {
 		LatLngBounds bounds = new LatLngBounds.Builder()
 				.include(getCurrentLocation())
 				.include(mExploration.getRoute().getStartLocation())
@@ -99,6 +92,16 @@ public class ExplorationStartActivity extends Activity
 	}
 
 	@Override
+	public void onConnected(Bundle bundle) {
+		mLocationClient.requestLocationUpdates(LocationRequest.create()
+				.setFastestInterval(5000)
+				.setInterval(5000)
+				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY), this);
+
+		moveCameraPosition();
+	}
+
+	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
 	}
@@ -106,5 +109,24 @@ public class ExplorationStartActivity extends Activity
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		float[] distanceAndBearing = { 0, 0 };
+
+		Location.distanceBetween(
+				location.getLatitude(),
+				location.getLongitude(),
+				mExploration.getRoute().getStartLocation().latitude,
+				mExploration.getRoute().getStartLocation().longitude,
+				distanceAndBearing);
+
+		float distance = distanceAndBearing[0];
+		float bearing = distanceAndBearing[1];
+
+		new ActivityUtil(this)
+				.setText(R.id.exploration_start_distance, distance + "m")
+				.setText(R.id.exploration_start_bearing, bearing + "“x");
 	}
 }
