@@ -1,24 +1,34 @@
 package jp.knct.di.c6t.ui.route;
 
+import java.io.File;
+import java.io.IOException;
+
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.util.ActivityUtil;
+import jp.knct.di.c6t.util.ImageUtil;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class RouteCreationQuestFormActivity extends Activity implements OnClickListener {
 
-	public static int REQUEST_CODE_EDIT_QUEST = 0;
+	private static final int REQUEST_CODE_IMAGE_CAPTURE = 0x100;
+	public static final int REQUEST_CODE_EDIT_QUEST = 0;
 
 	private int mQuestNumber;
 	private LatLng mQuestLocation;
+
+	private Uri mImageUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +52,7 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		String mission = getter.getText(R.id.route_creation_quest_form_mission);
 		String pose = getter.getText(R.id.route_creation_quest_form_pose);
 		String title = getter.getText(R.id.route_creation_quest_form_title);
-		return new Quest(mQuestLocation, title, pose, mission, ""); // TODO image
+		return new Quest(mQuestLocation, title, pose, mission, mImageUri.getPath());
 	}
 
 	private void putQuestDataIntoEditForms(Quest quest) {
@@ -54,10 +64,29 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CODE_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+			Bitmap image = ImageUtil.decodeBitmap(mImageUri.getPath(), 10);
+			((ImageView) findViewById(R.id.route_creation_quest_form_image))
+					.setImageBitmap(image);
+		}
+	}
+
+	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch (v.getId()) {
 		case R.id.route_creation_quest_form_camera:
-			Toast.makeText(this, "–¢ŽÀ‘•", 0).show(); // TODO
+			try {
+				mImageUri = Uri.parse(File.createTempFile("c6t__", ".tmp").toURI().toString());
+				intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+						.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+				startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 
 		case R.id.route_creation_quest_form_cancel:
@@ -68,7 +97,7 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		case R.id.route_creation_quest_form_ok:
 			Quest quest = createQuestFromEditForms();
 			if (quest.isValid()) {
-				Intent intent = new Intent()
+				intent = new Intent()
 						.putExtra(IntentData.EXTRA_KEY_BASE_QUEST, quest)
 						.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mQuestNumber);
 				setResult(RESULT_OK, intent);
