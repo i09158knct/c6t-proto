@@ -1,5 +1,9 @@
 package jp.knct.di.c6t.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +16,23 @@ public class User implements Parcelable {
 	private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String AREA = "area";
+
+	public static List<User> parseUsers(JSONArray users) throws JSONException {
+		List<User> userList = new LinkedList<User>();
+		for (int i = 0; i < users.length(); i++) {
+			User user = parseJSON(users.getJSONObject(i));
+			userList.add(user);
+		}
+		return userList;
+	}
+
+	public static JSONArray convertUsersToJsonArray(List<User> users) {
+		JSONArray userList = new JSONArray();
+		for (User user : users) {
+			userList.put(user.toJSON());
+		}
+		return userList;
+	}
 
 	public static User parseJSON(JSONObject user) throws JSONException {
 		int id = user.getInt(ID);
