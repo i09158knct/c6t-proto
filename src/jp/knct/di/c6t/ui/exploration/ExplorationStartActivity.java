@@ -7,8 +7,10 @@ import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -91,6 +93,25 @@ public class ExplorationStartActivity extends Activity
 		});
 	}
 
+	private float[] calculateDistanceAndBearingToStartPoint(Location location) {
+		float[] distanceAndBearing = { 0, 0 };
+
+		Location.distanceBetween(
+				location.getLatitude(),
+				location.getLongitude(),
+				mExploration.getRoute().getStartLocation().latitude,
+				mExploration.getRoute().getStartLocation().longitude,
+				distanceAndBearing);
+
+		return distanceAndBearing;
+	}
+
+	private void setLocationHintsText(float distance, float bearing) {
+		new ActivityUtil(this)
+				.setText(R.id.exploration_start_distance, distance + "m")
+				.setText(R.id.exploration_start_bearing, bearing + "“x");
+	}
+
 	@Override
 	public void onConnected(Bundle bundle) {
 		mLocationClient.requestLocationUpdates(LocationRequest.create()
@@ -113,20 +134,20 @@ public class ExplorationStartActivity extends Activity
 
 	@Override
 	public void onLocationChanged(Location location) {
-		float[] distanceAndBearing = { 0, 0 };
-
-		Location.distanceBetween(
-				location.getLatitude(),
-				location.getLongitude(),
-				mExploration.getRoute().getStartLocation().latitude,
-				mExploration.getRoute().getStartLocation().longitude,
-				distanceAndBearing);
-
+		float[] distanceAndBearing = calculateDistanceAndBearingToStartPoint(location);
 		float distance = distanceAndBearing[0];
 		float bearing = distanceAndBearing[1];
 
-		new ActivityUtil(this)
-				.setText(R.id.exploration_start_distance, distance + "m")
-				.setText(R.id.exploration_start_bearing, bearing + "“x");
+		setLocationHintsText(distance, bearing);
+
+		if (distance < 50) {
+			Toast.makeText(this, "’Tõ‘Ò‚¿Žó‚¯‰æ–Ê‚ÉˆÚs‚µ‚Ü‚·", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(this, ExplorationStandbyActivity.class)
+					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+			startActivity(intent);
+			mLocationClient.disconnect();
+			finish();
+			return;
+		}
 	}
 }
