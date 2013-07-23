@@ -2,6 +2,7 @@ package jp.knct.di.c6t.ui.exploration;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
@@ -62,7 +63,7 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 		User myself = new DebugSharedPreferencesClient(this).getMyUserData();
 		Date date = getDateTime();
 		String description = ActivityUtil.getText(this, R.id.new_exploration_description);
-		return new Exploration(myself, mRoute, date, description);
+		return new Exploration(myself, mRoute, date, description, new LinkedList<User>());
 	}
 
 	private Date getDateTime() {
