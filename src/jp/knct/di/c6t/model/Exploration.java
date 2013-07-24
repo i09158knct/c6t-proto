@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +21,15 @@ public class Exploration implements Parcelable {
 	private static final String START_TIME = "start_time";
 	private static final String DESCRIPTION = "description";
 	private static final String PARTICIPANTS = "participants";
+
+	public static List<Exploration> parseExplorations(JSONArray explorations) throws JSONException, ParseException {
+		List<Exploration> explorationList = new LinkedList<Exploration>();
+		for (int i = 0; i < explorations.length(); i++) {
+			Exploration exploration = parseJSON(explorations.getJSONObject(i));
+			explorationList.add(exploration);
+		}
+		return explorationList;
+	}
 
 	public static Exploration parseJSONString(String explorationString) throws JSONException, ParseException {
 		return parseJSON(new JSONObject(explorationString));

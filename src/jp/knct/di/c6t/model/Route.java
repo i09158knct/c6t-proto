@@ -3,6 +3,7 @@ package jp.knct.di.c6t.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +18,15 @@ public class Route implements Parcelable {
 	private static final String START_LOCATION = "start_location";
 	private static final String DESCRIPTION = "description";
 	private static final String QUESTS = "quests";
+
+	public static List<Route> parseRoutes(JSONArray routes) throws JSONException {
+		List<Route> routeList = new LinkedList<Route>();
+		for (int i = 0; i < routes.length(); i++) {
+			Route route = parseJSON(routes.getJSONObject(i));
+			routeList.add(route);
+		}
+		return routeList;
+	}
 
 	public static Route parseJSONString(String route) throws JSONException {
 		return parseJSON(new JSONObject(route));
