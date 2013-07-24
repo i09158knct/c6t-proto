@@ -51,16 +51,14 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		ActivityUtil getter = new ActivityUtil(this);
 		String mission = getter.getText(R.id.route_creation_quest_form_mission);
 		String pose = getter.getText(R.id.route_creation_quest_form_pose);
-		String title = getter.getText(R.id.route_creation_quest_form_title);
-		return new Quest(mQuestLocation, title, pose, mission, mImageUri.getPath());
+		return new Quest(mQuestLocation, pose, mission, mImageUri.getPath());
 	}
 
 	private void putQuestDataIntoEditForms(Quest quest) {
 		new ActivityUtil(this)
 				.setText(R.id.route_creation_quest_form_location, quest.getLocation().toString())
 				.setText(R.id.route_creation_quest_form_mission, quest.getMission())
-				.setText(R.id.route_creation_quest_form_pose, quest.getPose())
-				.setText(R.id.route_creation_quest_form_title, quest.getTitle());
+				.setText(R.id.route_creation_quest_form_pose, quest.getPose());
 	}
 
 	@Override

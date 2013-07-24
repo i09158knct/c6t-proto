@@ -56,7 +56,7 @@ public class RouteCreationActivity extends Activity
 			int questNumber = Integer.parseInt(marker.getSnippet());
 			Quest targetQuest = mRoute.getQuests().get(questNumber - 1);
 
-			mTitle.setText(questNumber + ". " + targetQuest.getTitle());
+			mTitle.setText("クエストポイント" + questNumber);
 			mImage.setImageBitmap(ImageUtil.decodeBitmap(targetQuest.getImage(), 10));
 
 			return mContents;

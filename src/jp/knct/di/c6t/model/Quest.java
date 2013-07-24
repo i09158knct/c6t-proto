@@ -19,7 +19,6 @@ public class Quest implements Parcelable {
 	private static final String MISSION = "mission";
 	private static final String POSE = "pose";
 	private static final String LOCATION = "location";
-	public static final String TITLE = "title";
 
 	public static LatLng parseLocation(String location) {
 		String[] latlng = location.split(",");
@@ -54,39 +53,28 @@ public class Quest implements Parcelable {
 	}
 
 	public static Quest parseJSON(JSONObject quest) throws JSONException {
-		String title = quest.getString(TITLE);
 		LatLng location = parseLocation(quest.getString(LOCATION));
 		String pose = quest.getString(POSE);
 		String mission = quest.getString(MISSION);
 		String image = quest.getString(IMAGE);
-		return new Quest(location, title, pose, mission, image);
+		return new Quest(location, pose, mission, image);
 	}
 
-	private String title;
 	private String pose;
 	private String mission;
 	private String image;
 	private double latitude;
 	private double longitude;
 
-	public Quest(LatLng location, String title, String pose, String mission, String image) {
+	public Quest(LatLng location, String pose, String mission, String image) {
 		setLocation(location);
-		setTitle(title);
 		setPose(pose);
 		setMission(mission);
 		setImage(image); // FIXME: image type
 	}
 
 	public Quest(LatLng location) {
-		this(location, "", "", "", "");
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+		this(location, "", "", "");
 	}
 
 	public LatLng getLocation() {
@@ -125,7 +113,6 @@ public class Quest implements Parcelable {
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
-					.put(TITLE, getTitle())
 					.put(LOCATION, serializeLocation(getLocation()))
 					.put(POSE, getPose())
 					.put(MISSION, getMission())
@@ -151,7 +138,6 @@ public class Quest implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(getTitle());
 		dest.writeDouble(getLocation().latitude);
 		dest.writeDouble(getLocation().longitude);
 		dest.writeString(getPose());
@@ -162,14 +148,13 @@ public class Quest implements Parcelable {
 	public static final Parcelable.Creator<Quest> CREATOR = new Parcelable.Creator<Quest>() {
 		@Override
 		public Quest createFromParcel(Parcel source) {
-			String title = source.readString();
 			Double latitude = source.readDouble();
 			Double longitude = source.readDouble();
 			String pose = source.readString();
 			String mission = source.readString();
 			String image = source.readString();
 			LatLng location = new LatLng(latitude, longitude);
-			return new Quest(location, title, pose, mission, image);
+			return new Quest(location, pose, mission, image);
 		}
 
 		@Override
