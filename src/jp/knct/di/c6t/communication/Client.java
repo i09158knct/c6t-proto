@@ -20,4 +20,8 @@ public interface Client {
 	void saveRoute(Route route);
 
 	User getMyUserData();
+
+	Exploration refreshExplorationInfo(Exploration exploration);
+
+	void joinExploration(Exploration exploration, User user);
 }

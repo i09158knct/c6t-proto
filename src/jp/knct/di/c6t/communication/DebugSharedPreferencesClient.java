@@ -118,4 +118,16 @@ public class DebugSharedPreferencesClient implements Client {
 	public User getMyUserData() {
 		return new User(0, "taro", "tokyo");
 	}
+
+	@Override
+	public Exploration refreshExplorationInfo(Exploration exploration) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void joinExploration(Exploration exploration, User user) {
+		// TODO Auto-generated method stub
+
+	}
 }
