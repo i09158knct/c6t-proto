@@ -27,6 +27,9 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 public class BasicClient {
+	private static final String PREFERENCE_KEY_USER_ID = "user_id";
+	private static final String PREFERENCE_KEY_USER_NAME = "user_name";
+	private static final String PREFERENCE_KEY_USER_AREA = "user_area";
 
 	private static final String SERVER_URL = "http://192.168.11.2:8080/";
 	private static final String EXPLORATIONS_URL = SERVER_URL + "explorations/";
@@ -187,14 +190,20 @@ public class BasicClient {
 	 */
 
 	public User getUserFromLocal(Context context) {
-		final String PREFERENCE_KEY_USER_ID = "user_id";
-		final String PREFERENCE_KEY_USER_NAME = "user_name";
-		final String PREFERENCE_KEY_USER_AREA = "user_area";
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		int id = preferences.getInt(PREFERENCE_KEY_USER_ID, -1);
 		String name = preferences.getString(PREFERENCE_KEY_USER_NAME, "new user");
 		String area = preferences.getString(PREFERENCE_KEY_USER_AREA, "unknown");
 		return new User(name, area, id);
+	}
+
+	public void saveUserToLocal(Context context, User user) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		preferences.edit()
+				.putInt(PREFERENCE_KEY_USER_ID, user.getId())
+				.putString(PREFERENCE_KEY_USER_NAME, user.getName())
+				.putString(PREFERENCE_KEY_USER_AREA, user.getArea())
+				.commit();
 	}
 
 	// GET /users/:id
