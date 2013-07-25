@@ -34,6 +34,10 @@ public class User implements Parcelable {
 		return userList;
 	}
 
+	public static User parseJSONString(String user) throws JSONException {
+		return parseJSON(new JSONObject(user));
+	}
+
 	public static User parseJSON(JSONObject user) throws JSONException {
 		int id = user.getInt(ID);
 		String name = user.getString(NAME);
