@@ -42,17 +42,21 @@ public class User implements Parcelable {
 		int id = user.getInt(ID);
 		String name = user.getString(NAME);
 		String area = user.getString(AREA);
-		return new User(id, name, area);
+		return new User(name, area, id);
 	}
 
-	private int id;
+	private int id = -1;
 	private String name;
 	private String area;
 
-	public User(int id, String name, String area) {
+	public User(String name, String area, int id) {
 		setId(id);
 		setName(name);
 		setArea(area);
+	}
+
+	public User(String name, String area) {
+		this(name, area, -1);
 	}
 
 	public int getId() {
@@ -88,7 +92,7 @@ public class User implements Parcelable {
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
-			Log.d("Quest", "JSON Error!!!!!!!!!!!!!!!!");
+			Log.d("User", "JSON Error!!!!!!!!!!!!!!!!");
 			return null;
 		}
 	}
@@ -112,7 +116,7 @@ public class User implements Parcelable {
 			int id = source.readInt();
 			String area = source.readString();
 			String name = source.readString();
-			return new User(id, name, area);
+			return new User(name, area, id);
 		}
 
 		@Override
