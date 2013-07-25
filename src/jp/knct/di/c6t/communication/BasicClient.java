@@ -1,6 +1,7 @@
 package jp.knct.di.c6t.communication;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -179,9 +182,24 @@ public class BasicClient {
 		return postJSONObject(NEW_ROUTE_URL, route.toJSON());
 	}
 
-	// PUT /routes/:id/images
-	public void putRouteImages(Route route) {
+	// PUT /routes/:route_id/images/:quest_number
+	// PUT /routes/1/images/1
+	public HttpResponse putQuestImage(Route route, int questNumber)
+			throws ClientProtocolException, IOException {
+		HttpPut request = new HttpPut(Uri.parse(ROUTES_URL).buildUpon()
+				.appendPath("" + route.getId())
+				.appendPath("images")
+				.appendPath("" + questNumber)
+				.build()
+				.toString());
 
+		MultipartEntity entity = new MultipartEntity();
+		File image = new File(route.getQuests().get(questNumber).getImage());
+		entity.addPart("image", new FileBody(image));
+		request.setEntity(entity);
+
+		HttpClient client = new DefaultHttpClient();
+		return client.execute(request);
 	}
 
 	/*
