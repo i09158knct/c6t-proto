@@ -116,7 +116,7 @@ public class DebugSharedPreferencesClient implements Client {
 
 	@Override
 	public User getMyUserData() {
-		return new User(0, "taro", "tokyo");
+		return new User("taro", "tokyo", 0);
 	}
 
 	@Override
