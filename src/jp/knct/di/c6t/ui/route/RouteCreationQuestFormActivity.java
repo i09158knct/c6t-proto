@@ -23,7 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 public class RouteCreationQuestFormActivity extends Activity implements OnClickListener {
 
 	private static final int REQUEST_CODE_IMAGE_CAPTURE = 0x100;
-	public static final int REQUEST_CODE_EDIT_QUEST = 0;
+	public static final int REQUEST_CODE_CREATE_QUEST = 0;
+	public static final int REQUEST_CODE_EDIT_QUEST = 1;
 
 	private int mQuestNumber;
 	private LatLng mQuestLocation;
@@ -36,14 +37,19 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		setContentView(R.layout.activity_route_creation_quest_form);
 
 		mQuestNumber = getIntent().getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
-		Quest quest = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_BASE_QUEST);
+		Quest quest = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_QUEST);
 		mQuestLocation = quest.getLocation();
 		putQuestDataIntoEditForms(quest);
+
+		if (getIntent().getIntExtra(IntentData.EXTRA_KEY_REQUEST_CODE, -1) == REQUEST_CODE_EDIT_QUEST) {
+			findViewById(R.id.route_creation_quest_form_delete).setVisibility(View.VISIBLE);
+		}
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.route_creation_quest_form_camera,
 				R.id.route_creation_quest_form_cancel,
 				R.id.route_creation_quest_form_ok,
+				R.id.route_creation_quest_form_delete,
 		});
 	}
 
@@ -96,11 +102,19 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 			Quest quest = createQuestFromEditForms();
 			if (quest.isValid()) {
 				intent = new Intent()
-						.putExtra(IntentData.EXTRA_KEY_BASE_QUEST, quest)
+						.putExtra(IntentData.EXTRA_KEY_QUEST, quest)
 						.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mQuestNumber);
 				setResult(RESULT_OK, intent);
 				finish();
 			}
+			break;
+
+		case R.id.route_creation_quest_form_delete:
+			intent = new Intent()
+					.putExtra(IntentData.EXTRA_KEY_QUEST, (Quest) null)
+					.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mQuestNumber);
+			setResult(RESULT_OK, intent);
+			finish();
 			break;
 
 		default:

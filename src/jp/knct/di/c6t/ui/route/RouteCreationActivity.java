@@ -8,6 +8,8 @@ import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.ImageUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,7 +37,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class RouteCreationActivity extends Activity
 		implements OnClickListener,
 		ConnectionCallbacks,
-		OnConnectionFailedListener {
+		OnConnectionFailedListener,
+		OnInfoWindowClickListener {
+
+	private static int getQuestNumber(Marker marker) {
+		return Integer.parseInt(marker.getSnippet());
+	}
 
 	class QuestInfoWindowAdapter implements InfoWindowAdapter {
 		private View mContents;
@@ -53,10 +61,10 @@ public class RouteCreationActivity extends Activity
 				return null;
 			}
 
-			int questNumber = Integer.parseInt(marker.getSnippet());
-			Quest targetQuest = mRoute.getQuests().get(questNumber - 1);
+			int questNumber = getQuestNumber(marker);
+			Quest targetQuest = mRoute.getQuests().get(questNumber);
 
-			mTitle.setText("クエストポイント" + questNumber);
+			mTitle.setText("クエストポイント" + (questNumber + 1));
 			mImage.setImageBitmap(ImageUtil.decodeBitmap(targetQuest.getImage(), 10));
 
 			return mContents;
@@ -101,7 +109,7 @@ public class RouteCreationActivity extends Activity
 		mMap.moveCamera(MapUtil.INITIAL_CAMERA_UPDATE);
 
 		// TODO
-		// mMap.setOnInfoWindowClickListener(this);
+		mMap.setOnInfoWindowClickListener(this);
 	}
 
 	private MarkerOptions createStartPointMarker(Route route) {
@@ -125,7 +133,7 @@ public class RouteCreationActivity extends Activity
 			mMap.addMarker(createStartPointMarker(mRoute));
 		}
 
-		int questNumber = 1;
+		int questNumber = 0;
 		for (Quest quest : mRoute.getQuests()) {
 			mMap.addMarker(createQuestPointMarker(quest, questNumber));
 			questNumber++;
@@ -134,18 +142,31 @@ public class RouteCreationActivity extends Activity
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST &&
+		if (requestCode == RouteCreationQuestFormActivity.REQUEST_CODE_CREATE_QUEST &&
 				resultCode == RESULT_OK) {
-			Quest quest = data.getParcelableExtra(IntentData.EXTRA_KEY_BASE_QUEST);
+			Quest quest = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST);
 			mRoute.addQuest(quest);
 
 			if (mRoute.getQuests().size() == 5) {
-				Toast.makeText(this, "終了", 0).show();
-				// TODO
+				findViewById(R.id.route_creation_create_new_quest).setVisibility(View.GONE);
+				if (mRoute.getStartLocation() != null) {
+					findViewById(R.id.route_creation_finish).setVisibility(View.VISIBLE);
+				}
 			}
-			else if (mRoute.getQuests().size() > 5) {
-				// TODO
+		}
 
+		if (requestCode == RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST &&
+				resultCode == RESULT_OK) {
+			int questNumber = data.getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
+			Quest quest = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST);
+
+			if (quest == null) {
+				mRoute.getQuests().remove(questNumber);
+				findViewById(R.id.route_creation_create_new_quest).setVisibility(View.VISIBLE);
+				findViewById(R.id.route_creation_finish).setVisibility(View.GONE);
+			}
+			else {
+				mRoute.getQuests().set(questNumber, quest);
 			}
 		}
 
@@ -166,13 +187,16 @@ public class RouteCreationActivity extends Activity
 			mRoute.setStartLocation(getCurrentLocation());
 			updateMap();
 			Toast.makeText(this, "現在地点をスタートポイントに設定しました。", Toast.LENGTH_SHORT).show();
+			if (mRoute.getQuests().size() == 5) {
+				findViewById(R.id.route_creation_finish).setVisibility(View.VISIBLE);
+			}
 			break;
 
 		case R.id.route_creation_create_new_quest:
 			Quest newQuest = new Quest(getCurrentLocation());
 			intent = new Intent(this, RouteCreationQuestFormActivity.class)
-					.putExtra(IntentData.EXTRA_KEY_BASE_QUEST, newQuest);
-			startActivityForResult(intent, RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST);
+					.putExtra(IntentData.EXTRA_KEY_QUEST, newQuest);
+			startActivityForResult(intent, RouteCreationQuestFormActivity.REQUEST_CODE_CREATE_QUEST);
 			break;
 
 		case R.id.route_creation_quests:
@@ -185,9 +209,6 @@ public class RouteCreationActivity extends Activity
 			startActivityForResult(intent, RouteCreationDetailFormActivity.REQUEST_CODE_EDIT_ROUTE_DETAIL);
 			break;
 
-		// case R.id.route_creation_debug_route_creation_updatequests:
-		// break;
-
 		default:
 			break;
 		}
@@ -195,6 +216,11 @@ public class RouteCreationActivity extends Activity
 
 	private LatLng getCurrentLocation() {
 		Location lastLocation = mLocationClient.getLastLocation();
+
+		if (lastLocation == null) {
+			lastLocation = mMap.getMyLocation();
+		}
+
 		double latitude = lastLocation.getLatitude();
 		double longitude = lastLocation.getLongitude();
 		return new LatLng(latitude, longitude);
@@ -218,5 +244,31 @@ public class RouteCreationActivity extends Activity
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+		if (marker.getTitle() != null) {
+			return;
+		}
+
+		int questNumber = getQuestNumber(marker);
+		Quest quest = mRoute.getQuests().get(questNumber);
+		final Intent intent = new Intent(RouteCreationActivity.this, RouteCreationQuestFormActivity.class)
+				.putExtra(IntentData.EXTRA_KEY_QUEST, quest)
+				.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, questNumber)
+				.putExtra(IntentData.EXTRA_KEY_REQUEST_CODE, RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST);
+
+		new AlertDialog.Builder(this)
+				.setMessage("クエストを編集しますか？")
+				.setCancelable(true)
+				.setPositiveButton("はい", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						startActivityForResult(intent, RouteCreationQuestFormActivity.REQUEST_CODE_EDIT_QUEST);
+					}
+				})
+				.setNegativeButton("いいえ", null)
+				.show();
+
 	}
 }
