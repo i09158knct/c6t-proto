@@ -21,7 +21,7 @@ public class Exploration implements Parcelable {
 	private static final String ROUTE = "route";
 	private static final String START_TIME = "start_time";
 	private static final String DESCRIPTION = "description";
-	private static final String PARTICIPANTS = "participants";
+	private static final String MEMBERS = "members";
 
 	public static List<Exploration> parseExplorations(JSONArray explorations) throws JSONException, ParseException {
 		List<Exploration> explorationList = new LinkedList<Exploration>();
@@ -42,8 +42,8 @@ public class Exploration implements Parcelable {
 		Route route = Route.parseJSON(exploration.getJSONObject(ROUTE));
 		Date startTime = new SimpleDateFormat().parse(exploration.getString(START_TIME));
 		String description = exploration.getString(DESCRIPTION);
-		List<User> participants = User.parseUsers(exploration.getJSONArray(PARTICIPANTS));
-		return new Exploration(host, route, startTime, description, participants, id);
+		List<User> menbers = User.parseUsers(exploration.getJSONArray(MEMBERS));
+		return new Exploration(host, route, startTime, description, menbers, id);
 	}
 
 	private int id = -1;
@@ -51,19 +51,19 @@ public class Exploration implements Parcelable {
 	private Route route;
 	private Date startTime;
 	private String description;
-	private List<User> participants;
+	private List<User> menbers;
 
-	public Exploration(User host, Route route, Date startTime, String description, List<User> participants, int id) {
+	public Exploration(User host, Route route, Date startTime, String description, List<User> menbers, int id) {
 		setId(id);
 		setHost(host);
 		setRoute(route);
 		setStartTime(startTime);
 		setDescription(description);
-		setParticipants(participants);
+		setMembers(menbers);
 	}
 
-	public Exploration(User host, Route route, Date startTime, String description, List<User> participants) {
-		this(host, route, startTime, description, participants, -1);
+	public Exploration(User host, Route route, Date startTime, String description, List<User> menbers) {
+		this(host, route, startTime, description, menbers, -1);
 	}
 
 	public Exploration() {
@@ -110,12 +110,12 @@ public class Exploration implements Parcelable {
 		this.description = description;
 	}
 
-	public List<User> getParticipants() {
-		return participants;
+	public List<User> getMembers() {
+		return menbers;
 	}
 
-	public void setParticipants(List<User> participants) {
-		this.participants = participants;
+	public void setMembers(List<User> menbers) {
+		this.menbers = menbers;
 	}
 
 	public JSONObject toJSON() {
@@ -126,7 +126,7 @@ public class Exploration implements Parcelable {
 					.put(ROUTE, getRoute().toJSON())
 					.put(START_TIME, new SimpleDateFormat().format(getStartTime()))
 					.put(DESCRIPTION, getDescription())
-					.put(PARTICIPANTS, User.convertUsersToJsonArray(getParticipants()));
+					.put(MEMBERS, User.convertUsersToJsonArray(getMembers()));
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
@@ -153,7 +153,7 @@ public class Exploration implements Parcelable {
 		dest.writeParcelable(getRoute(), -1);
 		dest.writeString(new SimpleDateFormat().format(startTime));
 		dest.writeString(getDescription());
-		dest.writeTypedList(getParticipants());
+		dest.writeTypedList(getMembers());
 	}
 
 	public static final Parcelable.Creator<Exploration> CREATOR = new Parcelable.Creator<Exploration>() {

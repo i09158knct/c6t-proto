@@ -31,9 +31,10 @@ public class ExplorationStandbyActivity extends ListActivity implements OnClickL
 		client.joinExploration(mExploration, client.getMyUserData());
 		mExploration = client.refreshExplorationInfo(mExploration);
 
-		ArrayAdapter<User> adapter = new ArrayAdapter<User>(this,
-				android.R.layout.simple_list_item_1,
-				(User[]) mExploration.getParticipants().toArray());
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+		for (User user : mExploration.getMembers()) {
+			adapter.add(user.getName());
+		}
 		setListAdapter(adapter);
 
 		// TODO: continuous update process
