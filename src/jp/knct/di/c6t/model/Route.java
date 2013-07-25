@@ -14,6 +14,8 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Route implements Parcelable {
+
+	private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String START_LOCATION = "start_location";
 	private static final String DESCRIPTION = "description";
@@ -33,13 +35,15 @@ public class Route implements Parcelable {
 	}
 
 	public static Route parseJSON(JSONObject routeJSON) throws JSONException {
+		int id = routeJSON.getInt(ID);
 		String name = routeJSON.getString(NAME);
 		LatLng location = Quest.parseLocation(routeJSON.getString(START_LOCATION));
 		String description = routeJSON.getString(DESCRIPTION);
 		List<Quest> quests = Quest.parseQuests(routeJSON.getJSONArray(QUESTS));
-		return new Route(location, name, description, quests);
+		return new Route(location, name, description, quests, id);
 	}
 
+	private int id = -1;
 	private String name;
 	private String description;
 	private List<Quest> quests;
@@ -47,15 +51,28 @@ public class Route implements Parcelable {
 	private double longitude = INITIAL_LAT_LNG_VALUE;
 	private static double INITIAL_LAT_LNG_VALUE = 0xfffff;
 
-	public Route(LatLng startLocation, String name, String description, List<Quest> quests) {
+	public Route(LatLng startLocation, String name, String description, List<Quest> quests, int id) {
+		setId(id);
 		setStartLocation(startLocation);
 		setName(name);
 		setDescription(description);
 		setQuests(quests);
 	}
 
+	public Route(LatLng startLocation, String name, String description, List<Quest> quests) {
+		this(startLocation, name, description, quests, -1);
+	}
+
 	public Route() {
 		this(null, "", "", new LinkedList<Quest>());
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -107,6 +124,7 @@ public class Route implements Parcelable {
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
+					.put(ID, getId())
 					.put(NAME, getName())
 					.put(START_LOCATION, Quest.serializeLocation(getStartLocation()))
 					.put(DESCRIPTION, getDescription())
@@ -132,6 +150,7 @@ public class Route implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(getId());
 		dest.writeString(getName());
 		dest.writeString(getDescription());
 		dest.writeDouble(getStartLocation().latitude);
@@ -142,6 +161,7 @@ public class Route implements Parcelable {
 	public static final Parcelable.Creator<Route> CREATOR = new Parcelable.Creator<Route>() {
 		@Override
 		public Route createFromParcel(Parcel source) {
+			int id = source.readInt();
 			String name = source.readString();
 			String description = source.readString();
 			Double latitude = source.readDouble();
@@ -149,7 +169,7 @@ public class Route implements Parcelable {
 			List<Quest> quests = new LinkedList<Quest>();
 			source.readTypedList(quests, Quest.CREATOR);
 			LatLng location = new LatLng(latitude, longitude);
-			return new Route(location, name, description, quests);
+			return new Route(location, name, description, quests, id);
 		}
 
 		@Override
