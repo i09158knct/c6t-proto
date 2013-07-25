@@ -16,6 +16,7 @@ import android.util.Log;
 
 public class Exploration implements Parcelable {
 
+	private static final String ID = "id";
 	private static final String HOST = "host";
 	private static final String ROUTE = "route";
 	private static final String START_TIME = "start_time";
@@ -36,21 +37,24 @@ public class Exploration implements Parcelable {
 	}
 
 	public static Exploration parseJSON(JSONObject exploration) throws JSONException, ParseException {
+		int id = exploration.getInt(ID); // TODO: case: undefined
 		User host = User.parseJSON(exploration.getJSONObject(HOST));
 		Route route = Route.parseJSON(exploration.getJSONObject(ROUTE));
 		Date startTime = new SimpleDateFormat().parse(exploration.getString(START_TIME));
 		String description = exploration.getString(DESCRIPTION);
 		List<User> participants = User.parseUsers(exploration.getJSONArray(PARTICIPANTS));
-		return new Exploration(host, route, startTime, description, participants);
+		return new Exploration(host, route, startTime, description, participants, id);
 	}
 
+	private int id = -1;
 	private User host;
 	private Route route;
 	private Date startTime;
 	private String description;
 	private List<User> participants;
 
-	public Exploration(User host, Route route, Date startTime, String description, List<User> participants) {
+	public Exploration(User host, Route route, Date startTime, String description, List<User> participants, int id) {
+		setId(id);
 		setHost(host);
 		setRoute(route);
 		setStartTime(startTime);
@@ -58,8 +62,20 @@ public class Exploration implements Parcelable {
 		setParticipants(participants);
 	}
 
+	public Exploration(User host, Route route, Date startTime, String description, List<User> participants) {
+		this(host, route, startTime, description, participants, -1);
+	}
+
 	public Exploration() {
 		this(null, null, null, null, new LinkedList<User>());
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public User getHost() {
@@ -105,6 +121,7 @@ public class Exploration implements Parcelable {
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
+					.put(ID, getId())
 					.put(HOST, getHost().toJSON())
 					.put(ROUTE, getRoute().toJSON())
 					.put(START_TIME, new SimpleDateFormat().format(getStartTime()))
@@ -131,6 +148,7 @@ public class Exploration implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(getId());
 		dest.writeParcelable(getHost(), -1);
 		dest.writeParcelable(getRoute(), -1);
 		dest.writeString(new SimpleDateFormat().format(startTime));
@@ -142,13 +160,14 @@ public class Exploration implements Parcelable {
 		@Override
 		public Exploration createFromParcel(Parcel source) {
 			try {
+				int id = source.readInt();
 				User host = source.readParcelable(User.class.getClassLoader());
 				Route route = source.readParcelable(Route.class.getClassLoader());
 				Date startTime = new SimpleDateFormat().parse(source.readString());
 				String description = source.readString();
 				List<User> users = new LinkedList<User>();
 				source.readTypedList(users, User.CREATOR);
-				return new Exploration(host, route, startTime, description, users);
+				return new Exploration(host, route, startTime, description, users, id);
 			}
 			catch (ParseException e) {
 				// TODO Auto-generated catch block
