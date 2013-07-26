@@ -1,10 +1,11 @@
 package jp.knct.di.c6t.model;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import jp.knct.di.c6t.util.TimeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +41,7 @@ public class Exploration implements Parcelable {
 		int id = exploration.getInt(ID); // TODO: case: undefined
 		User host = User.parseJSON(exploration.getJSONObject(HOST));
 		Route route = Route.parseJSON(exploration.getJSONObject(ROUTE));
-		Date startTime = new SimpleDateFormat().parse(exploration.getString(START_TIME));
+		Date startTime = TimeUtil.parse(exploration.getString(START_TIME));
 		String description = exploration.getString(DESCRIPTION);
 		List<User> menbers = User.parseUsers(exploration.getJSONArray(MEMBERS));
 		return new Exploration(host, route, startTime, description, menbers, id);
@@ -124,7 +125,7 @@ public class Exploration implements Parcelable {
 					.put(ID, getId())
 					.put(HOST, getHost().toJSON())
 					.put(ROUTE, getRoute().toJSON())
-					.put(START_TIME, new SimpleDateFormat().format(getStartTime()))
+					.put(START_TIME, TimeUtil.format(getStartTime()))
 					.put(DESCRIPTION, getDescription())
 					.put(MEMBERS, User.convertUsersToJsonArray(getMembers()));
 		}
@@ -151,7 +152,7 @@ public class Exploration implements Parcelable {
 		dest.writeInt(getId());
 		dest.writeParcelable(getHost(), -1);
 		dest.writeParcelable(getRoute(), -1);
-		dest.writeString(new SimpleDateFormat().format(startTime));
+		dest.writeString(TimeUtil.format(startTime));
 		dest.writeString(getDescription());
 		dest.writeTypedList(getMembers());
 	}
@@ -163,7 +164,7 @@ public class Exploration implements Parcelable {
 				int id = source.readInt();
 				User host = source.readParcelable(User.class.getClassLoader());
 				Route route = source.readParcelable(Route.class.getClassLoader());
-				Date startTime = new SimpleDateFormat().parse(source.readString());
+				Date startTime = TimeUtil.parse(source.readString());
 				String description = source.readString();
 				List<User> users = new LinkedList<User>();
 				source.readTypedList(users, User.CREATOR);
