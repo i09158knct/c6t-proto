@@ -82,6 +82,10 @@ public class DebugSharedPreferencesClient implements Client {
 			e.printStackTrace();
 			return null;
 		}
+		catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
