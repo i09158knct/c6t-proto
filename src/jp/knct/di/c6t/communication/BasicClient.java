@@ -130,12 +130,12 @@ public class BasicClient {
 		return postJSONObject(NEW_EXPLORATION_URL, exploration.toJSON());
 	}
 
-	// PUT /explorations/:exploration_id/participants
-	public HttpResponse putParticipant(Exploration exploration, User user)
+	// PUT /explorations/:exploration_id/members
+	public HttpResponse putMember(Exploration exploration, User user)
 			throws ClientProtocolException, IOException, JSONException, ParseException {
 		return putJSONObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
 				.appendPath("" + exploration.getId())
-				.appendPath("participants")
+				.appendPath("members")
 				.build()
 				.toString(), user.toJSON());
 	}
@@ -183,7 +183,7 @@ public class BasicClient {
 	}
 
 	// PUT /routes/:route_id/images/:quest_number
-	// PUT /routes/1/images/1
+	// PUT /routes/1/images/0
 	public HttpResponse putQuestImage(Route route, int questNumber)
 			throws ClientProtocolException, IOException {
 		HttpPut request = new HttpPut(Uri.parse(ROUTES_URL).buildUpon()
