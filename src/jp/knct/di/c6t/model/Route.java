@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.knct.di.c6t.util.MapUtil;
 import jp.knct.di.c6t.util.TimeUtil;
 
 import org.json.JSONArray;
@@ -45,7 +46,7 @@ public class Route implements Parcelable {
 	public static Route parseJSON(JSONObject routeJSON) throws JSONException, ParseException {
 		int id = routeJSON.getInt(ID);
 		String name = routeJSON.getString(NAME);
-		LatLng location = Quest.parseLocation(routeJSON.getString(START_LOCATION));
+		LatLng location = MapUtil.parseLocation(routeJSON.getString(START_LOCATION));
 		String description = routeJSON.getString(DESCRIPTION);
 		List<Quest> quests = Quest.parseQuests(routeJSON.getJSONArray(QUESTS));
 		User user = User.parseJSON(routeJSON.getJSONObject(USER));
@@ -182,7 +183,7 @@ public class Route implements Parcelable {
 			return new JSONObject()
 					.put(ID, getId())
 					.put(NAME, getName())
-					.put(START_LOCATION, Quest.serializeLocation(getStartLocation()))
+					.put(START_LOCATION, MapUtil.serializeLocation(getStartLocation()))
 					.put(DESCRIPTION, getDescription())
 					.put(QUESTS, Quest.convertQuestsToJsonArray(getQuests()))
 					.put(USER, getUser().toJSON())

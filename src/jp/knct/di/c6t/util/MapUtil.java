@@ -23,4 +23,15 @@ public class MapUtil {
 				.build();
 
 	}
+
+	public static LatLng parseLocation(String location) {
+		String[] latlng = location.split(",");
+		return new LatLng(
+				Double.parseDouble(latlng[0]),
+				Double.parseDouble(latlng[1]));
+	}
+
+	public static String serializeLocation(LatLng location) {
+		return location.latitude + "," + location.longitude;
+	}
 }

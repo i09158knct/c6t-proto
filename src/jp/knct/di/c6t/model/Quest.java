@@ -3,6 +3,8 @@ package jp.knct.di.c6t.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.knct.di.c6t.util.MapUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,17 +21,6 @@ public class Quest implements Parcelable {
 	private static final String MISSION = "mission";
 	private static final String POSE = "pose";
 	private static final String LOCATION = "location";
-
-	public static LatLng parseLocation(String location) {
-		String[] latlng = location.split(",");
-		return new LatLng(
-				Double.parseDouble(latlng[0]),
-				Double.parseDouble(latlng[1]));
-	}
-
-	public static String serializeLocation(LatLng location) {
-		return location.latitude + "," + location.longitude;
-	}
 
 	public static List<Quest> parseQuests(JSONArray quests) throws JSONException {
 		List<Quest> questList = new LinkedList<Quest>();
@@ -53,7 +44,7 @@ public class Quest implements Parcelable {
 	}
 
 	public static Quest parseJSON(JSONObject quest) throws JSONException {
-		LatLng location = parseLocation(quest.getString(LOCATION));
+		LatLng location = MapUtil.parseLocation(quest.getString(LOCATION));
 		String pose = quest.getString(POSE);
 		String mission = quest.getString(MISSION);
 		String image = quest.getString(IMAGE);
@@ -113,7 +104,7 @@ public class Quest implements Parcelable {
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
-					.put(LOCATION, serializeLocation(getLocation()))
+					.put(LOCATION, MapUtil.serializeLocation(getLocation()))
 					.put(POSE, getPose())
 					.put(MISSION, getMission())
 					.put(IMAGE, getImage());
