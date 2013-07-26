@@ -39,6 +39,7 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		mQuestNumber = getIntent().getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
 		Quest quest = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_QUEST);
 		mQuestLocation = quest.getLocation();
+		mImageUri = Uri.parse(quest.getImage());
 		putQuestDataIntoEditForms(quest);
 
 		if (getIntent().getIntExtra(IntentData.EXTRA_KEY_REQUEST_CODE, -1) == REQUEST_CODE_EDIT_QUEST) {
