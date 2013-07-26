@@ -1,7 +1,11 @@
 package jp.knct.di.c6t.model;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import jp.knct.di.c6t.util.TimeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,8 +24,12 @@ public class Route implements Parcelable {
 	private static final String START_LOCATION = "start_location";
 	private static final String DESCRIPTION = "description";
 	private static final String QUESTS = "quests";
+	private static final String USER = "user";
+	private static final String PLAYED_COUNT = "played_count";
+	private static final String ACHIEVEMENT_COUNT = "achievement_count";
+	private static final String CREATED_AT = "created_at";
 
-	public static List<Route> parseRoutes(JSONArray routes) throws JSONException {
+	public static List<Route> parseRoutes(JSONArray routes) throws JSONException, ParseException {
 		List<Route> routeList = new LinkedList<Route>();
 		for (int i = 0; i < routes.length(); i++) {
 			Route route = parseJSON(routes.getJSONObject(i));
@@ -30,17 +38,21 @@ public class Route implements Parcelable {
 		return routeList;
 	}
 
-	public static Route parseJSONString(String route) throws JSONException {
+	public static Route parseJSONString(String route) throws JSONException, ParseException {
 		return parseJSON(new JSONObject(route));
 	}
 
-	public static Route parseJSON(JSONObject routeJSON) throws JSONException {
+	public static Route parseJSON(JSONObject routeJSON) throws JSONException, ParseException {
 		int id = routeJSON.getInt(ID);
 		String name = routeJSON.getString(NAME);
 		LatLng location = Quest.parseLocation(routeJSON.getString(START_LOCATION));
 		String description = routeJSON.getString(DESCRIPTION);
 		List<Quest> quests = Quest.parseQuests(routeJSON.getJSONArray(QUESTS));
-		return new Route(location, name, description, quests, id);
+		User user = User.parseJSON(routeJSON.getJSONObject(USER));
+		int playedCount = routeJSON.getInt(PLAYED_COUNT);
+		int achievedCount = routeJSON.getInt(ACHIEVEMENT_COUNT);
+		Date createdAt = TimeUtil.parse(routeJSON.getString(CREATED_AT));
+		return new Route(location, name, description, quests, id, user, playedCount, achievedCount, createdAt);
 	}
 
 	private int id = -1;
@@ -50,13 +62,25 @@ public class Route implements Parcelable {
 	private double latitude = INITIAL_LAT_LNG_VALUE;
 	private double longitude = INITIAL_LAT_LNG_VALUE;
 	private static double INITIAL_LAT_LNG_VALUE = 0xfffff;
+	private User user;
+	private int playedCount;
+	private int achievedCount;
+	private Date createdAt;
 
-	public Route(LatLng startLocation, String name, String description, List<Quest> quests, int id) {
+	public Route(LatLng startLocation, String name, String description, List<Quest> quests, int id, User user, int playedCount, int achievedCount, Date createdAt) {
 		setId(id);
 		setStartLocation(startLocation);
 		setName(name);
 		setDescription(description);
 		setQuests(quests);
+		setUser(user);
+		setPlayedCount(playedCount);
+		setAchievedCount(achievedCount);
+		setCreatedAt(createdAt);
+	}
+
+	public Route(LatLng startLocation, String name, String description, List<Quest> quests, int id) {
+		this(startLocation, name, description, quests, id, null, 0, 0, null);
 	}
 
 	public Route(LatLng startLocation, String name, String description, List<Quest> quests) {
@@ -121,6 +145,38 @@ public class Route implements Parcelable {
 		this.quests.add(quest);
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public int getPlayedCount() {
+		return playedCount;
+	}
+
+	public void setPlayedCount(int playedCount) {
+		this.playedCount = playedCount;
+	}
+
+	public int getAchievedCount() {
+		return achievedCount;
+	}
+
+	public void setAchievedCount(int achievedCount) {
+		this.achievedCount = achievedCount;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
@@ -128,7 +184,11 @@ public class Route implements Parcelable {
 					.put(NAME, getName())
 					.put(START_LOCATION, Quest.serializeLocation(getStartLocation()))
 					.put(DESCRIPTION, getDescription())
-					.put(QUESTS, Quest.convertQuestsToJsonArray(getQuests()));
+					.put(QUESTS, Quest.convertQuestsToJsonArray(getQuests()))
+					.put(USER, getUser().toJSON())
+					.put(PLAYED_COUNT, getPlayedCount())
+					.put(ACHIEVEMENT_COUNT, getAchievedCount())
+					.put(CREATED_AT, getCreatedAt());
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
@@ -156,6 +216,10 @@ public class Route implements Parcelable {
 		dest.writeDouble(getStartLocation().latitude);
 		dest.writeDouble(getStartLocation().longitude);
 		dest.writeTypedList(getQuests());
+		dest.writeParcelable(getUser(), -1);
+		dest.writeInt(getPlayedCount());
+		dest.writeInt(getAchievedCount());
+		dest.writeSerializable(getCreatedAt());
 	}
 
 	public static final Parcelable.Creator<Route> CREATOR = new Parcelable.Creator<Route>() {
@@ -169,7 +233,11 @@ public class Route implements Parcelable {
 			List<Quest> quests = new LinkedList<Quest>();
 			source.readTypedList(quests, Quest.CREATOR);
 			LatLng location = new LatLng(latitude, longitude);
-			return new Route(location, name, description, quests, id);
+			User user = source.readParcelable(User.class.getClassLoader());
+			int playedCount = source.readInt();
+			int achievedCount = source.readInt();
+			Date createdAt = (Date) source.readSerializable();
+			return new Route(location, name, description, quests, id, user, playedCount, achievedCount, createdAt);
 		}
 
 		@Override
