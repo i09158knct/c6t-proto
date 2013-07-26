@@ -152,7 +152,7 @@ public class Exploration implements Parcelable {
 		dest.writeInt(getId());
 		dest.writeParcelable(getHost(), -1);
 		dest.writeParcelable(getRoute(), -1);
-		dest.writeString(TimeUtil.format(startTime));
+		dest.writeSerializable(getStartTime());
 		dest.writeString(getDescription());
 		dest.writeTypedList(getMembers());
 	}
@@ -160,21 +160,14 @@ public class Exploration implements Parcelable {
 	public static final Parcelable.Creator<Exploration> CREATOR = new Parcelable.Creator<Exploration>() {
 		@Override
 		public Exploration createFromParcel(Parcel source) {
-			try {
-				int id = source.readInt();
-				User host = source.readParcelable(User.class.getClassLoader());
-				Route route = source.readParcelable(Route.class.getClassLoader());
-				Date startTime = TimeUtil.parse(source.readString());
-				String description = source.readString();
-				List<User> users = new LinkedList<User>();
-				source.readTypedList(users, User.CREATOR);
-				return new Exploration(host, route, startTime, description, users, id);
-			}
-			catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
+			int id = source.readInt();
+			User host = source.readParcelable(User.class.getClassLoader());
+			Route route = source.readParcelable(Route.class.getClassLoader());
+			Date startTime = (Date) source.readSerializable();
+			String description = source.readString();
+			List<User> users = new LinkedList<User>();
+			source.readTypedList(users, User.CREATOR);
+			return new Exploration(host, route, startTime, description, users, id);
 		}
 
 		@Override
