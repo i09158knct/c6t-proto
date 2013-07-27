@@ -106,7 +106,7 @@ public class RouteCreationActivity extends Activity
 		mMap.setMyLocationEnabled(true);
 		mMap.setInfoWindowAdapter(new QuestInfoWindowAdapter());
 
-		mMap.moveCamera(MapUtil.INITIAL_CAMERA_UPDATE);
+		mMap.moveCamera(MapUtil.getInitialiCameraUpdate());
 
 		// TODO
 		mMap.setOnInfoWindowClickListener(this);

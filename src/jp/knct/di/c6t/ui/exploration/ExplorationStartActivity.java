@@ -55,7 +55,7 @@ public class ExplorationStartActivity extends Activity
 				.getMap();
 		mMap.setMyLocationEnabled(true);
 
-		mMap.moveCamera(MapUtil.INITIAL_CAMERA_UPDATE);
+		mMap.moveCamera(MapUtil.getInitialiCameraUpdate());
 
 		MarkerOptions startPoint = createStartPointMarker(mExploration.getRoute());
 		mMap.addMarker(startPoint);

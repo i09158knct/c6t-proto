@@ -11,8 +11,11 @@ public class MapUtil {
 	public static final LatLng TOKYO = new LatLng(35.4138, 139.4505);
 	public static final CameraPosition INITIAL_CAMERA_POSITION =
 			new CameraPosition(TOKYO, 0, 0, 0);
-	public static final CameraUpdate INITIAL_CAMERA_UPDATE =
-			CameraUpdateFactory.newCameraPosition(INITIAL_CAMERA_POSITION);
+
+	// Cannot use CameraUpdateFactory when GoogleMap Object is not available.
+	public static CameraUpdate getInitialiCameraUpdate() {
+		return CameraUpdateFactory.newCameraPosition(INITIAL_CAMERA_POSITION);
+	}
 
 	public static Geofence createEventPointGeofence(String id, LatLng location) {
 		return new Geofence.Builder()
