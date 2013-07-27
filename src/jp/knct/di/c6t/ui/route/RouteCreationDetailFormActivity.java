@@ -37,8 +37,10 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 
 		case R.id.route_creation_detail_form_ok:
 			setDetailsFromEditForms(mRoute);
+			DebugSharedPreferencesClient client = new DebugSharedPreferencesClient(this);
+			mRoute.setUser(client.getMyUserData());
 			if (mRoute.isValid()) {
-				new DebugSharedPreferencesClient(this).saveRoute(mRoute); // TODO use http client
+				client.saveRoute(mRoute); // TODO use http client
 				setResult(RESULT_OK);
 				finish();
 			}
