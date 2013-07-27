@@ -7,7 +7,6 @@ import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.Client;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Route;
-import jp.knct.di.c6t.model.User;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;

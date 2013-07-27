@@ -180,7 +180,15 @@ public class Route implements Parcelable {
 
 	public JSONObject toJSON() {
 		User user = getUser();
-		JSONObject userJSON = (user == null) ? null : user.toJSON();
+		JSONObject userJSON = (user == null) ?
+				null :
+				user.toJSON();
+
+		Date date = getCreatedAt();
+		String dateString = TimeUtil.format((date == null) ?
+				new Date(0) :
+				date);
+
 		try {
 			return new JSONObject()
 					.put(ID, getId())
@@ -191,7 +199,7 @@ public class Route implements Parcelable {
 					.put(USER, userJSON)
 					.put(PLAYED_COUNT, getPlayedCount())
 					.put(ACHIEVEMENT_COUNT, getAchievedCount())
-					.put(CREATED_AT, getCreatedAt());
+					.put(CREATED_AT, dateString);
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
