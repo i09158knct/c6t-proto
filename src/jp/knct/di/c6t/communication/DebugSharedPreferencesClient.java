@@ -125,13 +125,15 @@ public class DebugSharedPreferencesClient implements Client {
 
 	@Override
 	public Exploration refreshExplorationInfo(Exploration exploration) {
-		// TODO Auto-generated method stub
-		return null;
+		return exploration;
 	}
 
 	@Override
 	public void joinExploration(Exploration exploration, User user) {
-		// TODO Auto-generated method stub
+		exploration.getMembers().add(user);
+	}
+
+	public void startExploration(Exploration exploration) {
 
 	}
 }

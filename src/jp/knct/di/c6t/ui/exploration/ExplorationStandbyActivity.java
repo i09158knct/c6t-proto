@@ -2,16 +2,17 @@ package jp.knct.di.c6t.ui.exploration;
 
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
-import jp.knct.di.c6t.communication.Client;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.User;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 public class ExplorationStandbyActivity extends ListActivity implements OnClickListener {
 	private Exploration mExploration;
@@ -27,7 +28,7 @@ public class ExplorationStandbyActivity extends ListActivity implements OnClickL
 				R.id.exploration_standby_start,
 		});
 
-		Client client = new DebugSharedPreferencesClient(this);
+		DebugSharedPreferencesClient client = new DebugSharedPreferencesClient(this);
 		client.joinExploration(mExploration, client.getMyUserData());
 		mExploration = client.refreshExplorationInfo(mExploration);
 
@@ -44,13 +45,21 @@ public class ExplorationStandbyActivity extends ListActivity implements OnClickL
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.exploration_standby_start:
-			// TODO:
+			new DebugSharedPreferencesClient(this).startExploration(mExploration);
+			onExplorationStart();
 			break;
 
 		default:
 			break;
 		}
 
+	}
+
+	private void onExplorationStart() {
+		Toast.makeText(this, "íTçıÇäJénÇµÇ‹Ç∑", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this, ExplorationMainActivity.class)
+				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+		startActivity(intent);
 	}
 
 }
