@@ -179,6 +179,8 @@ public class Route implements Parcelable {
 	}
 
 	public JSONObject toJSON() {
+		User user = getUser();
+		JSONObject userJSON = (user == null) ? null : user.toJSON();
 		try {
 			return new JSONObject()
 					.put(ID, getId())
@@ -186,7 +188,7 @@ public class Route implements Parcelable {
 					.put(START_LOCATION, MapUtil.serializeLocation(getStartLocation()))
 					.put(DESCRIPTION, getDescription())
 					.put(QUESTS, Quest.convertQuestsToJsonArray(getQuests()))
-					.put(USER, getUser().toJSON())
+					.put(USER, userJSON)
 					.put(PLAYED_COUNT, getPlayedCount())
 					.put(ACHIEVEMENT_COUNT, getAchievedCount())
 					.put(CREATED_AT, getCreatedAt());
