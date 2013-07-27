@@ -66,14 +66,22 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 				.setText(R.id.route_creation_quest_form_location, quest.getLocation().toString())
 				.setText(R.id.route_creation_quest_form_mission, quest.getMission())
 				.setText(R.id.route_creation_quest_form_pose, quest.getPose());
+
+		if (mImageUri != null) {
+			putQuestImage();
+		}
+	}
+
+	private void putQuestImage() {
+		Bitmap image = ImageUtil.decodeBitmap(mImageUri.getPath(), 10);
+		((ImageView) findViewById(R.id.route_creation_quest_form_image))
+				.setImageBitmap(image);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-			Bitmap image = ImageUtil.decodeBitmap(mImageUri.getPath(), 10);
-			((ImageView) findViewById(R.id.route_creation_quest_form_image))
-					.setImageBitmap(image);
+			putQuestImage();
 		}
 	}
 
