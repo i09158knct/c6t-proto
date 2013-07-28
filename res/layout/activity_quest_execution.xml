@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/quest_execution_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ポーズ" />
+
+    <TextView
+        android:id="@+id/quest_execution_pose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/quest_execution_capture_group_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="集合写真を撮る" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ミッション" />
+
+    <TextView
+        android:id="@+id/quest_execution_mission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/quest_execution_capture_mission_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ミッション写真を撮る" />
+
+</LinearLayout>
