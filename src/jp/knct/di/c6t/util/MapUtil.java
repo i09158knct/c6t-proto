@@ -1,5 +1,6 @@
 package jp.knct.di.c6t.util;
 
+import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.Route;
 import android.location.Location;
 
@@ -49,6 +50,19 @@ public class MapUtil {
 				location.getLongitude(),
 				route.getStartLocation().latitude,
 				route.getStartLocation().longitude,
+				distanceAndBearing);
+
+		return distanceAndBearing;
+	}
+
+	public static float[] calculateDistanceAndBearingToQuestPoint(Location location, Quest quest) {
+		float[] distanceAndBearing = { 0, 0 };
+
+		Location.distanceBetween(
+				location.getLatitude(),
+				location.getLongitude(),
+				quest.getLocation().latitude,
+				quest.getLocation().longitude,
 				distanceAndBearing);
 
 		return distanceAndBearing;
