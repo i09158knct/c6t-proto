@@ -1,6 +1,5 @@
 package jp.knct.di.c6t.ui.route;
 
-import java.io.File;
 import java.io.IOException;
 
 import jp.knct.di.c6t.IntentData;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -91,9 +89,8 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 		switch (v.getId()) {
 		case R.id.route_creation_quest_form_camera:
 			try {
-				mImageUri = Uri.parse(File.createTempFile("c6t__", ".tmp").toURI().toString());
-				intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-						.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+				mImageUri = ImageUtil.createTempFileUri();
+				intent = ImageUtil.createCaptureImageIntent(mImageUri);
 				startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
 			}
 			catch (IOException e) {
