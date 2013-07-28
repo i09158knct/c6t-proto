@@ -4,7 +4,6 @@ import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.Route;
-import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
 import android.content.Intent;
@@ -93,25 +92,6 @@ public class ExplorationStartActivity extends Activity
 		});
 	}
 
-	private float[] calculateDistanceAndBearingToStartPoint(Location location) {
-		float[] distanceAndBearing = { 0, 0 };
-
-		Location.distanceBetween(
-				location.getLatitude(),
-				location.getLongitude(),
-				mExploration.getRoute().getStartLocation().latitude,
-				mExploration.getRoute().getStartLocation().longitude,
-				distanceAndBearing);
-
-		return distanceAndBearing;
-	}
-
-	private void setLocationHintsText(float distance, float bearing) {
-		new ActivityUtil(this)
-				.setText(R.id.exploration_start_distance, distance + "m")
-				.setText(R.id.exploration_start_bearing, bearing + "“x");
-	}
-
 	@Override
 	public void onConnected(Bundle bundle) {
 		mLocationClient.requestLocationUpdates(LocationRequest.create()
@@ -134,11 +114,8 @@ public class ExplorationStartActivity extends Activity
 
 	@Override
 	public void onLocationChanged(Location location) {
-		float[] distanceAndBearing = calculateDistanceAndBearingToStartPoint(location);
+		float[] distanceAndBearing = MapUtil.calculateDistanceAndBearingToStartPoint(location, mExploration.getRoute());
 		float distance = distanceAndBearing[0];
-		float bearing = distanceAndBearing[1];
-
-		setLocationHintsText(distance, bearing);
 
 		if (distance < 50) {
 			Toast.makeText(this, "’Tõ‘Ò‚¿Žó‚¯‰æ–Ê‚ÉˆÚs‚µ‚Ü‚·", Toast.LENGTH_SHORT).show();

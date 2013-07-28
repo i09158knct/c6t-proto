@@ -1,5 +1,8 @@
 package jp.knct.di.c6t.util;
 
+import jp.knct.di.c6t.model.Route;
+import android.location.Location;
+
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,4 +40,18 @@ public class MapUtil {
 	public static String serializeLocation(LatLng location) {
 		return location.latitude + "," + location.longitude;
 	}
+
+	public static float[] calculateDistanceAndBearingToStartPoint(Location location, Route route) {
+		float[] distanceAndBearing = { 0, 0 };
+
+		Location.distanceBetween(
+				location.getLatitude(),
+				location.getLongitude(),
+				route.getStartLocation().latitude,
+				route.getStartLocation().longitude,
+				distanceAndBearing);
+
+		return distanceAndBearing;
+	}
+
 }
