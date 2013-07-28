@@ -7,4 +7,5 @@ public class IntentData {
 	public static final String EXTRA_KEY_QUEST = PREFIX_PACKAGE_NAME + "keyquest";
 	public static final String EXTRA_KEY_QUEST_NUMBER = PREFIX_PACKAGE_NAME + "keyquestnumber";
 	public static final String EXTRA_KEY_EXPLORATION = PREFIX_PACKAGE_NAME + ".keyexploration";
+	public static final String EXTRA_KEY_CAMERA_POSITION = PREFIX_PACKAGE_NAME + ".kyecameraposition";
 }

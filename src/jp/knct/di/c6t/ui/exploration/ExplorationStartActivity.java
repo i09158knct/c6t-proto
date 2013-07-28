@@ -143,7 +143,8 @@ public class ExplorationStartActivity extends Activity
 		if (distance < 50) {
 			Toast.makeText(this, "’Tõ‘Ò‚¿Žó‚¯‰æ–Ê‚ÉˆÚs‚µ‚Ü‚·", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(this, ExplorationStandbyActivity.class)
-					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration)
+					.putExtra(IntentData.EXTRA_KEY_CAMERA_POSITION, mMap.getCameraPosition());
 			startActivity(intent);
 			mLocationClient.disconnect();
 			finish();

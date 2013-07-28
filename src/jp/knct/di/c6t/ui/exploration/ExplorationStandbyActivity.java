@@ -14,6 +14,8 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.CameraPosition;
+
 public class ExplorationStandbyActivity extends ListActivity implements OnClickListener {
 	private Exploration mExploration;
 
@@ -57,8 +59,12 @@ public class ExplorationStandbyActivity extends ListActivity implements OnClickL
 
 	private void onExplorationStart() {
 		Toast.makeText(this, "íTçıÇäJénÇµÇ‹Ç∑", Toast.LENGTH_SHORT).show();
+
+		CameraPosition position = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_CAMERA_POSITION);
+
 		Intent intent = new Intent(this, ExplorationMainActivity.class)
-				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration)
+				.putExtra(IntentData.EXTRA_KEY_CAMERA_POSITION, position);
 		startActivity(intent);
 	}
 
