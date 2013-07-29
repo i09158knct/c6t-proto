@@ -59,6 +59,7 @@ public class ExplorationMainActivity extends Activity
 		if (requestCode == QuestExecutionActivity.REQUEST_CODE_EXECUTION &&
 				resultCode == RESULT_OK) {
 			mCurrentQuestNumber++;
+			mLocationClient.connect();
 			// TODO: update quest image and something
 		}
 
@@ -104,7 +105,8 @@ public class ExplorationMainActivity extends Activity
 
 		setLocationHintsText(distance, bearing);
 
-		if (distance < 50) {
+		if (distance < 500000000) {
+			mLocationClient.disconnect();
 			Toast.makeText(this, "クエスト遂行画面に移行します", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(this, QuestExecutionActivity.class)
 					.putExtra(IntentData.EXTRA_KEY_QUEST, currentQuest)
