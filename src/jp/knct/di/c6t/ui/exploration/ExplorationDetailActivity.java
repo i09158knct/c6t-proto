@@ -6,7 +6,6 @@ import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,8 +52,12 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 			break;
 
 		case R.id.exploration_detail_share:
-			intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto:", "", null))
-					.putExtra(Intent.EXTRA_SUBJECT, "íTçı:" + mExploration.getRoute().getName());
+			intent = new Intent(Intent.ACTION_SEND)
+					.setType("text/plain")
+					.putExtra(Intent.EXTRA_EMAIL, "")
+					.putExtra(Intent.EXTRA_SUBJECT, "íTçı:" + mExploration.getRoute().getName())
+					.putExtra(Intent.EXTRA_TEXT, mExploration.getDescription());
+
 			startActivity(Intent.createChooser(intent, "ÉÅÅ[ÉãÇëóÇÈ"));
 			break;
 
