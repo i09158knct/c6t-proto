@@ -6,6 +6,7 @@ import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,9 +40,10 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 
 	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch (v.getId()) {
 		case R.id.exploration_detail_join:
-			Intent intent = new Intent(this, ExplorationStartActivity.class)
+			intent = new Intent(this, ExplorationStartActivity.class)
 					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
 			startActivity(intent);
 			break;
@@ -51,7 +53,9 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 			break;
 
 		case R.id.exploration_detail_share:
-			// TODO
+			intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto:", "", null))
+					.putExtra(Intent.EXTRA_SUBJECT, "íTçı:" + mExploration.getRoute().getName());
+			startActivity(Intent.createChooser(intent, "ÉÅÅ[ÉãÇëóÇÈ"));
 			break;
 
 		default:
