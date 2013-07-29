@@ -46,7 +46,7 @@ public class ExplorationMainActivity extends Activity
 	}
 
 	private void setUpMap() {
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.exploration_start_map))
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.exploration_main_map))
 				.getMap();
 		mMap.setMyLocationEnabled(true);
 
@@ -61,6 +61,14 @@ public class ExplorationMainActivity extends Activity
 			mCurrentQuestNumber++;
 			// TODO: update quest image and something
 		}
+
+		if (mCurrentQuestNumber > 4) {
+			finishExploration();
+		}
+	}
+
+	private void finishExploration() {
+		Toast.makeText(this, "’TõŠ®—¹", Toast.LENGTH_SHORT).show();
 	}
 
 	private void setLocationHintsText(float distance, float bearing) {
