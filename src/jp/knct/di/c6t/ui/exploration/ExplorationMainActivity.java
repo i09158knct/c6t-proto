@@ -106,7 +106,7 @@ public class ExplorationMainActivity extends Activity
 
 		if (distance < 50) {
 			Toast.makeText(this, "クエスト遂行画面に移行します", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent(this, ExplorationStandbyActivity.class)
+			Intent intent = new Intent(this, QuestExecutionActivity.class)
 					.putExtra(IntentData.EXTRA_KEY_QUEST, currentQuest)
 					.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mCurrentQuestNumber);
 			startActivityForResult(intent, QuestExecutionActivity.REQUEST_CODE_EXECUTION);
