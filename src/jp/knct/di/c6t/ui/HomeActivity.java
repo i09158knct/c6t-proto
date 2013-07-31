@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.os.Bundle;
 
 public class HomeActivity extends Activity {
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,5 +25,4 @@ public class HomeActivity extends Activity {
 				new ActivityLink(R.id.home_creation, RouteCreationActivity.class),
 		});
 	}
-
 }
