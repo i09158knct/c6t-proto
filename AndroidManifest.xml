@@ -106,6 +106,10 @@
             android:name=".ui.exploration.QuestExecutionActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".ui.collection.CollectionHomeActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>
