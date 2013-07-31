@@ -41,6 +41,7 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 			mRoute.setUser(client.getMyUserData());
 			if (mRoute.isValid()) {
 				client.saveRoute(mRoute); // TODO use http client
+				// TODO: delete quest images of local
 				setResult(RESULT_OK);
 				finish();
 			}
