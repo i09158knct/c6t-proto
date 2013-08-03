@@ -14,7 +14,7 @@ public class CollectionHomeActivity extends Activity {
 
 		ActivityUtil.setJumper(this, new ActivityLink[] {
 				new ActivityLink(R.id.collection_home_outcomes, OutcomesActivity.class),
-				new ActivityLink(R.id.collection_home_trophies, null),
+				new ActivityLink(R.id.collection_home_trophies, TrophiesActivity.class),
 		});
 	}
 }
