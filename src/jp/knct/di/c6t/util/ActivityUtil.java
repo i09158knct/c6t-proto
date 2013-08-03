@@ -41,23 +41,54 @@ public class ActivityUtil {
 		return textView.getText().toString();
 	}
 
+	public static String getText(View container, int id) {
+		TextView textView = (TextView) container.findViewById(id);
+		return textView.getText().toString();
+	}
+
 	public static void setText(Activity container, int id, String text) {
 		TextView textView = (TextView) container.findViewById(id);
 		textView.setText(text);
 	}
 
-	private Activity mContainer;
+	public static void setText(View container, int id, String text) {
+		TextView textView = (TextView) container.findViewById(id);
+		textView.setText(text);
+	}
+
+	private Activity mContainerActivity;
+	private View mContainerView;
 
 	public ActivityUtil(Activity container) {
-		mContainer = container;
+		mContainerActivity = container;
+	}
+
+	public ActivityUtil(View container) {
+		mContainerView = container;
 	}
 
 	public ActivityUtil setText(int id, String text) {
-		ActivityUtil.setText(mContainer, id, text);
+		if (mContainerActivity != null) {
+			ActivityUtil.setText(mContainerActivity, id, text);
+		}
+		else if (mContainerView != null) {
+			ActivityUtil.setText(mContainerView, id, text);
+		}
+		else {
+			throw new AssertionError("error");
+		}
 		return this;
 	}
 
 	public String getText(int id) {
-		return ActivityUtil.getText(mContainer, id);
+		if (mContainerActivity != null) {
+			return ActivityUtil.getText(mContainerActivity, id);
+		}
+		else if (mContainerView != null) {
+			return ActivityUtil.getText(mContainerView, id);
+		}
+		else {
+			throw new AssertionError("error");
+		}
 	}
 }

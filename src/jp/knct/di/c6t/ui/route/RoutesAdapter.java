@@ -4,12 +4,12 @@ import java.util.List;
 
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Route;
+import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 public class RoutesAdapter extends BaseAdapter {
 
@@ -43,15 +43,11 @@ public class RoutesAdapter extends BaseAdapter {
 		}
 
 		Route route = mRoutes.get(position);
-		setText(convertView, R.id.list_item_route_name, route.getName());
-		setText(convertView, R.id.list_item_route_description, route.getDescription());
+		new ActivityUtil(convertView)
+				.setText(R.id.list_item_route_name, route.getName())
+				.setText(R.id.list_item_route_description, route.getDescription());
 
 		return convertView;
-	}
-
-	private void setText(View view, int id, String text) {
-		TextView target = (TextView) view.findViewById(id);
-		target.setText(text);
 	}
 
 }

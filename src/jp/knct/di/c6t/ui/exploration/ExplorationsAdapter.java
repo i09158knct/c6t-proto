@@ -4,12 +4,12 @@ import java.util.List;
 
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
+import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 public class ExplorationsAdapter extends BaseAdapter {
 
@@ -43,15 +43,11 @@ public class ExplorationsAdapter extends BaseAdapter {
 		}
 
 		Exploration exploration = mExplorations.get(position);
-		setText(convertView, R.id.list_item_exploration_name, exploration.getRoute().getName());
-		setText(convertView, R.id.list_item_exploration_start_time, exploration.getStartTime().toString());
+		new ActivityUtil(convertView)
+				.setText(R.id.list_item_exploration_name, exploration.getRoute().getName())
+				.setText(R.id.list_item_exploration_start_time, exploration.getStartTime().toString());
 
 		return convertView;
-	}
-
-	private void setText(View view, int id, String text) {
-		TextView target = (TextView) view.findViewById(id);
-		target.setText(text);
 	}
 
 }
