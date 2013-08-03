@@ -13,7 +13,7 @@ public class CollectionHomeActivity extends Activity {
 		setContentView(R.layout.activity_collection_home);
 
 		ActivityUtil.setJumper(this, new ActivityLink[] {
-				new ActivityLink(R.id.collection_home_outcomes, null),
+				new ActivityLink(R.id.collection_home_outcomes, OutcomesActivity.class),
 				new ActivityLink(R.id.collection_home_trophies, null),
 		});
 	}

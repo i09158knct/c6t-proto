@@ -110,6 +110,10 @@
             android:name=".ui.collection.CollectionHomeActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".ui.collection.OutcomesActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>
