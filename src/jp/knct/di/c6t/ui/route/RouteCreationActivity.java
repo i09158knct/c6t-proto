@@ -170,12 +170,6 @@ public class RouteCreationActivity extends Activity
 			}
 		}
 
-		if (requestCode == RouteCreationDetailFormActivity.REQUEST_CODE_EDIT_ROUTE_DETAIL &&
-				resultCode == RESULT_OK) {
-			finish();
-			return;
-		}
-
 		updateMap();
 	}
 
@@ -206,7 +200,7 @@ public class RouteCreationActivity extends Activity
 		case R.id.route_creation_finish:
 			intent = new Intent(this, RouteCreationDetailFormActivity.class)
 					.putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
-			startActivityForResult(intent, RouteCreationDetailFormActivity.REQUEST_CODE_EDIT_ROUTE_DETAIL);
+			startActivity(intent);
 			break;
 
 		default:

@@ -33,7 +33,6 @@ public class SearchExplorationActivity extends ListActivity implements OnClickLi
 		Intent intent = new Intent(this, ExplorationDetailActivity.class)
 				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, targetExploration);
 		startActivity(intent);
-		finish();
 	}
 
 	@Override

@@ -49,9 +49,9 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 			}
 			catch (JSONException e) {}
 
-			Intent intent = new Intent(this, ExplorationDetailActivity.class)
-					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, exploration);
-			startActivity(intent);
+			Toast.makeText(this, "íTçıÇÃó\íËÇçÏê¨ÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
+			startActivity(new Intent(this, ExplorationHomeActivity.class)
+					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			break;
 
 		default:

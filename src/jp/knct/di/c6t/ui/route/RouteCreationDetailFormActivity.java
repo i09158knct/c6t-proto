@@ -4,15 +4,16 @@ import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Route;
+import jp.knct.di.c6t.ui.HomeActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public class RouteCreationDetailFormActivity extends Activity implements OnClickListener {
 
-	public static final int REQUEST_CODE_EDIT_ROUTE_DETAIL = 0x1000;
 	private Route mRoute;
 
 	@Override
@@ -42,8 +43,8 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 			if (mRoute.isValid()) {
 				client.saveRoute(mRoute); // TODO use http client
 				// TODO: delete quest images of local
-				setResult(RESULT_OK);
-				finish();
+				startActivity(new Intent(this, HomeActivity.class)
+						.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 			break;
 

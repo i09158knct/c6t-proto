@@ -33,7 +33,6 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 		Intent intent = new Intent(this, RouteActivity.class)
 				.putExtra(IntentData.EXTRA_KEY_ROUTE, targetRoute);
 		startActivity(intent);
-		finish();
 	}
 
 	@Override
