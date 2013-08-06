@@ -70,6 +70,9 @@ public class ExplorationMainActivity extends Activity
 
 	private void finishExploration() {
 		Toast.makeText(this, "íTçıäÆóπ", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(this, ExplorationEndActivity.class)
+				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+		startActivity(intent);
 	}
 
 	private void setLocationHintsText(float distance, float bearing) {
