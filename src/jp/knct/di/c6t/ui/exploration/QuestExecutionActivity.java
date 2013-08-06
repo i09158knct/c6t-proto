@@ -1,10 +1,14 @@
 package jp.knct.di.c6t.ui.exploration;
 
 import java.io.IOException;
+import java.util.Date;
 
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.model.Exploration;
+import jp.knct.di.c6t.model.MissionOutcome;
 import jp.knct.di.c6t.model.Quest;
+import jp.knct.di.c6t.model.QuestOutcome;
 import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.ImageUtil;
 import android.app.Activity;
@@ -23,11 +27,13 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 	private static int REQUEST_CODE_CAPTURE_MISSION_PHOTO = 0x002;
 	public static int REQUEST_CODE_EXECUTION = 0x001;
 
+	private QuestOutcome mQuestOutcome;
+	private MissionOutcome mMissionOutcome;
 	private Quest mQuest;
-	private Uri mGroupPhotoUri;
-	private Uri mMissionPhotoUri;
 	private boolean mHasMissionCompleted = false;
 	private boolean mHasPoseCompleted = false;
+	private Uri mGroupPhotoUri;
+	private Uri mMissionPhotoUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,11 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 
 		Intent intent = getIntent();
 		int questNumber = intent.getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
-		mQuest = intent.getParcelableExtra(IntentData.EXTRA_KEY_QUEST);
+		Exploration exploration = intent.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
+		mQuest = exploration.getRoute().getQuests().get(questNumber);
+
+		mQuestOutcome = new QuestOutcome(exploration, questNumber, null, null);
+		mMissionOutcome = new MissionOutcome(exploration, questNumber, null, null);
 
 		putQuestData(questNumber, mQuest);
 
@@ -66,11 +76,15 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 		if (requestCode == REQUEST_CODE_CAPTURE_GROUP_PHOTO && resultCode == RESULT_OK) {
 			// TODO: notify c6t server that group photo is taken
 			mHasPoseCompleted = true;
+			mQuestOutcome.setPhotoedAt(new Date());
+			mQuestOutcome.setPhotoUri(mGroupPhotoUri.getPath());
 		}
 
 		if (requestCode == REQUEST_CODE_CAPTURE_MISSION_PHOTO && resultCode == RESULT_OK) {
 			// TODO: notify c6t server that mission photo is taken
 			mHasMissionCompleted = true;
+			mMissionOutcome.setPhotoedAt(new Date());
+			mMissionOutcome.setPhotoUri(mMissionPhotoUri.getPath());
 		}
 
 		// FIXME: move to continuous update process
@@ -81,7 +95,9 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 		// FIXME: change to confirm the server side quest state
 		if (mHasMissionCompleted && mHasPoseCompleted) {
 			Toast.makeText(this, "クエストを完了しました", Toast.LENGTH_SHORT).show();
-			setResult(RESULT_OK);
+			setResult(RESULT_OK, new Intent()
+					.putExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME, mQuestOutcome)
+					.putExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME, mMissionOutcome));
 			finish();
 		}
 

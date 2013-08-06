@@ -1,9 +1,13 @@
 package jp.knct.di.c6t.ui.exploration;
 
+import java.util.ArrayList;
+
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
+import jp.knct.di.c6t.model.MissionOutcome;
 import jp.knct.di.c6t.model.Quest;
+import jp.knct.di.c6t.model.QuestOutcome;
 import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
@@ -28,6 +32,8 @@ public class ExplorationMainActivity extends Activity
 		OnConnectionFailedListener,
 		LocationListener {
 	private Exploration mExploration;
+	private ArrayList<QuestOutcome> mQuestOutcomes = new ArrayList<QuestOutcome>(5);
+	private ArrayList<MissionOutcome> mMissionOutcomes = new ArrayList<MissionOutcome>(4);
 	private LocationClient mLocationClient;
 	private GoogleMap mMap;
 	private int mCurrentQuestNumber = 0;
@@ -38,7 +44,6 @@ public class ExplorationMainActivity extends Activity
 		setContentView(R.layout.activity_exploration_main);
 
 		mExploration = getIntent().getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
-
 		setUpMap();
 
 		mLocationClient = new LocationClient(this, this, this);
@@ -60,18 +65,26 @@ public class ExplorationMainActivity extends Activity
 				resultCode == RESULT_OK) {
 			mCurrentQuestNumber++;
 			mLocationClient.connect();
-			// TODO: update quest image and something
-		}
 
-		if (mCurrentQuestNumber > 4) {
-			finishExploration();
+			MissionOutcome missionOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME);
+			QuestOutcome questOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME);
+			mMissionOutcomes.add(missionOutcome);
+			mQuestOutcomes.add(questOutcome);
+
+			// TODO: update quest image and something
+
+			if (mCurrentQuestNumber > 4) {
+				finishExploration();
+			}
 		}
 	}
 
 	private void finishExploration() {
 		Toast.makeText(this, "探索完了", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(this, ExplorationEndActivity.class)
-				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration);
+				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration)
+				.putExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME_LIST, mMissionOutcomes)
+				.putExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME_LIST, mQuestOutcomes);
 		startActivity(intent);
 	}
 
@@ -112,7 +125,7 @@ public class ExplorationMainActivity extends Activity
 			mLocationClient.disconnect();
 			Toast.makeText(this, "クエスト遂行画面に移行します", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(this, QuestExecutionActivity.class)
-					.putExtra(IntentData.EXTRA_KEY_QUEST, currentQuest)
+					.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration)
 					.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mCurrentQuestNumber);
 			startActivityForResult(intent, QuestExecutionActivity.REQUEST_CODE_EXECUTION);
 			return;

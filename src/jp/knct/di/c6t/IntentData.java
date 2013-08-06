@@ -7,5 +7,9 @@ public class IntentData {
 	public static final String EXTRA_KEY_QUEST = PREFIX_PACKAGE_NAME + "keyquest";
 	public static final String EXTRA_KEY_QUEST_NUMBER = PREFIX_PACKAGE_NAME + "keyquestnumber";
 	public static final String EXTRA_KEY_EXPLORATION = PREFIX_PACKAGE_NAME + ".keyexploration";
-	public static final String EXTRA_KEY_CAMERA_POSITION = PREFIX_PACKAGE_NAME + ".kyecameraposition";
+	public static final String EXTRA_KEY_CAMERA_POSITION = PREFIX_PACKAGE_NAME + ".keycameraposition";
+	public static final String EXTRA_KEY_QUEST_OUTCOME = PREFIX_PACKAGE_NAME + ".kyequestoutcome";
+	public static final String EXTRA_KEY_MISSION_OUTCOME = PREFIX_PACKAGE_NAME + ".keymissionoutcome";
+	public static final String EXTRA_KEY_QUEST_OUTCOME_LIST = PREFIX_PACKAGE_NAME + ".kyequestoutcomelist";
+	public static final String EXTRA_KEY_MISSION_OUTCOME_LIST = PREFIX_PACKAGE_NAME + ".keymissionoutcomelist";
 }
