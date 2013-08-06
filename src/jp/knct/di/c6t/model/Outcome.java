@@ -17,7 +17,7 @@ import android.util.Log;
 
 public class Outcome implements Parcelable {
 
-	private static final String ROUTE = "route";
+	private static final String ROUTE = "exploration";
 	private static final String QUEST_NUMBER = "quest_number";
 	private static final String PHOTOED_AT = "photoed_at";
 	private static final String PHOTO_URI = "photo_uri";
@@ -44,31 +44,31 @@ public class Outcome implements Parcelable {
 	}
 
 	public static Outcome parseJSON(JSONObject outcome) throws JSONException, ParseException {
-		Route route = Route.parseJSON(outcome.getJSONObject(ROUTE));
+		Exploration exploration = Exploration.parseJSON(outcome.getJSONObject(ROUTE));
 		int questNumber = outcome.getInt(QUEST_NUMBER);
 		Date photoedAt = TimeUtil.parse(outcome.getString(PHOTOED_AT));
 		String photoUri = outcome.getString(PHOTO_URI);
-		return new Outcome(route, questNumber, photoedAt, photoUri);
+		return new Outcome(exploration, questNumber, photoedAt, photoUri);
 	}
 
-	private Route route;
+	private Exploration exploration;
 	private int questNumber;
 	private Date photoedAt;
 	private String photoUri;
 
-	public Outcome(Route route, int questNumber, Date photoedAt, String photoUri) {
-		setRoute(route);
+	public Outcome(Exploration exploration, int questNumber, Date photoedAt, String photoUri) {
+		setExploration(exploration);
 		setQuestNumber(questNumber);
 		setPhotoedAt(photoedAt);
 		setPhotoUri(photoUri);
 	}
 
-	public Route getRoute() {
-		return route;
+	public Exploration getExploration() {
+		return exploration;
 	}
 
-	public void setRoute(Route route) {
-		this.route = route;
+	public void setExploration(Exploration exploration) {
+		this.exploration = exploration;
 	}
 
 	public int getQuestNumber() {
@@ -95,14 +95,18 @@ public class Outcome implements Parcelable {
 		this.photoUri = photoUri;
 	}
 
+	public Route getRoute() {
+		return getExploration().getRoute();
+	}
+
 	public Quest getQuest() {
-		return getRoute().getQuests().get(getQuestNumber());
+		return getExploration().getRoute().getQuests().get(getQuestNumber());
 	}
 
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
-					.put(ROUTE, getRoute().toJSON())
+					.put(ROUTE, getExploration().toJSON())
 					.put(QUEST_NUMBER, getQuestNumber())
 					.put(PHOTOED_AT, TimeUtil.format(getPhotoedAt()))
 					.put(PHOTO_URI, getPhotoUri());
@@ -122,7 +126,7 @@ public class Outcome implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeParcelable(getRoute(), -1);
+		dest.writeParcelable(getExploration(), -1);
 		dest.writeInt(getQuestNumber());
 		dest.writeSerializable(getPhotoedAt());
 		dest.writeString(getPhotoUri());
@@ -131,11 +135,11 @@ public class Outcome implements Parcelable {
 	public static final Parcelable.Creator<Outcome> CREATOR = new Parcelable.Creator<Outcome>() {
 		@Override
 		public Outcome createFromParcel(Parcel source) {
-			Route route = source.readParcelable(Route.class.getClassLoader());
+			Exploration exploration = source.readParcelable(Exploration.class.getClassLoader());
 			int questNumber = source.readInt();
 			Date photoedAt = (Date) source.readSerializable();
 			String photoUri = source.readString();
-			return new Outcome(route, questNumber, photoedAt, photoUri);
+			return new Outcome(exploration, questNumber, photoedAt, photoUri);
 		}
 
 		@Override

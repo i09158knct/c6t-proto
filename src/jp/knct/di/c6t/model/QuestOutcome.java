@@ -6,14 +6,14 @@ public class QuestOutcome extends Outcome {
 
 	public static QuestOutcome convertOutcome(Outcome outcome) {
 		return new QuestOutcome(
-				outcome.getRoute(),
+				outcome.getExploration(),
 				outcome.getQuestNumber(),
 				outcome.getPhotoedAt(),
 				outcome.getPhotoUri());
 	}
 
-	public QuestOutcome(Route route, int questNumber, Date photoedAt, String photoUri) {
-		super(route, questNumber, photoedAt, photoUri);
+	public QuestOutcome(Exploration exploration, int questNumber, Date photoedAt, String photoUri) {
+		super(exploration, questNumber, photoedAt, photoUri);
 	}
 
 	public String getPose() {
