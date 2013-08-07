@@ -69,6 +69,11 @@ public class ExplorationStartActivity extends Activity
 
 	private LatLng getCurrentLocation() {
 		Location lastLocation = mLocationClient.getLastLocation();
+
+		if (lastLocation == null) {
+			lastLocation = mMap.getMyLocation();
+		}
+
 		double latitude = lastLocation.getLatitude();
 		double longitude = lastLocation.getLongitude();
 		return new LatLng(latitude, longitude);
