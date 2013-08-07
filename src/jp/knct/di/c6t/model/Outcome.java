@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.knct.di.c6t.util.ImageUtil;
 import jp.knct.di.c6t.util.TimeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -93,6 +95,10 @@ public class Outcome implements Parcelable {
 
 	public void setPhotoUri(String photoUri) {
 		this.photoUri = photoUri;
+	}
+
+	public Bitmap decodePhotoBitmap(int scale) {
+		return ImageUtil.decodeBitmap(getPhotoUri(), scale);
 	}
 
 	public Route getRoute() {

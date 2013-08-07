@@ -3,12 +3,14 @@ package jp.knct.di.c6t.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.knct.di.c6t.util.ImageUtil;
 import jp.knct.di.c6t.util.MapUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -99,6 +101,10 @@ public class Quest implements Parcelable {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public Bitmap decodeImageBitmap(int scale) {
+		return ImageUtil.decodeBitmap(getImage(), scale);
 	}
 
 	public JSONObject toJSON() {
