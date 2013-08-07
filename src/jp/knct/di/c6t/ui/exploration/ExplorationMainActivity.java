@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
-import jp.knct.di.c6t.model.MissionOutcome;
 import jp.knct.di.c6t.model.Outcome;
 import jp.knct.di.c6t.model.Quest;
-import jp.knct.di.c6t.model.QuestOutcome;
 import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
@@ -67,8 +65,8 @@ public class ExplorationMainActivity extends Activity
 			mCurrentQuestNumber++;
 			mLocationClient.connect();
 
-			MissionOutcome missionOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME);
-			QuestOutcome questOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME);
+			Outcome missionOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME);
+			Outcome questOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME);
 			mMissionOutcomes.add(missionOutcome);
 			mQuestOutcomes.add(questOutcome);
 
