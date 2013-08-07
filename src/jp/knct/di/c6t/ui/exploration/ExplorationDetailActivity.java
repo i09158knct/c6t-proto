@@ -58,7 +58,7 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 					.putExtra(Intent.EXTRA_SUBJECT, "’Tõ:" + mExploration.getRoute().getName())
 					.putExtra(Intent.EXTRA_TEXT, mExploration.getDescription());
 
-			startActivity(Intent.createChooser(intent, "ƒ[ƒ‹‚ğ‘—‚é"));
+			startActivity(Intent.createChooser(intent, "‹¤—L"));
 			break;
 
 		default:
