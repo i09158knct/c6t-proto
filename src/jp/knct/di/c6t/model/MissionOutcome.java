@@ -20,7 +20,7 @@ public class MissionOutcome extends Outcome {
 				outcome.getExploration(),
 				outcome.getQuestNumber(),
 				outcome.getPhotoedAt(),
-				outcome.getPhotoUri());
+				outcome.getPhotoPath());
 	}
 
 	public static List<MissionOutcome> convertOutcomes(List<Outcome> outcomes) {

@@ -42,15 +42,15 @@ public class ExplorationEndActivity extends Activity implements OnClickListener 
 		List<QuestOutcome> questOutcomeList = QuestOutcome.convertOutcomes(questOutcomes);
 
 		QuestOutcome lastQuestOutcome = questOutcomeList.get(questOutcomeList.size() - 1);
-		String lastGroupPhotoUri = lastQuestOutcome.getPhotoUri();
-		saveTrophy(exploration, lastGroupPhotoUri);
+		String lastGroupPhotoPath = lastQuestOutcome.getPhotoPath();
+		saveTrophy(exploration, lastGroupPhotoPath);
 		saveOutcomes(exploration, missionOutcomeList, questOutcomeList);
 	}
 
-	private void saveTrophy(Exploration exploration, String lastGroupPhotoUri) {
+	private void saveTrophy(Exploration exploration, String lastGroupPhotoPath) {
 		OutcomesClient client = new OutcomesClient();
 		try {
-			client.addTrophy(this, new Trophy(exploration, new Date(), lastGroupPhotoUri));
+			client.addTrophy(this, new Trophy(exploration, new Date(), lastGroupPhotoPath));
 			Toast.makeText(this, "トロフィーが保存されました", Toast.LENGTH_SHORT).show();
 		}
 		catch (JSONException e) {

@@ -77,14 +77,14 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 			// TODO: notify c6t server that group photo is taken
 			mHasPoseCompleted = true;
 			mQuestOutcome.setPhotoedAt(new Date());
-			mQuestOutcome.setPhotoUri(mGroupPhotoUri.getPath());
+			mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
 		}
 
 		if (requestCode == REQUEST_CODE_CAPTURE_MISSION_PHOTO && resultCode == RESULT_OK) {
 			// TODO: notify c6t server that mission photo is taken
 			mHasMissionCompleted = true;
 			mMissionOutcome.setPhotoedAt(new Date());
-			mMissionOutcome.setPhotoUri(mMissionPhotoUri.getPath());
+			mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
 		}
 
 		// FIXME: move to continuous update process
