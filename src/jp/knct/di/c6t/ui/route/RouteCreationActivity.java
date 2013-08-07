@@ -5,7 +5,6 @@ import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.util.ActivityUtil;
-import jp.knct.di.c6t.util.ImageUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -65,7 +64,7 @@ public class RouteCreationActivity extends Activity
 			Quest targetQuest = mRoute.getQuests().get(questNumber);
 
 			mTitle.setText("クエストポイント" + (questNumber + 1));
-			mImage.setImageBitmap(ImageUtil.decodeBitmap(targetQuest.getImage(), 10));
+			mImage.setImageBitmap(targetQuest.decodeImageBitmap(10));
 
 			return mContents;
 		}
