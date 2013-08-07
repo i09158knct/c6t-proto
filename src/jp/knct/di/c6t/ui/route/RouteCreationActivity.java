@@ -177,9 +177,8 @@ public class RouteCreationActivity extends Activity
 		Intent intent;
 		switch (v.getId()) {
 		case R.id.route_creation_start:
-			mRoute.setStartLocation(getCurrentLocation());
-			updateMap();
-			Toast.makeText(this, "現在地点をスタートポイントに設定しました。", Toast.LENGTH_SHORT).show();
+			setStartLocation();
+			v.setVisibility(View.GONE);
 			if (mRoute.getQuests().size() == 5) {
 				findViewById(R.id.route_creation_finish).setVisibility(View.VISIBLE);
 			}
@@ -205,6 +204,12 @@ public class RouteCreationActivity extends Activity
 		default:
 			break;
 		}
+	}
+
+	private void setStartLocation() {
+		mRoute.setStartLocation(getCurrentLocation());
+		updateMap();
+		Toast.makeText(this, "現在地点をスタートポイントに設定しました。", Toast.LENGTH_SHORT).show();
 	}
 
 	private LatLng getCurrentLocation() {
@@ -241,10 +246,24 @@ public class RouteCreationActivity extends Activity
 
 	@Override
 	public void onInfoWindowClick(Marker marker) {
+
+		// if marker is start point
 		if (marker.getTitle() != null) {
+			new AlertDialog.Builder(this)
+					.setMessage("スタートポイントを現在地点に設定し直しますか？")
+					.setCancelable(true)
+					.setPositiveButton("はい", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							setStartLocation();
+						}
+					})
+					.setNegativeButton("いいえ", null)
+					.show();
+
 			return;
 		}
 
+		// if marker is quest point
 		int questNumber = getQuestNumber(marker);
 		Quest quest = mRoute.getQuests().get(questNumber);
 		final Intent intent = new Intent(RouteCreationActivity.this, RouteCreationQuestFormActivity.class)
