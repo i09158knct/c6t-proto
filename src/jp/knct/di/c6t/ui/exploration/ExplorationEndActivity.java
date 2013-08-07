@@ -1,13 +1,28 @@
 package jp.knct.di.c6t.ui.exploration;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+
+import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.communication.OutcomesClient;
+import jp.knct.di.c6t.model.Exploration;
+import jp.knct.di.c6t.model.MissionOutcome;
+import jp.knct.di.c6t.model.Outcome;
+import jp.knct.di.c6t.model.QuestOutcome;
+import jp.knct.di.c6t.model.Trophy;
 import jp.knct.di.c6t.ui.HomeActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
+
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 public class ExplorationEndActivity extends Activity implements OnClickListener {
 	@Override
@@ -19,7 +34,50 @@ public class ExplorationEndActivity extends Activity implements OnClickListener 
 				R.id.exploration_end_end,
 		});
 
-		// TODO: save trophy and outcomes
+		Intent intent = getIntent();
+		Exploration exploration = intent.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
+		List<Outcome> missionOutcomes = intent.getParcelableArrayListExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME_LIST);
+		List<Outcome> questOutcomes = intent.getParcelableArrayListExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME_LIST);
+		List<MissionOutcome> missionOutcomeList = MissionOutcome.convertOutcomes(missionOutcomes);
+		List<QuestOutcome> questOutcomeList = QuestOutcome.convertOutcomes(questOutcomes);
+
+		QuestOutcome lastQuestOutcome = questOutcomeList.get(questOutcomeList.size() - 1);
+		String lastGroupPhotoUri = lastQuestOutcome.getPhotoUri();
+		saveTrophy(exploration, lastGroupPhotoUri);
+		saveOutcomes(exploration, missionOutcomeList, questOutcomeList);
+	}
+
+	private void saveTrophy(Exploration exploration, String lastGroupPhotoUri) {
+		OutcomesClient client = new OutcomesClient();
+		try {
+			client.addTrophy(this, new Trophy(exploration, new Date(), lastGroupPhotoUri));
+			Toast.makeText(this, "トロフィーが保存されました", Toast.LENGTH_SHORT).show();
+		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void saveOutcomes(Exploration exploration, List<MissionOutcome> missionOutcomeList, List<QuestOutcome> questOutcomeList) {
+		OutcomesClient client = new OutcomesClient();
+		try {
+			client.addMissionOutcome(this, (MissionOutcome[]) missionOutcomeList.toArray());
+			client.addQuestOutcome(this, (QuestOutcome[]) questOutcomeList.toArray());
+			Toast.makeText(this, "成果が保存されました", Toast.LENGTH_SHORT).show();
+		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

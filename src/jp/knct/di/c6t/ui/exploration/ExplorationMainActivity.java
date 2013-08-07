@@ -6,6 +6,7 @@ import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.MissionOutcome;
+import jp.knct.di.c6t.model.Outcome;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.QuestOutcome;
 import jp.knct.di.c6t.util.ActivityUtil;
@@ -32,8 +33,8 @@ public class ExplorationMainActivity extends Activity
 		OnConnectionFailedListener,
 		LocationListener {
 	private Exploration mExploration;
-	private ArrayList<QuestOutcome> mQuestOutcomes = new ArrayList<QuestOutcome>(5);
-	private ArrayList<MissionOutcome> mMissionOutcomes = new ArrayList<MissionOutcome>(4);
+	private ArrayList<Outcome> mQuestOutcomes = new ArrayList<Outcome>(5);
+	private ArrayList<Outcome> mMissionOutcomes = new ArrayList<Outcome>(4);
 	private LocationClient mLocationClient;
 	private GoogleMap mMap;
 	private int mCurrentQuestNumber = 0;
@@ -83,8 +84,8 @@ public class ExplorationMainActivity extends Activity
 		Toast.makeText(this, "íTçıäÆóπ", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(this, ExplorationEndActivity.class)
 				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration)
-				.putExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME_LIST, mMissionOutcomes)
-				.putExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME_LIST, mQuestOutcomes);
+				.putParcelableArrayListExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME_LIST, mMissionOutcomes)
+				.putParcelableArrayListExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME_LIST, mQuestOutcomes);
 		startActivity(intent);
 	}
 
