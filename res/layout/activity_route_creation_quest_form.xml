@@ -45,16 +45,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ポーズ説明" />
+            android:text="ポーズ" />
 
-        <EditText
+        <Spinner
             android:id="@+id/route_creation_quest_form_pose"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:lines="3" />
+            android:entries="@array/pose_subjects" />
     </LinearLayout>
 
     <LinearLayout
@@ -65,17 +62,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ミッション説明" />
+            android:text="ミッション" />
 
-        <EditText
+        <Spinner
             android:id="@+id/route_creation_quest_form_mission"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:lines="3" >
-        </EditText>
+            android:entries="@array/mission_subjects" />
     </LinearLayout>
 
     <Button
@@ -94,7 +87,7 @@
         android:id="@+id/route_creation_quest_form_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="削除" />
+        android:text="削除"
+        android:visibility="gone" />
 
 </LinearLayout>

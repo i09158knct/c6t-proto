@@ -5,4 +5,29 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+    <string-array name="mission_subjects">
+        <item>川を見つけろ</item>
+        <item>電車の写真を撮れ</item>
+        <item>虫を捕まえろ</item>
+        <item>花を見つけろ</item>
+        <item>気に入った石を拾え</item>
+        <item>四つ葉のクローバーを探せ</item>
+        <item>高そうな車を探せ</item>
+        <item>木の写真を見つけろ</item>
+        <item>田んぼを探せ</item>
+        <item>鳥を見つけろ</item>
+        <item>道路標識を探せ</item>
+        <item>自動販売機を探せ</item>
+        <item>交差点を見つけろ</item>
+        <item>面白い看板の写真を探せ</item>
+        <item>雲の写真を撮れ</item>
+    </string-array>
+    <string-array name="pose_subjects">
+        <item>ピースで撮れ</item>
+        <item>ジャンプしながら撮れ</item>
+        <item>肩を組んで写真を撮れ</item>
+        <item>人文字を作って写真を撮れ</item>
+        <item>千手観音像のポーズで撮れ</item>
+    </string-array>
+
 </resources>

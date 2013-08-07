@@ -1,6 +1,7 @@
 package jp.knct.di.c6t.ui.route;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -53,17 +55,36 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 	}
 
 	private Quest createQuestFromEditForms() {
-		ActivityUtil getter = new ActivityUtil(this);
-		String mission = getter.getText(R.id.route_creation_quest_form_mission);
-		String pose = getter.getText(R.id.route_creation_quest_form_pose);
+		String mission = (String) ((Spinner) findViewById(R.id.route_creation_quest_form_mission))
+				.getSelectedItem();
+		String pose = (String) ((Spinner) findViewById(R.id.route_creation_quest_form_pose))
+				.getSelectedItem();
 		return new Quest(mQuestLocation, pose, mission, mImageUri.getPath());
 	}
 
 	private void putQuestDataIntoEditForms(Quest quest) {
 		new ActivityUtil(this)
-				.setText(R.id.route_creation_quest_form_location, quest.getLocation().toString())
-				.setText(R.id.route_creation_quest_form_mission, quest.getMission())
-				.setText(R.id.route_creation_quest_form_pose, quest.getPose());
+				.setText(R.id.route_creation_quest_form_location, quest.getLocation().toString());
+
+		String mission = quest.getMission();
+		if (!mission.isEmpty()) {
+			String[] missions = getResources().getStringArray(R.array.mission_subjects);
+			int index = Arrays.asList(missions).indexOf(mission);
+			if (index > -1) {
+				((Spinner) findViewById(R.id.route_creation_quest_form_mission))
+						.setSelection(index);
+			}
+		}
+
+		String pose = quest.getPose();
+		if (!pose.isEmpty()) {
+			String[] poses = getResources().getStringArray(R.array.pose_subjects);
+			int index = Arrays.asList(poses).indexOf(pose);
+			if (index > -1) {
+				((Spinner) findViewById(R.id.route_creation_quest_form_pose))
+						.setSelection(index);
+			}
+		}
 
 		if (mImageUri != null) {
 			putQuestImage();
