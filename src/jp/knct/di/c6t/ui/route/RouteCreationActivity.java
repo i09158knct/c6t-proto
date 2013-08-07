@@ -87,7 +87,6 @@ public class RouteCreationActivity extends Activity
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.route_creation_start,
 				R.id.route_creation_create_new_quest,
-				R.id.route_creation_quests,
 				R.id.route_creation_finish,
 		});
 
@@ -189,10 +188,6 @@ public class RouteCreationActivity extends Activity
 			intent = new Intent(this, RouteCreationQuestFormActivity.class)
 					.putExtra(IntentData.EXTRA_KEY_QUEST, newQuest);
 			startActivityForResult(intent, RouteCreationQuestFormActivity.REQUEST_CODE_CREATE_QUEST);
-			break;
-
-		case R.id.route_creation_quests:
-			// TODO
 			break;
 
 		case R.id.route_creation_finish:

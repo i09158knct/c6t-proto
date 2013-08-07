@@ -26,14 +26,6 @@
         android:text="クエスト" />
 
     <Button
-        android:id="@+id/route_creation_quests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/route_creation_create_new_quest"
-        android:text="リスト" />
-
-    <Button
         android:id="@+id/route_creation_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
