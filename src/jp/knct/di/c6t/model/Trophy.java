@@ -21,7 +21,11 @@ public class Trophy implements Parcelable {
 	private static final String ACHIEVED_AT = "achieved_at";
 	private static final String PHOTO_URI = "photo_uri";
 
-	public static List<Trophy> parseTrophys(JSONArray trophies) throws JSONException, ParseException {
+	public static List<Trophy> parseTrophies(String trophies) throws JSONException, ParseException {
+		return parseTrophies(new JSONArray(trophies));
+	}
+
+	public static List<Trophy> parseTrophies(JSONArray trophies) throws JSONException, ParseException {
 		List<Trophy> trophyList = new LinkedList<Trophy>();
 		for (int i = 0; i < trophies.length(); i++) {
 			Trophy trophy = parseJSON(trophies.getJSONObject(i));
