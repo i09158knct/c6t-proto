@@ -47,6 +47,9 @@ public class BasicClient {
 		public static final String SCOPE_DESCRIPTION = "description";
 		public static final String SCOPE_USER_NAME = "user_name";
 		public static final String SCOPE_LOCATION = "location";
+		public static final String SORT_NEW = "new";
+		public static final String SORT_PLAYED_COUNT = "played_count";
+		public static final String SORT_ACHIEVEMENT_COUNT = "achievement_count";
 		public static final String ORDER_DESC = "desc";
 		public static final String ORDER_ASC = "asc";
 	}

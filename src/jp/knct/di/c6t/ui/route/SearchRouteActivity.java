@@ -24,18 +24,31 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 public class SearchRouteActivity extends ListActivity implements OnClickListener {
-	private static final String[] OPTION_LABELS = new String[] {
+	private static final String[] OPTION_SCOPE_LABELS = new String[] {
 			"ルート名",
 			"作成ユーザ名",
 			"説明文",
 	};
-	private static final String[] OPTION_VALUES = new String[] {
+	private static final String[] OPTION_SCOPE_VALUES = new String[] {
 			BasicClient.SearchRouteParams.SCOPE_TITLE,
 			BasicClient.SearchRouteParams.SCOPE_USER_NAME,
 			BasicClient.SearchRouteParams.SCOPE_DESCRIPTION,
 	};
+
+	private static final String[] OPTION_SORT_LABELS = new String[] {
+			"作成の新しい順/古い順",
+			"試遊回数の多い順/少ない順",
+			"達成回数の多い順/少ない順",
+	};
+	private static final String[] OPTION_SORT_VALUES = new String[] {
+			BasicClient.SearchRouteParams.SORT_NEW,
+			BasicClient.SearchRouteParams.SORT_PLAYED_COUNT,
+			BasicClient.SearchRouteParams.SORT_ACHIEVEMENT_COUNT,
+	};
+
 	private List<Route> mRoutes;
-	private Map<String, String> mOptionMap;
+	private Map<String, String> mScopeOptionMap;
+	private Map<String, String> mSortOptionMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +56,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 		setContentView(R.layout.activity_search_route);
 
 		setupSearchScopeSpinner();
+		setupSearchSortSpinner();
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.search_route_search,
@@ -50,13 +64,24 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	}
 
 	private void setupSearchScopeSpinner() {
-		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, OPTION_LABELS);
-		mOptionMap = new HashMap<String, String>();
-		for (int i = 0; i < OPTION_LABELS.length; i++) {
-			mOptionMap.put(OPTION_LABELS[i], OPTION_VALUES[i]);
+		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, OPTION_SCOPE_LABELS);
+		mScopeOptionMap = new HashMap<String, String>();
+		for (int i = 0; i < OPTION_SCOPE_LABELS.length; i++) {
+			mScopeOptionMap.put(OPTION_SCOPE_LABELS[i], OPTION_SCOPE_VALUES[i]);
 		}
 
 		Spinner spinner = (Spinner) findViewById(R.id.search_route_scope);
+		spinner.setAdapter(adapter);
+	}
+
+	private void setupSearchSortSpinner() {
+		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, OPTION_SORT_LABELS);
+		mSortOptionMap = new HashMap<String, String>();
+		for (int i = 0; i < OPTION_SORT_LABELS.length; i++) {
+			mSortOptionMap.put(OPTION_SORT_LABELS[i], OPTION_SORT_VALUES[i]);
+		}
+
+		Spinner spinner = (Spinner) findViewById(R.id.search_route_order);
 		spinner.setAdapter(adapter);
 	}
 
@@ -84,6 +109,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	// TODO
 	private List<Route> fetchRoutes() {
 		Toast.makeText(this, getSelectedScopeValue(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getSelectedSortValue(), Toast.LENGTH_SHORT).show();
 		Toast.makeText(this, getSelectedOrderValue(), Toast.LENGTH_SHORT).show();
 
 		String searchText = ActivityUtil.getText(this, R.id.search_route_name);
@@ -93,7 +119,12 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 
 	private String getSelectedScopeValue() {
 		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_scope)).getSelectedItem();
-		return mOptionMap.get(selectedSpinnerLabel);
+		return mScopeOptionMap.get(selectedSpinnerLabel);
+	}
+
+	private CharSequence getSelectedSortValue() {
+		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_order)).getSelectedItem();
+		return mSortOptionMap.get(selectedSpinnerLabel);
 	}
 
 	private String getSelectedOrderValue() {
