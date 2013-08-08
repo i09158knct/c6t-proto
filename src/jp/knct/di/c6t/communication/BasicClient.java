@@ -47,6 +47,8 @@ public class BasicClient {
 		public static final String SCOPE_DESCRIPTION = "description";
 		public static final String SCOPE_USER_NAME = "user_name";
 		public static final String SCOPE_LOCATION = "location";
+		public static final String ORDER_DESC = "desc";
+		public static final String ORDER_ASC = "asc";
 	}
 
 	public static class SearchExplorationParams {

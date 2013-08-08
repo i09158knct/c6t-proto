@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
@@ -82,13 +83,31 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 
 	// TODO
 	private List<Route> fetchRoutes() {
-		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_scope)).getSelectedItem();
-		String selectedScopeValue = mOptionMap.get(selectedSpinnerLabel);
-		Toast.makeText(this, selectedScopeValue, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getSelectedScopeValue(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getSelectedOrderValue(), Toast.LENGTH_SHORT).show();
 
 		String searchText = ActivityUtil.getText(this, R.id.search_route_name);
 		Client client = new DebugSharedPreferencesClient(this);
 		return client.getRoutes(searchText);
+	}
+
+	private String getSelectedScopeValue() {
+		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_scope)).getSelectedItem();
+		return mOptionMap.get(selectedSpinnerLabel);
+	}
+
+	private String getSelectedOrderValue() {
+		int selectedOrderId = ((RadioGroup) findViewById(R.id.search_route_order)).getCheckedRadioButtonId();
+		switch (selectedOrderId) {
+		case R.id.search_route_order_desc:
+			return BasicClient.SearchRouteParams.ORDER_DESC;
+
+		case R.id.search_route_order_asc:
+			return BasicClient.SearchRouteParams.ORDER_ASC;
+
+		default:
+			throw new AssertionError("Unknown ID");
+		}
 	}
 
 	private void setRoutes(List<Route> routes) {
