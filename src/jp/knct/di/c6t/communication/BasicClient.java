@@ -53,6 +53,8 @@ public class BasicClient {
 		public static final String SCOPE_ROUTE_TITLE = "route_title";
 		public static final String SCOPE_ROUTE_ID = "route_id";
 		public static final String SCOPE_USER_NAME = "user_name";
+		public static final String ORDER_DESC = "desc";
+		public static final String ORDER_ASC = "asc";
 	}
 
 	public static HttpResponse putJSONObject(String url, JSONObject object)

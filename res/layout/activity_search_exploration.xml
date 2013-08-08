@@ -21,6 +21,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <RadioGroup
+        android:id="@+id/search_exploration_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/search_exploration_order_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="降順" />
+
+        <RadioButton
+            android:id="@+id/search_exploration_order_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="昇順" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/search_exploration_search"
         android:layout_width="wrap_content"

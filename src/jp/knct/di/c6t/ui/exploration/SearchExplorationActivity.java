@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
@@ -80,13 +81,31 @@ public class SearchExplorationActivity extends ListActivity implements OnClickLi
 
 	// TODO
 	private List<Exploration> fetchExplorations() {
-		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_exploration_scope)).getSelectedItem();
-		String selectedScopeValue = mOptionMap.get(selectedSpinnerLabel);
-		Toast.makeText(this, selectedScopeValue, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getSelectedScopeValue(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, getSelectedOrderValue(), Toast.LENGTH_SHORT).show();
 
 		String searchText = ActivityUtil.getText(this, R.id.search_exploration_name);
 		Client client = new DebugSharedPreferencesClient(this);
 		return client.getExplorations(searchText);
+	}
+
+	private String getSelectedScopeValue() {
+		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_exploration_scope)).getSelectedItem();
+		return mOptionMap.get(selectedSpinnerLabel);
+	}
+
+	private String getSelectedOrderValue() {
+		int selectedOrderId = ((RadioGroup) findViewById(R.id.search_exploration_order)).getCheckedRadioButtonId();
+		switch (selectedOrderId) {
+		case R.id.search_exploration_order_desc:
+			return BasicClient.SearchExplorationParams.ORDER_DESC;
+
+		case R.id.search_exploration_order_asc:
+			return BasicClient.SearchExplorationParams.ORDER_ASC;
+
+		default:
+			throw new AssertionError("Unknown ID");
+		}
 	}
 
 	private void setExplorations(List<Exploration> explorations) {
