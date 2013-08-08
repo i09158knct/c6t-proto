@@ -16,6 +16,11 @@
         android:ems="10" >
     </EditText>
 
+    <Spinner
+        android:id="@+id/search_exploration_scope"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/search_exploration_search"
         android:layout_width="wrap_content"

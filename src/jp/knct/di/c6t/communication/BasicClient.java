@@ -49,6 +49,12 @@ public class BasicClient {
 		public static final String SCOPE_LOCATION = "location";
 	}
 
+	public static class SearchExplorationParams {
+		public static final String SCOPE_ROUTE_TITLE = "route_title";
+		public static final String SCOPE_ROUTE_ID = "route_id";
+		public static final String SCOPE_USER_NAME = "user_name";
+	}
+
 	public static HttpResponse putJSONObject(String url, JSONObject object)
 			throws ClientProtocolException, IOException {
 		HttpPut request = new HttpPut(url);
