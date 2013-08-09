@@ -47,6 +47,8 @@ public class ExplorationMainActivity extends Activity
 
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationClient.connect();
+
+		setQuestImage();
 	}
 
 	private void setUpMap() {
@@ -63,19 +65,27 @@ public class ExplorationMainActivity extends Activity
 		if (requestCode == QuestExecutionActivity.REQUEST_CODE_EXECUTION &&
 				resultCode == RESULT_OK) {
 			mCurrentQuestNumber++;
-			mLocationClient.connect();
 
 			Outcome missionOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME);
 			Outcome questOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME);
 			mMissionOutcomes.add(missionOutcome);
 			mQuestOutcomes.add(questOutcome);
 
-			// TODO: update quest image and something
+			setQuestImage();
 
 			if (mCurrentQuestNumber > 4) {
 				finishExploration();
 			}
+			else {
+				mLocationClient.connect();
+			}
 		}
+	}
+
+	private void setQuestImage() {
+		ActivityUtil.setImageBitmap(this,
+				R.id.exploration_main_current_quest_image,
+				getCurrentQuest().decodeImageBitmap(10));
 	}
 
 	private void finishExploration() {
@@ -113,8 +123,9 @@ public class ExplorationMainActivity extends Activity
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Quest currentQuest = mExploration.getRoute().getQuests().get(mCurrentQuestNumber);
-		float[] distanceAndBearing = MapUtil.calculateDistanceAndBearingToQuestPoint(location, currentQuest);
+		float[] distanceAndBearing = MapUtil.calculateDistanceAndBearingToQuestPoint(
+				location,
+				getCurrentQuest());
 		float distance = distanceAndBearing[0];
 		float bearing = distanceAndBearing[1];
 
@@ -129,5 +140,9 @@ public class ExplorationMainActivity extends Activity
 			startActivityForResult(intent, QuestExecutionActivity.REQUEST_CODE_EXECUTION);
 			return;
 		}
+	}
+
+	private Quest getCurrentQuest() {
+		return mExploration.getRoute().getQuests().get(mCurrentQuestNumber);
 	}
 }
