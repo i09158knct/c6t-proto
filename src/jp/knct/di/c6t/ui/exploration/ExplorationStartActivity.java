@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -104,7 +105,16 @@ public class ExplorationStartActivity extends Activity
 				.setInterval(5000)
 				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY), this);
 
-		moveCameraPosition();
+		Toast.makeText(this, "現在地検出中...", Toast.LENGTH_SHORT).show();
+		mMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
+			@Override
+			public void onMyLocationChange(Location location) {
+				Toast.makeText(ExplorationStartActivity.this, "現在地を検出しました", Toast.LENGTH_SHORT).show();
+				moveCameraPosition();
+				mMap.setOnMyLocationChangeListener(null);
+			}
+		});
+
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -221,12 +222,19 @@ public class RouteCreationActivity extends Activity
 
 	@Override
 	public void onConnected(Bundle bundle) {
-		CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-				.target(getCurrentLocation())
-				.zoom(mMap.getMaxZoomLevel())
-				.build());
-
-		mMap.animateCamera(update);
+		Toast.makeText(this, "現在地検出中...", Toast.LENGTH_SHORT).show();
+		mMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
+			@Override
+			public void onMyLocationChange(Location location) {
+				Toast.makeText(RouteCreationActivity.this, "現在地を検出しました", Toast.LENGTH_SHORT).show();
+				CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+						.target(getCurrentLocation())
+						.zoom(mMap.getMaxZoomLevel())
+						.build());
+				mMap.animateCamera(update);
+				mMap.setOnMyLocationChangeListener(null);
+			}
+		});
 	}
 
 	@Override
