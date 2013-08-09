@@ -80,9 +80,9 @@ public class ExplorationStartActivity extends Activity
 		return new LatLng(latitude, longitude);
 	}
 
-	private void moveCameraPosition() {
+	private void moveCameraPosition(Location location) {
 		LatLngBounds bounds = new LatLngBounds.Builder()
-				.include(getCurrentLocation())
+				.include(new LatLng(location.getLatitude(), location.getLongitude()))
 				.include(mExploration.getRoute().getStartLocation())
 				.build();
 		final CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 200);
@@ -110,11 +110,10 @@ public class ExplorationStartActivity extends Activity
 			@Override
 			public void onMyLocationChange(Location location) {
 				Toast.makeText(ExplorationStartActivity.this, "åªç›ínÇåüèoÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
-				moveCameraPosition();
+				moveCameraPosition(location);
 				mMap.setOnMyLocationChangeListener(null);
 			}
 		});
-
 	}
 
 	@Override

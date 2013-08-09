@@ -228,7 +228,7 @@ public class RouteCreationActivity extends Activity
 			public void onMyLocationChange(Location location) {
 				Toast.makeText(RouteCreationActivity.this, "åªç›ínÇåüèoÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
 				CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-						.target(getCurrentLocation())
+						.target(new LatLng(location.getLatitude(), location.getLongitude()))
 						.zoom(mMap.getMaxZoomLevel())
 						.build());
 				mMap.animateCamera(update);
