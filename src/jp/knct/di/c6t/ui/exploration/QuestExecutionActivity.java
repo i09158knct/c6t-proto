@@ -61,9 +61,8 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 	private void putQuestData(int questNumber, Quest quest) {
 		new ActivityUtil(this)
 				.setText(R.id.quest_execution_pose, quest.getPose())
-				.setText(R.id.quest_execution_mission, quest.getMission());
-
-		// TODO: display quest image
+				.setText(R.id.quest_execution_mission, quest.getMission())
+				.setImageBitmap(R.id.quest_execution_image, quest.decodeImageBitmap(10));
 	}
 
 	private void putImage(int id, Uri imageUri) {
@@ -78,6 +77,9 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 			mHasPoseCompleted = true;
 			mQuestOutcome.setPhotoedAt(new Date());
 			mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
+			ActivityUtil.setImageBitmap(this,
+					R.id.quest_execution_capture_group_photo,
+					mQuestOutcome.decodePhotoBitmap(10));
 		}
 
 		if (requestCode == REQUEST_CODE_CAPTURE_MISSION_PHOTO && resultCode == RESULT_OK) {
@@ -85,6 +87,9 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 			mHasMissionCompleted = true;
 			mMissionOutcome.setPhotoedAt(new Date());
 			mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
+			ActivityUtil.setImageBitmap(this,
+					R.id.quest_execution_capture_mission_photo,
+					mMissionOutcome.decodePhotoBitmap(10));
 		}
 
 		// FIXME: move to continuous update process
