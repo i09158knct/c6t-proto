@@ -43,6 +43,9 @@ public class BasicClient {
 	private static final String NEW_USER_URL = SERVER_URL + "users/new";
 
 	public static class SearchRouteParams {
+		public static final String KEY_SCOPE = "for";
+		public static final String KEY_SORT = "sort";
+		public static final String KEY_ORDER = "order";
 		public static final String SCOPE_TITLE = "title";
 		public static final String SCOPE_DESCRIPTION = "description";
 		public static final String SCOPE_USER_NAME = "user_name";
@@ -55,6 +58,8 @@ public class BasicClient {
 	}
 
 	public static class SearchExplorationParams {
+		public static final String KEY_SCOPE = "for";
+		public static final String KEY_ORDER = "order";
 		public static final String SCOPE_ROUTE_TITLE = "route_title";
 		public static final String SCOPE_ROUTE_ID = "route_id";
 		public static final String SCOPE_USER_NAME = "user_name";
