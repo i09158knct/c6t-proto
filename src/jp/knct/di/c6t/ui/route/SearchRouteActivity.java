@@ -81,7 +81,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 			mSortOptionMap.put(OPTION_SORT_LABELS[i], OPTION_SORT_VALUES[i]);
 		}
 
-		Spinner spinner = (Spinner) findViewById(R.id.search_route_order);
+		Spinner spinner = (Spinner) findViewById(R.id.search_route_sort);
 		spinner.setAdapter(adapter);
 	}
 
@@ -123,7 +123,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	}
 
 	private CharSequence getSelectedSortValue() {
-		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_order)).getSelectedItem();
+		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_sort)).getSelectedItem();
 		return mSortOptionMap.get(selectedSpinnerLabel);
 	}
 
