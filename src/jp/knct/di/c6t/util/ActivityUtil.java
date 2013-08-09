@@ -2,8 +2,10 @@ package jp.knct.di.c6t.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ActivityUtil {
@@ -56,6 +58,16 @@ public class ActivityUtil {
 		textView.setText(text);
 	}
 
+	public static void setImageBitmap(Activity container, int id, Bitmap bitmap) {
+		ImageView imageView = (ImageView) container.findViewById(id);
+		imageView.setImageBitmap(bitmap);
+	}
+
+	public static void setImageBitmap(View container, int id, Bitmap bitmap) {
+		ImageView imageView = (ImageView) container.findViewById(id);
+		imageView.setImageBitmap(bitmap);
+	}
+
 	private Activity mContainerActivity;
 	private View mContainerView;
 
@@ -91,4 +103,18 @@ public class ActivityUtil {
 			throw new AssertionError("error");
 		}
 	}
+
+	public ActivityUtil setImageBitmap(int id, Bitmap bitmap) {
+		if (mContainerActivity != null) {
+			ActivityUtil.setImageBitmap(mContainerActivity, id, bitmap);
+		}
+		else if (mContainerView != null) {
+			ActivityUtil.setImageBitmap(mContainerView, id, bitmap);
+		}
+		else {
+			throw new AssertionError("error");
+		}
+		return this;
+	}
+
 }
