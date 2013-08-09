@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 public class QuestOutcomesFragment extends ListFragment {
 	private List<QuestOutcome> mQuestOutcomes;
@@ -62,10 +61,8 @@ public class QuestOutcomesFragment extends ListFragment {
 			QuestOutcome questOutcome = mQuestOutcomes.get(position);
 			new ActivityUtil(convertView)
 					.setText(R.id.list_item_outcome_quest_pose_name, questOutcome.getPose())
-					.setText(R.id.list_item_outcome_quest_photoed_at, TimeUtil.format(questOutcome.getPhotoedAt()));
-
-			((ImageView) convertView.findViewById(R.id.list_item_outcome_quest_photo))
-					.setImageBitmap(questOutcome.decodePhotoBitmap(10));
+					.setText(R.id.list_item_outcome_quest_photoed_at, TimeUtil.format(questOutcome.getPhotoedAt()))
+					.setImageBitmap(R.id.list_item_outcome_quest_photo, questOutcome.decodePhotoBitmap(10));
 
 			return convertView;
 		}
