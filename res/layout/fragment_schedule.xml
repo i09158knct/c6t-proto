@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/schedule_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="前の日" />
+
+        <TextView
+            android:id="@+id/schedule_current_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/schedule_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="次の日" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/schedule_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+
+        <include layout="@layout/table_row_schedule_section" />
+    </TableLayout>
+
+</LinearLayout>
