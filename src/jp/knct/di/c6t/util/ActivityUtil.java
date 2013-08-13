@@ -38,6 +38,12 @@ public class ActivityUtil {
 		}
 	}
 
+	public static void setOnClickListener(View container, OnClickListener listener, int... ids) {
+		for (int id : ids) {
+			container.findViewById(id).setOnClickListener(listener);
+		}
+	}
+
 	public static String getText(Activity container, int id) {
 		TextView textView = (TextView) container.findViewById(id);
 		return textView.getText().toString();
