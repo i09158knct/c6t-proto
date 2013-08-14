@@ -27,58 +27,63 @@
             android:text="次の日" />
     </LinearLayout>
 
-    <TableLayout
-        android:id="@+id/schedule_content"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <include layout="@layout/table_row_schedule_section" />
+        <TableLayout
+            android:id="@+id/schedule_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
+            <include layout="@layout/table_row_schedule_section" />
 
-        <include layout="@layout/table_row_schedule_section" />
-    </TableLayout>
+            <include layout="@layout/table_row_schedule_section" />
+
+            <include layout="@layout/table_row_schedule_section" />
+        </TableLayout>
+    </ScrollView>
 
 </LinearLayout>
