@@ -10,6 +10,7 @@ import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.model.User;
+import jp.knct.di.c6t.ui.schedule.RouteScheduleActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
 
 import org.json.JSONException;
@@ -35,6 +36,7 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.new_exploration_ok,
+				R.id.new_exploration_schedule,
 		});
 	}
 
@@ -52,6 +54,12 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 			Toast.makeText(this, "íTçıÇÃó\íËÇçÏê¨ÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
 			startActivity(new Intent(this, ExplorationHomeActivity.class)
 					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			break;
+
+		case R.id.new_exploration_schedule:
+			Intent intent = new Intent(this, RouteScheduleActivity.class)
+					.putExtra(IntentData.EXTRA_KEY_ROUTE, mRoute);
+			startActivity(intent);
 			break;
 
 		default:

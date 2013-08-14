@@ -126,6 +126,10 @@
             android:name=".ui.schedule.MyScheduleActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".ui.schedule.RouteScheduleActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

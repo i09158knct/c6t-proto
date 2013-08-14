@@ -3,6 +3,7 @@ package jp.knct.di.c6t.ui.exploration;
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
+import jp.knct.di.c6t.ui.schedule.RouteScheduleActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
 import android.app.Activity;
 import android.content.Intent;
@@ -48,7 +49,9 @@ public class ExplorationDetailActivity extends Activity implements OnClickListen
 			break;
 
 		case R.id.exploration_detail_calender:
-			// TODO
+			intent = new Intent(this, RouteScheduleActivity.class)
+					.putExtra(IntentData.EXTRA_KEY_ROUTE, mExploration.getRoute());
+			startActivity(intent);
 			break;
 
 		case R.id.exploration_detail_share:
