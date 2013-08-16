@@ -66,8 +66,10 @@ public class ExplorationEndActivity extends Activity implements OnClickListener 
 	private void saveOutcomes(Exploration exploration, List<MissionOutcome> missionOutcomeList, List<QuestOutcome> questOutcomeList) {
 		OutcomesClient client = new OutcomesClient();
 		try {
-			client.addMissionOutcome(this, (MissionOutcome[]) missionOutcomeList.toArray());
-			client.addQuestOutcome(this, (QuestOutcome[]) questOutcomeList.toArray());
+			MissionOutcome[] missionOutcomes = missionOutcomeList.toArray(new MissionOutcome[missionOutcomeList.size()]);
+			client.addMissionOutcome(this, missionOutcomes);
+			QuestOutcome[] questOutcomes = questOutcomeList.toArray(new QuestOutcome[questOutcomeList.size()]);
+			client.addQuestOutcome(this, questOutcomes);
 			Toast.makeText(this, "ê¨â Ç™ï€ë∂Ç≥ÇÍÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
 		}
 		catch (JSONException e) {
