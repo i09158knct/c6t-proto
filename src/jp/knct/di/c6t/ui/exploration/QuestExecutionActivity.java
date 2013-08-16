@@ -13,12 +13,10 @@ import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.ImageUtil;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 public class QuestExecutionActivity extends Activity implements OnClickListener {
@@ -42,6 +40,12 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 
 		Intent intent = getIntent();
 		int questNumber = intent.getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
+
+		if (questNumber == 4) {
+			mHasMissionCompleted = true;
+			findViewById(R.id.quest_execution_capture_mission_photo).setVisibility(View.GONE);
+		}
+
 		Exploration exploration = intent.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
 		mQuest = exploration.getRoute().getQuests().get(questNumber);
 
@@ -63,11 +67,6 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 				.setText(R.id.quest_execution_pose, quest.getPose())
 				.setText(R.id.quest_execution_mission, quest.getMission())
 				.setImageBitmap(R.id.quest_execution_image, quest.decodeImageBitmap(10));
-	}
-
-	private void putImage(int id, Uri imageUri) {
-		Bitmap image = ImageUtil.decodeBitmap(imageUri.getPath(), 10);
-		((ImageView) findViewById(id)).setImageBitmap(image);
 	}
 
 	@Override

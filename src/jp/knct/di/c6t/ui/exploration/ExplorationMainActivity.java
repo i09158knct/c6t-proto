@@ -48,7 +48,7 @@ public class ExplorationMainActivity extends Activity
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationClient.connect();
 
-		setQuestImage();
+		setQuestImage(getCurrentQuest());
 	}
 
 	private void setUpMap() {
@@ -68,24 +68,24 @@ public class ExplorationMainActivity extends Activity
 
 			Outcome missionOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME);
 			Outcome questOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME);
-			mMissionOutcomes.add(missionOutcome);
-			mQuestOutcomes.add(questOutcome);
-
-			setQuestImage();
 
 			if (mCurrentQuestNumber > 4) {
 				finishExploration();
+				mQuestOutcomes.add(questOutcome);
 			}
 			else {
 				mLocationClient.connect();
+				setQuestImage(getCurrentQuest());
+				mMissionOutcomes.add(missionOutcome);
+				mQuestOutcomes.add(questOutcome);
 			}
 		}
 	}
 
-	private void setQuestImage() {
+	private void setQuestImage(Quest quest) {
 		ActivityUtil.setImageBitmap(this,
 				R.id.exploration_main_current_quest_image,
-				getCurrentQuest().decodeImageBitmap(10));
+				quest.decodeImageBitmap(10));
 	}
 
 	private void finishExploration() {
