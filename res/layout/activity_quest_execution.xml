@@ -25,6 +25,11 @@
         android:layout_height="wrap_content"
         android:text="集合写真を撮る" />
 
+    <ImageView
+        android:id="@+id/quest_execution_group_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,5 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ミッション写真を撮る" />
+
+    <ImageView
+        android:id="@+id/quest_execution_mission_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

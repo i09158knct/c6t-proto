@@ -78,7 +78,7 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 			mQuestOutcome.setPhotoedAt(new Date());
 			mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
 			ActivityUtil.setImageBitmap(this,
-					R.id.quest_execution_capture_group_photo,
+					R.id.quest_execution_group_photo,
 					mQuestOutcome.decodePhotoBitmap(10));
 		}
 
@@ -88,7 +88,7 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 			mMissionOutcome.setPhotoedAt(new Date());
 			mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
 			ActivityUtil.setImageBitmap(this,
-					R.id.quest_execution_capture_mission_photo,
+					R.id.quest_execution_mission_photo,
 					mMissionOutcome.decodePhotoBitmap(10));
 		}
 
