@@ -1,0 +1,37 @@
+<h1>Listing routes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Achievement count</th>
+      <th>Played count</th>
+      <th>Start location</th>
+      <th>Description</th>
+      <th>User</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @routes.each do |route| %>
+      <tr>
+        <td><%= route.name %></td>
+        <td><%= route.achievement_count %></td>
+        <td><%= route.played_count %></td>
+        <td><%= route.start_location %></td>
+        <td><%= route.description %></td>
+        <td><%= route.user %></td>
+        <td><%= link_to 'Show', route %></td>
+        <td><%= link_to 'Edit', edit_route_path(route) %></td>
+        <td><%= link_to 'Destroy', route, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Route', new_route_path %>

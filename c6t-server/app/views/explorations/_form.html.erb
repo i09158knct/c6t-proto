@@ -1,0 +1,45 @@
+<%= form_for(@exploration) do |f| %>
+  <% if @exploration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@exploration.errors.count, "error") %> prohibited this exploration from being saved:</h2>
+
+      <ul>
+      <% @exploration.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :start_time %><br>
+    <%= f.datetime_select :start_time %>
+  </div>
+  <div class="field">
+    <%= f.label :route %><br>
+    <%= f.text_field :route %>
+  </div>
+  <div class="field">
+    <%= f.label :user %><br>
+    <%= f.text_field :user %>
+  </div>
+  <div class="field">
+    <%= f.label :current_quest_number %><br>
+    <%= f.number_field :current_quest_number %>
+  </div>
+  <div class="field">
+    <%= f.label :current_mission_completed_number_count %><br>
+    <%= f.number_field :current_mission_completed_number_count %>
+  </div>
+  <div class="field">
+    <%= f.label :photographed %><br>
+    <%= f.check_box :photographed %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

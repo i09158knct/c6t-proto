@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @exploration.start_time %>
+</p>
+
+<p>
+  <strong>Route:</strong>
+  <%= @exploration.route %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @exploration.user %>
+</p>
+
+<p>
+  <strong>Current quest number:</strong>
+  <%= @exploration.current_quest_number %>
+</p>
+
+<p>
+  <strong>Current mission completed number count:</strong>
+  <%= @exploration.current_mission_completed_number_count %>
+</p>
+
+<p>
+  <strong>Photographed:</strong>
+  <%= @exploration.photographed %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @exploration.description %>
+</p>
+
+<%= link_to 'Edit', edit_exploration_path(@exploration) %> |
+<%= link_to 'Back', explorations_path %>

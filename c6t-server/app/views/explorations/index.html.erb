@@ -1,0 +1,39 @@
+<h1>Listing explorations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Start time</th>
+      <th>Route</th>
+      <th>User</th>
+      <th>Current quest number</th>
+      <th>Current mission completed number count</th>
+      <th>Photographed</th>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @explorations.each do |exploration| %>
+      <tr>
+        <td><%= exploration.start_time %></td>
+        <td><%= exploration.route %></td>
+        <td><%= exploration.user %></td>
+        <td><%= exploration.current_quest_number %></td>
+        <td><%= exploration.current_mission_completed_number_count %></td>
+        <td><%= exploration.photographed %></td>
+        <td><%= exploration.description %></td>
+        <td><%= link_to 'Show', exploration %></td>
+        <td><%= link_to 'Edit', edit_exploration_path(exploration) %></td>
+        <td><%= link_to 'Destroy', exploration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Exploration', new_exploration_path %>
