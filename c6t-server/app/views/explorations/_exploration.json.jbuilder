@@ -11,6 +11,15 @@ json.route do |json|
   json.partial! exploration.route
 end
 
+# NOTICE: For consistency with Android C6t app program,
+# property name of creator of exploration should be "user",
+# should NOT be "host".
 json.user do |json|
   json.partial! exploration.host
+end
+
+json.members do |json|
+  json.array(exploration.members) do |member|
+    json.partial! member
+  end
 end
