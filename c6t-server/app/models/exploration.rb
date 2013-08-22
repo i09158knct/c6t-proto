@@ -3,7 +3,7 @@ class Exploration < ActiveRecord::Base
   belongs_to :host,
     foreign_key: :user_id,
     class_name: :User
-  has_and_belongs_to_many :users,
+  has_and_belongs_to_many :members,
     join_table: :users_explorations,
     class_name: :User
 end
