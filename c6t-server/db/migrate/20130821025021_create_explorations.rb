@@ -4,7 +4,7 @@ class CreateExplorations < ActiveRecord::Migration
       t.datetime :start_time, null: false
       t.references :route, index: true, null: false
       t.references :user, index: true, null: false
-      t.integer :current_quest_number, defalut: -1
+      t.integer :current_quest_number, default: -1
       t.integer :current_mission_completed_number_count, default: 0
       t.boolean :photographed, default: false
       t.text :description, null: false

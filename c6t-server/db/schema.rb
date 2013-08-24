@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20130821153928) do
     t.datetime "start_time",                                             null: false
     t.integer  "route_id",                                               null: false
     t.integer  "user_id",                                                null: false
-    t.integer  "current_quest_number"
+    t.integer  "current_quest_number",                   default: -1
     t.integer  "current_mission_completed_number_count", default: 0
     t.boolean  "photographed",                           default: false
     t.text     "description",                                            null: false
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20130821153928) do
 
   add_index "users", ["name"], name: "index_users_on_name", unique: true
 
-  create_table "users_explorations", force: true do |t|
+  create_table "users_explorations", id: false, force: true do |t|
     t.integer "user_id"
     t.integer "exploration_id"
   end
