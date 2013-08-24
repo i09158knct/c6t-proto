@@ -1,5 +1,9 @@
 class RoutesController < ApplicationController
-  before_action :set_route, only: [:show, :edit, :update, :destroy]
+  protect_from_forgery except: [:put_quest_image]
+
+  before_action :set_route, only: [
+    :show, :edit, :update, :destroy, :put_quest_image,
+  ]
 
   # GET /routes
   # GET /routes.json
@@ -59,6 +63,25 @@ class RoutesController < ApplicationController
       format.html { redirect_to routes_url }
       format.json { head :no_content }
     end
+  end
+
+  def put_quest_image
+    quest_number = params[:quest_number].to_i
+
+    dest_dir_path = Rails.root.to_s + '/public/routes/' + params[:id] + '/images/'
+    dest_file_path = dest_dir_path + quest_number.to_s + '.png'
+
+    FileUtils.mkdir_p dest_dir_path
+    File.open(dest_file_path, 'wb') do |dest|
+      dest.write(request.body.read)
+    end
+
+    actual_path = dest_file_path.match(/public\/(routes\/.*)$/)[1]
+    photo_url = 'http://' + request.host_with_port + '/' + actual_path
+    @route.quests[quest_number].photo = photo_url
+    @route.save
+
+    render template: 'routes/show.json.jbuilder'
   end
 
   private

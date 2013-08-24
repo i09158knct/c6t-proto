@@ -1,7 +1,20 @@
 C6tServer::Application.routes.draw do
-  resources :explorations
+  resources :explorations do
+    member do
+      get 'members', action: 'get_members'
+      get 'current_quest_number', action: 'get_current_quest_number'
+      put 'members', action: 'add_member'
+      put 'start', action: 'start'
+      put ':quest_number/group_photo', action: 'put_group_photo'
+      put ':quest_number/mission_photos', action: 'put_mission_photo'
+    end
+  end
 
-  resources :routes
+  resources :routes do
+    member do
+      put 'images/:quest_number', action: 'put_quest_image'
+    end
+  end
 
   resources :users
 
@@ -45,7 +58,7 @@ C6tServer::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
-  
+
   # Example resource route with concerns:
   #   concern :toggleable do
   #     post 'toggle'
