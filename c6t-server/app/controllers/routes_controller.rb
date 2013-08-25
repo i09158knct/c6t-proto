@@ -8,7 +8,49 @@ class RoutesController < ApplicationController
   # GET /routes
   # GET /routes.json
   def index
-    @routes = Route.all
+    if params[:query].present? && params[:for].present?
+      query = params[:query]
+      case params[:for]
+      when 'route_id'
+        @routes = Routes
+          .where(route_id: query)
+
+      when 'description'
+        @routes = Routes
+          .joins(:route)
+          .where('routes.description like ?', "%#{query}%")
+
+      when 'user_name'
+        @routes = Routes
+          .joins(:user)
+          .where(users: {name: query})
+
+      when 'location'
+        # TODO
+        raise "-- not implemented (location) --"
+
+      else
+        raise "Invalid Param (for: #{params[:for]})"
+      end
+
+    else
+      @routes = Routes.all
+    end
+
+    sort_column = 'created_at'
+    if params[:sort].present?
+      case params[:sort]
+      when 'played_count'
+        sort_column = 'played_count'
+
+      when 'achievement_count'
+        sort_column = 'achievement_count'
+
+      end
+    end
+
+    order = (params[:order] == 'asc') ? 'ASC' : 'DESC'
+    @routes.order!("#{sort_column} #{order}")
   end
 
   # GET /routes/1
