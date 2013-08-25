@@ -35,15 +35,16 @@ public class BasicClient {
 	private static final String PREFERENCE_KEY_USER_AREA = "user_area";
 
 	private static final String SERVER_URL = "http://192.168.11.2:8080/";
-	private static final String EXPLORATIONS_URL = SERVER_URL + "explorations/";
-	private static final String NEW_EXPLORATION_URL = SERVER_URL + "explorations/new";
-	private static final String ROUTES_URL = SERVER_URL + "routes/";
-	private static final String NEW_ROUTE_URL = SERVER_URL + "routes/new";
-	private static final String USERS_URL = SERVER_URL + "users/";
-	private static final String NEW_USER_URL = SERVER_URL + "users/new";
+	private static final String EXPLORATIONS_URL = SERVER_URL + "explorations";
+	private static final String NEW_EXPLORATION_URL = SERVER_URL + "explorations";
+	private static final String ROUTES_URL = SERVER_URL + "routes";
+	private static final String NEW_ROUTE_URL = SERVER_URL + "routes";
+	private static final String USERS_URL = SERVER_URL + "users";
+	private static final String NEW_USER_URL = SERVER_URL + "users";
 
 	public static class SearchRouteParams {
 		public static final String KEY_SCOPE = "for";
+		public static final String KEY_QUERY = "query";
 		public static final String KEY_SORT = "sort";
 		public static final String KEY_ORDER = "order";
 		public static final String SCOPE_TITLE = "title";
@@ -59,6 +60,7 @@ public class BasicClient {
 
 	public static class SearchExplorationParams {
 		public static final String KEY_SCOPE = "for";
+		public static final String KEY_QUERY = "query";
 		public static final String KEY_ORDER = "order";
 		public static final String SCOPE_ROUTE_TITLE = "route_title";
 		public static final String SCOPE_ROUTE_ID = "route_id";
@@ -118,49 +120,45 @@ public class BasicClient {
 	 * ===========
 	 */
 
-	// GET /explorations/
+	// GET /explorations.json
+	public List<Exploration> getExplorations(String scope, String query, String order)
+			throws ClientProtocolException, JSONException, IOException, ParseException {
+		JSONArray explorationsJSON = getJsonArray(Uri.parse(EXPLORATIONS_URL + ".json").buildUpon()
+				.appendQueryParameter(SearchExplorationParams.KEY_SCOPE, scope)
+				.appendQueryParameter(SearchExplorationParams.KEY_QUERY, query)
+				.appendQueryParameter(SearchExplorationParams.KEY_ORDER, order)
+				.build()
+				.toString());
+		return Exploration.parseExplorations(explorationsJSON);
+	}
+
 	public List<Exploration> getExplorations(User user)
 			throws ClientProtocolException, JSONException, IOException, ParseException {
-		JSONArray explorationsJSON = getJsonArray(Uri.parse(EXPLORATIONS_URL).buildUpon()
-				.appendQueryParameter("user_id", "" + user.getId())
-				.build()
-				.toString());
-		return Exploration.parseExplorations(explorationsJSON);
+		return getExplorations(SearchExplorationParams.SCOPE_USER_NAME, user.getName(), "desc");
 	}
 
-	// GET /explorations/
-	public List<Exploration> getExplorations(String searchText)
-			throws ClientProtocolException, JSONException, IOException, ParseException {
-		JSONArray explorationsJSON = getJsonArray(Uri.parse(EXPLORATIONS_URL).buildUpon()
-				.appendQueryParameter("query", searchText)
-				.build()
-				.toString());
-		return Exploration.parseExplorations(explorationsJSON);
-	}
-
-	// GET /explorations/:id
-	// GET /explorations/1
+	// GET /explorations/:id.json
 	public Exploration getExploration(int id)
 			throws ClientProtocolException, JSONException, IOException, ParseException {
 		JSONObject explorationJSON = getJsonObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
-				.appendPath("" + id)
+				.appendPath(id + ".json")
 				.build()
 				.toString());
 		return Exploration.parseJSON(explorationJSON);
 	}
 
-	// POST /explorations/new
+	// POST /explorations
 	public HttpResponse postExploration(Exploration exploration)
 			throws ClientProtocolException, IOException, JSONException, ParseException {
 		return postJSONObject(NEW_EXPLORATION_URL, exploration.toJSON());
 	}
 
-	// PUT /explorations/:exploration_id/members
+	// PUT /explorations/:exploration_id/members.json
 	public HttpResponse putMember(Exploration exploration, User user)
 			throws ClientProtocolException, IOException, JSONException, ParseException {
 		return putJSONObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
 				.appendPath("" + exploration.getId())
-				.appendPath("members")
+				.appendPath("members.json")
 				.build()
 				.toString(), user.toJSON());
 	}
@@ -170,45 +168,41 @@ public class BasicClient {
 	 * =====
 	 */
 
-	// GET /routes/
+	// GET /routes.json
+	public List<Route> getRoutes(String scope, String query, String sort, String order)
+			throws ClientProtocolException, JSONException, IOException, ParseException {
+		JSONArray routesJSON = getJsonArray(Uri.parse(ROUTES_URL + ".json").buildUpon()
+				.appendQueryParameter(SearchRouteParams.KEY_SCOPE, scope)
+				.appendQueryParameter(SearchRouteParams.KEY_QUERY, query)
+				.appendQueryParameter(SearchRouteParams.KEY_SORT, sort)
+				.appendQueryParameter(SearchRouteParams.KEY_ORDER, order)
+				.build()
+				.toString());
+		return Route.parseRoutes(routesJSON);
+	}
+
 	public List<Route> getRoutes(User user)
 			throws ClientProtocolException, JSONException, IOException, ParseException {
-		JSONArray routesJSON = getJsonArray(Uri.parse(ROUTES_URL).buildUpon()
-				.appendQueryParameter("user_id", "" + user.getId())
-				.build()
-				.toString());
-		return Route.parseRoutes(routesJSON);
+		return getRoutes(SearchRouteParams.SCOPE_USER_NAME, user.getName(), "new", "desc");
 	}
 
-	// GET /routes/
-	public List<Route> getRoutes(String searchText)
-			throws ClientProtocolException, JSONException, IOException, ParseException {
-		JSONArray routesJSON = getJsonArray(Uri.parse(ROUTES_URL).buildUpon()
-				.appendQueryParameter("query", searchText)
-				.build()
-				.toString());
-		return Route.parseRoutes(routesJSON);
-	}
-
-	// GET /routes/:id
-	// GET /routes/1
+	// GET /routes/:id.json
 	public Route getRoute(int id)
 			throws ClientProtocolException, JSONException, IOException, ParseException {
 		JSONObject routeJSON = getJsonObject(Uri.parse(ROUTES_URL).buildUpon()
-				.appendPath("" + id)
+				.appendPath(id + ".json")
 				.build()
 				.toString());
 		return Route.parseJSON(routeJSON);
 	}
 
-	// POST /routes/new
+	// POST /routes
 	public HttpResponse postRoute(Route route)
 			throws ClientProtocolException, IOException, JSONException {
 		return postJSONObject(NEW_ROUTE_URL, route.toJSON());
 	}
 
 	// PUT /routes/:route_id/images/:quest_number
-	// PUT /routes/1/images/0
 	public HttpResponse putQuestImage(Route route, int questNumber)
 			throws ClientProtocolException, IOException {
 		HttpPut request = new HttpPut(Uri.parse(ROUTES_URL).buildUpon()
@@ -249,17 +243,17 @@ public class BasicClient {
 				.commit();
 	}
 
-	// GET /users/:id
+	// GET /users/:id.json
 	public User getUser(int id)
 			throws ClientProtocolException, JSONException, IOException {
 		JSONObject userJSON = getJsonObject(Uri.parse(USERS_URL).buildUpon()
-				.appendPath("" + id)
+				.appendPath("" + id + ".json")
 				.build()
 				.toString());
 		return User.parseJSON(userJSON);
 	}
 
-	// POST /users/new
+	// POST /users
 	public HttpResponse postUser(User user)
 			throws ClientProtocolException, IOException, JSONException {
 		return postJSONObject(NEW_USER_URL, user.toJSON());
