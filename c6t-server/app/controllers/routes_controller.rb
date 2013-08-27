@@ -12,16 +12,16 @@ class RoutesController < ApplicationController
       query = params[:query]
       case params[:for]
       when 'route_id'
-        @routes = Routes
+        @routes = Route
           .where(route_id: query)
 
       when 'description'
-        @routes = Routes
+        @routes = Route
           .joins(:route)
           .where('routes.description like ?', "%#{query}%")
 
       when 'user_name'
-        @routes = Routes
+        @routes = Route
           .joins(:user)
           .where(users: {name: query})
 
@@ -30,11 +30,11 @@ class RoutesController < ApplicationController
         raise "-- not implemented (location) --"
 
       else
-        raise "Invalid Param (for: #{params[:for]})"
+        @routes = Route.all
       end
 
     else
-      @routes = Routes.all
+      @routes = Route.all
     end
 
     sort_column = 'created_at'
@@ -70,7 +70,24 @@ class RoutesController < ApplicationController
   # POST /routes
   # POST /routes.json
   def create
-    @route = Route.new(route_params)
+    quests_params = params.permit(quests: [:mission, :pose, :location])[:quests]
+    quests = quests_params.map {|quest_params|
+      Quest.new(quest_params)
+    }
+
+    route_params = params.permit(
+      :name,
+      :achievement_count,
+      :played_count,
+      :start_location,
+      :description
+    )
+
+    @route = Route.new({
+      # user_id: params[:user][:id],
+      user_id: 1,
+      quests: quests,
+    }.merge(route_params))
 
     respond_to do |format|
       if @route.save
@@ -108,14 +125,16 @@ class RoutesController < ApplicationController
   end
 
   def put_quest_image
+    # image_file = request.body
+    image_file = params[:image]
     quest_number = params[:quest_number].to_i
 
     dest_dir_path = Rails.root.to_s + '/public/routes/' + params[:id] + '/images/'
-    dest_file_path = dest_dir_path + quest_number.to_s + '.png'
+    dest_file_path = dest_dir_path + quest_number.to_s + '.jpg'
 
     FileUtils.mkdir_p dest_dir_path
     File.open(dest_file_path, 'wb') do |dest|
-      dest.write(request.body.read)
+      dest.write(image_file.read)
     end
 
     actual_path = dest_file_path.match(/public\/(routes\/.*)$/)[1]
