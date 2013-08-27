@@ -1,4 +1,5 @@
 json.extract! exploration,
+  :id,
   :start_time,
   :current_quest_number,
   :current_mission_completed_number_count,
