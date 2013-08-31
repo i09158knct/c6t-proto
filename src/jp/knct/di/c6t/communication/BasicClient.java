@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -147,10 +148,14 @@ public class BasicClient {
 		return Exploration.parseJSON(explorationJSON);
 	}
 
-	// POST /explorations
-	public HttpResponse postExploration(Exploration exploration)
-			throws ClientProtocolException, IOException, JSONException, ParseException {
-		return postJSONObject(NEW_EXPLORATION_URL, exploration.toJSON());
+	// POST /explorations.json
+	public Exploration postExploration(Exploration exploration)
+			throws ClientProtocolException, IOException, JSONException, ParseException, NetworkErrorException {
+		HttpResponse response = postJSONObject(NEW_EXPLORATION_URL + ".json", exploration.toJSON());
+		if (response.getStatusLine().getStatusCode() > 300) {
+			throw new NetworkErrorException(extractEntity(response));
+		}
+		return Exploration.parseJSONString(extractEntity(response));
 	}
 
 	// PUT /explorations/:exploration_id/members.json
@@ -196,10 +201,14 @@ public class BasicClient {
 		return Route.parseJSON(routeJSON);
 	}
 
-	// POST /routes
-	public HttpResponse postRoute(Route route)
-			throws ClientProtocolException, IOException, JSONException {
-		return postJSONObject(NEW_ROUTE_URL, route.toJSON());
+	// POST /routes.json
+	public Route postRoute(Route route)
+			throws ClientProtocolException, IOException, JSONException, NetworkErrorException, ParseException {
+		HttpResponse response = postJSONObject(NEW_ROUTE_URL + ".json", route.toJSON());
+		if (response.getStatusLine().getStatusCode() >= 300) {
+			throw new NetworkErrorException(extractEntity(response));
+		}
+		return Route.parseJSONString(extractEntity(response));
 	}
 
 	// PUT /routes/:route_id/images/:quest_number
@@ -253,10 +262,15 @@ public class BasicClient {
 		return User.parseJSON(userJSON);
 	}
 
-	// POST /users
-	public HttpResponse postUser(User user)
-			throws ClientProtocolException, IOException, JSONException {
-		return postJSONObject(NEW_USER_URL, user.toJSON());
+	// POST /users.json
+	public User postUser(User user)
+			throws ClientProtocolException, IOException, JSONException, NetworkErrorException {
+		HttpResponse response = postJSONObject(NEW_USER_URL + ".json", user.toJSON());
+		if (response.getStatusLine().getStatusCode() >= 300) {
+			throw new NetworkErrorException(extractEntity(response));
+		}
+		return User.parseJSONString(extractEntity(response));
+
 	}
 
 }
