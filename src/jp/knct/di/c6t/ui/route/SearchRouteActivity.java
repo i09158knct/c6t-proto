@@ -1,5 +1,7 @@
 package jp.knct.di.c6t.ui.route;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +9,15 @@ import java.util.Map;
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.BasicClient;
-import jp.knct.di.c6t.communication.Client;
-import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.util.ActivityUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -96,9 +101,8 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.search_route_search:
-			// TODO: use httpclient
-			mRoutes = fetchRoutes();
-			setRoutes(mRoutes);
+			// TODO: display alert dialog
+			new LoadingTask().execute();
 			break;
 
 		default:
@@ -106,15 +110,8 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 		}
 	}
 
-	// TODO
-	private List<Route> fetchRoutes() {
-		Toast.makeText(this, getSelectedScopeValue(), Toast.LENGTH_SHORT).show();
-		Toast.makeText(this, getSelectedSortValue(), Toast.LENGTH_SHORT).show();
-		Toast.makeText(this, getSelectedOrderValue(), Toast.LENGTH_SHORT).show();
-
-		String searchText = ActivityUtil.getText(this, R.id.search_route_name);
-		Client client = new DebugSharedPreferencesClient(this);
-		return client.getRoutes(searchText);
+	private String getSearchQuery() {
+		return ActivityUtil.getText(this, R.id.search_route_name);
 	}
 
 	private String getSelectedScopeValue() {
@@ -122,7 +119,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 		return mScopeOptionMap.get(selectedSpinnerLabel);
 	}
 
-	private CharSequence getSelectedSortValue() {
+	private String getSelectedSortValue() {
 		String selectedSpinnerLabel = (String) ((Spinner) findViewById(R.id.search_route_sort)).getSelectedItem();
 		return mSortOptionMap.get(selectedSpinnerLabel);
 	}
@@ -146,4 +143,44 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 		setListAdapter(adapter);
 	}
 
+	private class LoadingTask extends AsyncTask<Void, Void, List<Route>> {
+		@Override
+		protected List<Route> doInBackground(Void... params) {
+			BasicClient client = new BasicClient();
+			List<Route> routes = null;
+			try {
+				routes = client.getRoutes(
+						getSelectedScopeValue(),
+						getSearchQuery(),
+						getSelectedSortValue(),
+						getSelectedOrderValue());
+			}
+			catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return routes;
+		}
+
+		@Override
+		protected void onPostExecute(List<Route> routes) {
+			mRoutes = routes;
+			setRoutes(mRoutes);
+
+			Toast.makeText(getApplicationContext(), "ÉqÉbÉgêî: " + routes.size(), Toast.LENGTH_SHORT).show();
+		}
+	}
 }
