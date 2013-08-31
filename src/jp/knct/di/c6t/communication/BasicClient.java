@@ -138,6 +138,11 @@ public class BasicClient {
 		return getExplorations(SearchExplorationParams.SCOPE_USER_NAME, user.getName(), "desc");
 	}
 
+	public List<Exploration> getExplorations(Route route)
+			throws ClientProtocolException, JSONException, IOException, ParseException {
+		return getExplorations(SearchExplorationParams.SCOPE_ROUTE_ID, "" + route.getId(), "desc");
+	}
+
 	// GET /explorations/:id.json
 	public Exploration getExploration(int id)
 			throws ClientProtocolException, JSONException, IOException, ParseException {
