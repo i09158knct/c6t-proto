@@ -11,7 +11,7 @@ def random_location_string
 end
 
 def random_recently_time
-  random_offset = 1000 * 60 * 60 * 24 * 30 * 2 * (RANDOM.rand - 0.5)
+  random_offset = 60 * 60 * 24 * 30 * 2 * (RANDOM.rand - 0.5)
   Time.at(BASE_TIME.to_i + random_offset)
 end
 
