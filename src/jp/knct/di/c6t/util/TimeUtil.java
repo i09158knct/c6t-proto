@@ -6,12 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TimeUtil {
+	private static final String DATE_FORMAT = "yyyy-MM-dd'T'H:m:s.S'Z'";
+
 	public static Date parse(String dateString) throws ParseException {
-		return new SimpleDateFormat().parse(dateString);
+		return new SimpleDateFormat(DATE_FORMAT).parse(dateString);
 	}
 
 	public static String format(Date date) {
-		return new SimpleDateFormat().format(date);
+		return new SimpleDateFormat(DATE_FORMAT).format(date);
 	}
 
 	public static String formatOnlyDate(Date date) {
