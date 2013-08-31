@@ -1,37 +1,67 @@
 # encoding: utf-8
 
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+RANDOM_SEED = 0
+RANDOM = Random.new(RANDOM_SEED)
+BASE_TIME = Time.new(2013, 9, 1)
 
-users = (1..10).map {|i|
+def random_location_string
+  latitude = 34.0 + RANDOM.rand
+  longitude = 134.0 + RANDOM.rand
+  "#{latitude},#{longitude}"
+end
+
+def random_recently_time
+  random_offset = 1000 * 60 * 60 * 24 * 30 * 2 * (RANDOM.rand - 0.5)
+  Time.at(BASE_TIME.to_i + random_offset)
+end
+
+def create_seed_user(number)
   User.create({
-    name: "#{i}郎",
-    area: "東京#{i}",
+    name: "#{number}郎",
+    area: "東京#{number}",
   })
+end
+
+def create_seed_route(user, number)
+  Route.create({
+    name: "#{user.name}のルート (#{number})",
+    start_location: random_location_string,
+    description: "日本周辺を探検する。\n期間長め",
+    user: user,
+    quests: (1..5).map {|i|
+      Quest.new({
+        location: random_location_string,
+        pose: "ピース",
+        mission: "車を撮る",
+      })
+    },
+  })
+end
+
+def create_seed_exploration(route, number)
+  Exploration.create({
+    start_time: random_recently_time,
+    route: route,
+    host: route.user,
+    description: "#{route.user.name}のテストデータ (#{number})",
+  })
+end
+
+users = (1..5).map {|i|
+  create_seed_user(i)
 }
 
-route = Route.create({
-  name: "#{users[0].name}'s route in #{users[0].area}",
-  start_location: "34.0,134.0",
-  description: "日本周辺を探検する。\n期間長め",
-  user: users[0],
-  quests: (1..5).map {|i|
-    Quest.new({
-      location: "#{34.0 + i},#{134.0 + i}",
-      pose: "ピース",
-      mission: "車を撮る",
-    })
-  },
-})
+users.each {|user|
+  (1..3).each {|number|
+    create_seed_route(user, number)
+  }
+}
 
-Exploration.create({
-  start_time: DateTime.now,
-  route: route,
-  host: users[0],
-  description: "test exploration.",
-})
+users.each {|user|
+  user.routes.each {|route|
+    (1..3).each {|number|
+      create_seed_exploration(route, number)
+    }
+  }
+}
+
