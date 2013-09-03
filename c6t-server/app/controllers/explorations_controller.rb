@@ -23,7 +23,7 @@ class ExplorationsController < ApplicationController
 
       when 'user_name'
         @explorations = Exploration
-          .joins(:user)
+          .joins(:host)
           .where(users: {name: query})
 
       else
