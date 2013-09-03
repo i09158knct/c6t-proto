@@ -14,7 +14,7 @@ json.route do |json|
 end
 
 json.members do |json|
-  json.array(exploration.members) do |member|
+  json.array!(exploration.members) do |member|
     json.partial! member
   end
 end
