@@ -69,7 +69,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	}
 
 	private void setupSearchScopeSpinner() {
-		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, OPTION_SCOPE_LABELS);
+		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, OPTION_SCOPE_LABELS);
 		mScopeOptionMap = new HashMap<String, String>();
 		for (int i = 0; i < OPTION_SCOPE_LABELS.length; i++) {
 			mScopeOptionMap.put(OPTION_SCOPE_LABELS[i], OPTION_SCOPE_VALUES[i]);
@@ -80,7 +80,7 @@ public class SearchRouteActivity extends ListActivity implements OnClickListener
 	}
 
 	private void setupSearchSortSpinner() {
-		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, OPTION_SORT_LABELS);
+		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, OPTION_SORT_LABELS);
 		mSortOptionMap = new HashMap<String, String>();
 		for (int i = 0; i < OPTION_SORT_LABELS.length; i++) {
 			mSortOptionMap.put(OPTION_SORT_LABELS[i], OPTION_SORT_VALUES[i]);

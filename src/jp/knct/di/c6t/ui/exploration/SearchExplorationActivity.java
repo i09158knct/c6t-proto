@@ -48,7 +48,7 @@ public class SearchExplorationActivity extends ListActivity implements OnClickLi
 	}
 
 	private void setupSearchScopeSpinner() {
-		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, OPTION_LABELS);
+		SpinnerAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, OPTION_LABELS);
 		mOptionMap = new HashMap<String, String>();
 		for (int i = 0; i < OPTION_LABELS.length; i++) {
 			mOptionMap.put(OPTION_LABELS[i], OPTION_VALUES[i]);
