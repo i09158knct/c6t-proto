@@ -40,7 +40,7 @@ public class ScheduleFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onActivityCreated(savedInstanceState);
 
 		setDate(new Date());
 
