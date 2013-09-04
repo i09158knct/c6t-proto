@@ -1,22 +1,27 @@
 package jp.knct.di.c6t.ui.exploration;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
-import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
+import jp.knct.di.c6t.communication.BasicClient;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.model.User;
 import jp.knct.di.c6t.ui.schedule.RouteScheduleActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,15 +50,9 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 		switch (v.getId()) {
 		case R.id.new_exploration_ok:
 			Exploration exploration = createExplorationFromForms();
-			new DebugSharedPreferencesClient(this).saveExploration(exploration);
-			try {
-				Toast.makeText(this, exploration.toJSON().toString(2), 1).show(); // TODO
-			}
-			catch (JSONException e) {}
 
-			Toast.makeText(this, "íTçıÇÃó\íËÇçÏê¨ÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
-			startActivity(new Intent(this, ExplorationHomeActivity.class)
-					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			// TODO: show dialog
+			new PostingTask().execute(exploration);
 			break;
 
 		case R.id.new_exploration_schedule:
@@ -68,7 +67,7 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 	}
 
 	private Exploration createExplorationFromForms() {
-		User myself = new DebugSharedPreferencesClient(this).getMyUserData();
+		User myself = new BasicClient().getUserFromLocal(this);
 		Date date = getDateTime();
 		String description = ActivityUtil.getText(this, R.id.new_exploration_description);
 		return new Exploration(myself, mRoute, date, description, new LinkedList<User>());
@@ -86,4 +85,58 @@ public class NewExplorationActivity extends Activity implements OnClickListener 
 		return new GregorianCalendar(year, month, day, hour, minute).getTime();
 	}
 
+	private class PostingTask extends AsyncTask<Exploration, String, Void> {
+
+		@Override
+		protected Void doInBackground(Exploration... exploration) {
+			BasicClient client = new BasicClient();
+			try {
+				client.postExploration(exploration[0]);
+			}
+			catch (ClientProtocolException e) {
+				publishProgress(e.getLocalizedMessage());
+				e.printStackTrace();
+				cancel(true);
+				return null;
+			}
+			catch (JSONException e) {
+				publishProgress(e.getLocalizedMessage());
+				e.printStackTrace();
+				cancel(true);
+				return null;
+			}
+			catch (IOException e) {
+				publishProgress(e.getLocalizedMessage());
+				e.printStackTrace();
+				cancel(true);
+				return null;
+			}
+			catch (NetworkErrorException e) {
+				publishProgress(e.getLocalizedMessage());
+				e.printStackTrace();
+				cancel(true);
+				return null;
+			}
+			catch (ParseException e) {
+				publishProgress(e.getLocalizedMessage());
+				e.printStackTrace();
+				cancel(true);
+				return null;
+			}
+
+			publishProgress("íTçıÇÃó\íËÇÃçÏê¨Ç™äÆóπÇµÇ‹ÇµÇΩ");
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(String... progressText) {
+			Toast.makeText(getApplicationContext(), progressText[0], Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		protected void onPostExecute(Void results) {
+			startActivity(new Intent(NewExplorationActivity.this, ExplorationHomeActivity.class)
+					.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		}
+	}
 }
