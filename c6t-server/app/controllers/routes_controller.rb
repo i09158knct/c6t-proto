@@ -17,8 +17,7 @@ class RoutesController < ApplicationController
 
       when 'description'
         @routes = Route
-          .joins(:route)
-          .where('routes.description like ?', "%#{query}%")
+          .where('description like ?', "%#{query}%")
 
       when 'user_name'
         @routes = Route
