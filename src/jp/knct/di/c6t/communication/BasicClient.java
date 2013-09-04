@@ -31,6 +31,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 public class BasicClient {
+	private static final String CHARSET = "utf-8";
+
 	private static final String PREFERENCE_KEY_USER_ID = "user_id";
 	private static final String PREFERENCE_KEY_USER_NAME = "user_name";
 	private static final String PREFERENCE_KEY_USER_AREA = "user_area";
@@ -73,7 +75,7 @@ public class BasicClient {
 	public static HttpResponse putJSONObject(String url, JSONObject object)
 			throws ClientProtocolException, IOException {
 		HttpPut request = new HttpPut(url);
-		StringEntity entity = new StringEntity(object.toString());
+		StringEntity entity = new StringEntity(object.toString(), CHARSET);
 		request.setEntity(entity);
 		request.setHeader("Accept", "application/json");
 		request.setHeader("Content-type", "application/json");
@@ -85,7 +87,7 @@ public class BasicClient {
 	public static HttpResponse postJSONObject(String url, JSONObject object)
 			throws ClientProtocolException, IOException {
 		HttpPost request = new HttpPost(url);
-		StringEntity entity = new StringEntity(object.toString());
+		StringEntity entity = new StringEntity(object.toString(), CHARSET);
 		request.setEntity(entity);
 		request.setHeader("Accept", "application/json");
 		request.setHeader("Content-type", "application/json");
