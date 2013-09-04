@@ -19,7 +19,7 @@ class ExplorationsController < ApplicationController
       when 'route_title'
         @explorations = Exploration
           .joins(:route)
-          .where('routes.title like ?', "%#{query}%")
+          .where('routes.name like ?', "%#{query}%")
 
       when 'user_name'
         @explorations = Exploration
