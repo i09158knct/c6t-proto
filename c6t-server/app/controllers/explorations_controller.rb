@@ -55,7 +55,11 @@ class ExplorationsController < ApplicationController
   # POST /explorations
   # POST /explorations.json
   def create
-    @exploration = Exploration.new(exploration_params)
+    @exploration = Exploration.new({
+      user_id: params[:host][:id],
+      # user_id: 1,
+      route_id: params[:route][:id],
+    }.merge(exploration_params))
 
     respond_to do |format|
       if @exploration.save
