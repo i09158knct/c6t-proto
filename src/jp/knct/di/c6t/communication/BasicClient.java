@@ -244,9 +244,9 @@ public class BasicClient {
 
 	public User getUserFromLocal(Context context) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		int id = preferences.getInt(PREFERENCE_KEY_USER_ID, -1);
-		String name = preferences.getString(PREFERENCE_KEY_USER_NAME, "new user");
-		String area = preferences.getString(PREFERENCE_KEY_USER_AREA, "unknown");
+		int id = preferences.getInt(PREFERENCE_KEY_USER_ID, 1); // FIXME: default value
+		String name = preferences.getString(PREFERENCE_KEY_USER_NAME, "1˜Y"); // FIXME: default value
+		String area = preferences.getString(PREFERENCE_KEY_USER_AREA, "unknown"); // FIXME: default value
 		return new User(name, area, id);
 	}
 
