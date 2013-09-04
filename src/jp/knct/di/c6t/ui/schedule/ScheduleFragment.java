@@ -60,10 +60,11 @@ public class ScheduleFragment extends Fragment implements OnClickListener {
 
 	public void setDate(Date date) {
 		mCurrentDate = date;
+		ActivityUtil.setText(getActivity(),
+				R.id.schedule_current_date,
+				TimeUtil.formatOnlyDate(mCurrentDate));
+
 		if (mExplorations != null && mCurrentDate != null) {
-			ActivityUtil.setText(getActivity(),
-					R.id.schedule_current_date,
-					TimeUtil.formatOnlyDate(mCurrentDate));
 			updateScheduleView();
 		}
 	}
