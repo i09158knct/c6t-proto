@@ -1,5 +1,7 @@
 package jp.knct.di.c6t.ui.exploration;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +9,15 @@ import java.util.Map;
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.BasicClient;
-import jp.knct.di.c6t.communication.Client;
-import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.util.ActivityUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,8 +75,8 @@ public class SearchExplorationActivity extends ListActivity implements OnClickLi
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.search_exploration_search:
-			mExplorations = fetchExplorations();
-			setExplorations(mExplorations);
+			// TODO: display alert dialog
+			new LoadingTask().execute();
 			break;
 
 		default:
@@ -79,14 +84,8 @@ public class SearchExplorationActivity extends ListActivity implements OnClickLi
 		}
 	}
 
-	// TODO
-	private List<Exploration> fetchExplorations() {
-		Toast.makeText(this, getSelectedScopeValue(), Toast.LENGTH_SHORT).show();
-		Toast.makeText(this, getSelectedOrderValue(), Toast.LENGTH_SHORT).show();
-
-		String searchText = ActivityUtil.getText(this, R.id.search_exploration_name);
-		Client client = new DebugSharedPreferencesClient(this);
-		return client.getExplorations(searchText);
+	private String getSearchQuery() {
+		return ActivityUtil.getText(this, R.id.search_exploration_name);
 	}
 
 	private String getSelectedScopeValue() {
@@ -111,5 +110,45 @@ public class SearchExplorationActivity extends ListActivity implements OnClickLi
 	private void setExplorations(List<Exploration> explorations) {
 		ExplorationsAdapter adapter = new ExplorationsAdapter(this, explorations);
 		setListAdapter(adapter);
+	}
+
+	private class LoadingTask extends AsyncTask<Void, Void, List<Exploration>> {
+		@Override
+		protected List<Exploration> doInBackground(Void... params) {
+			BasicClient client = new BasicClient();
+			List<Exploration> explorations = null;
+			try {
+				explorations = client.getExplorations(
+						getSelectedScopeValue(),
+						getSearchQuery(),
+						getSelectedOrderValue());
+			}
+			catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return explorations;
+		}
+
+		@Override
+		protected void onPostExecute(List<Exploration> explorations) {
+			mExplorations = explorations;
+			setExplorations(mExplorations);
+
+			Toast.makeText(getApplicationContext(), "ÉqÉbÉgêî: " + explorations.size(), Toast.LENGTH_SHORT).show();
+		}
 	}
 }
