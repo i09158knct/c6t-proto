@@ -83,8 +83,8 @@ class RoutesController < ApplicationController
     )
 
     @route = Route.new({
-      # user_id: params[:user][:id],
-      user_id: 1,
+      user_id: params[:user][:id],
+      # user_id: 1,
       quests: quests,
     }.merge(route_params))
 
