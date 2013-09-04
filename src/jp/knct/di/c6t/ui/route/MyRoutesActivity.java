@@ -39,7 +39,6 @@ public class MyRoutesActivity extends ListActivity {
 		Intent intent = new Intent(this, RouteActivity.class)
 				.putExtra(IntentData.EXTRA_KEY_ROUTE, targetRoute);
 		startActivity(intent);
-		finish();
 	}
 
 	private class LoadingTask extends AsyncTask<Void, Void, List<Route>> {
