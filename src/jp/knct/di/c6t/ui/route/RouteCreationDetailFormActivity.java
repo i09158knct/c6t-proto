@@ -6,7 +6,6 @@ import java.text.ParseException;
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.BasicClient;
-import jp.knct.di.c6t.communication.DebugSharedPreferencesClient;
 import jp.knct.di.c6t.model.Route;
 import jp.knct.di.c6t.ui.HomeActivity;
 import jp.knct.di.c6t.util.ActivityUtil;
@@ -50,8 +49,8 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 
 		case R.id.route_creation_detail_form_ok:
 			setDetailsFromEditForms(mRoute);
-			DebugSharedPreferencesClient client = new DebugSharedPreferencesClient(this);
-			mRoute.setUser(client.getMyUserData());
+			BasicClient client = new BasicClient();
+			mRoute.setUser(client.getUserFromLocal(this));
 			if (mRoute.isValid()) {
 				// TODO: display alert dialog
 				new PostingTask().execute();
