@@ -5,7 +5,8 @@ class Exploration < ActiveRecord::Base
     class_name: :User
   has_and_belongs_to_many :members,
     join_table: :users_explorations,
-    class_name: :User
+    class_name: :User,
+    uniq: true
 
   def start!
     unless started?
