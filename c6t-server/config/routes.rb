@@ -5,7 +5,7 @@ C6tServer::Application.routes.draw do
       get 'current_quest_number', action: 'get_current_quest_number'
       put 'members', action: 'add_member'
       put 'start', action: 'start'
-      put ':quest_number/group_photo', action: 'put_group_photo'
+      put ':quest_number/group_photos', action: 'put_group_photo'
       put ':quest_number/mission_photos', action: 'put_mission_photo'
     end
   end
