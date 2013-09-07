@@ -113,7 +113,7 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 
 			publishProgress("ƒ‹[ƒg‚ğì¬‚µ‚Ü‚µ‚½");
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i <= 4; i++) {
 				try {
 					response = client.putQuestImage(mRoute, i);
 				}
