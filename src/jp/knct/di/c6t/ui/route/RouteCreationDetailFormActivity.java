@@ -132,7 +132,7 @@ public class RouteCreationDetailFormActivity extends Activity implements OnClick
 
 				int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode < 300) {
-					publishProgress("クエストイメージをアップロードしました (" + i + "/5)");
+					publishProgress("クエストイメージをアップロードしました (" + (i + 1) + "/5)");
 				}
 				else {
 					publishProgress("error: " + statusCode);
