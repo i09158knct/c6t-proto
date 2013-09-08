@@ -64,6 +64,9 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.quest_execution_capture_group_photo,
 				R.id.quest_execution_capture_mission_photo,
+
+				R.id.debug_quest_execution_capture_group_photo,
+				R.id.debug_quest_execution_capture_mission_photo,
 		});
 
 		new UpdatingLoopTask().execute(mExploration);
@@ -104,22 +107,30 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE_CAPTURE_GROUP_PHOTO && resultCode == RESULT_OK) {
-			new PuttingGroupPhotoTask().execute(mExploration);
-			mHasPoseCompleted = true;
-			mQuestOutcome.setPhotoedAt(new Date());
-			mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
-			renderCapturedGroupPhoto(mQuestOutcome);
+			completeQuest();
 		}
 
 		if (requestCode == REQUEST_CODE_CAPTURE_MISSION_PHOTO && resultCode == RESULT_OK) {
-			new PuttingMissionPhotoTask().execute(mExploration);
-			mHasMissionCompleted = true;
-			mMissionOutcome.setPhotoedAt(new Date());
-			mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
-			renderCapturedMissionPhoto(mMissionOutcome);
+			completeMission();
 		}
 
 		renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
+	}
+
+	private void completeQuest() {
+		new PuttingGroupPhotoTask().execute(mExploration);
+		mHasPoseCompleted = true;
+		mQuestOutcome.setPhotoedAt(new Date());
+		mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
+		renderCapturedGroupPhoto(mQuestOutcome);
+	}
+
+	private void completeMission() {
+		new PuttingMissionPhotoTask().execute(mExploration);
+		mHasMissionCompleted = true;
+		mMissionOutcome.setPhotoedAt(new Date());
+		mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
+		renderCapturedMissionPhoto(mMissionOutcome);
 	}
 
 	@Override
@@ -147,6 +158,18 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
+
+		case R.id.debug_quest_execution_capture_group_photo:
+			mGroupPhotoUri = Uri.parse(ImageUtil.debugGetSampleImagePath(this));
+			completeQuest();
+			renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
+			break;
+
+		case R.id.debug_quest_execution_capture_mission_photo:
+			mMissionPhotoUri = Uri.parse(ImageUtil.debugGetSampleImagePath(this));
+			completeMission();
+			renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
 			break;
 
 		default:
