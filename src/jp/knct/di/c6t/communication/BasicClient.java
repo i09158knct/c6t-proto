@@ -242,6 +242,11 @@ public class BasicClient {
 	 * ====
 	 */
 
+	public boolean isUserSaved(Context context) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		return preferences.contains(PREFERENCE_KEY_USER_ID);
+	}
+
 	public User getUserFromLocal(Context context) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		int id = preferences.getInt(PREFERENCE_KEY_USER_ID, 1); // FIXME: default value
