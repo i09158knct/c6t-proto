@@ -12,6 +12,7 @@ class Exploration < ActiveRecord::Base
     unless started?
       self.current_quest_number = 0
       self.route.played_count += 1
+      self.route.save
     end
   end
 
@@ -47,7 +48,9 @@ class Exploration < ActiveRecord::Base
       if self.photographed
         if self.current_quest_number == self.route.quests.length - 1
           self.current_quest_number = STATE_COMPLETED
+          self.photographed = false
           self.route.achievement_count += 1
+          self.route.save
 
 
         elsif self.current_mission_completed_number_count >= self.members.length

@@ -139,7 +139,7 @@ class RoutesController < ApplicationController
     actual_path = dest_file_path.match(/public\/(routes\/.*)$/)[1]
     photo_url = 'http://' + request.host_with_port + '/' + actual_path
     @route.quests[quest_number].photo = photo_url
-    @route.save
+    @route.quests[quest_number].save
 
     render template: 'routes/show.json.jbuilder'
   end
