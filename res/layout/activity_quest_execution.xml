@@ -19,6 +19,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/quest_execution_group_photo_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/quest_execution_capture_group_photo"
         android:layout_width="wrap_content"
@@ -37,6 +42,11 @@
 
     <TextView
         android:id="@+id/quest_execution_mission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/quest_execution_mission_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

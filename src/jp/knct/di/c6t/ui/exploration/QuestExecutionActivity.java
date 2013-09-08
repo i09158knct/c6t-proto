@@ -1,19 +1,27 @@
 package jp.knct.di.c6t.ui.exploration;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 
 import jp.knct.di.c6t.IntentData;
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.communication.BasicClient;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.model.MissionOutcome;
 import jp.knct.di.c6t.model.Quest;
 import jp.knct.di.c6t.model.QuestOutcome;
 import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.ImageUtil;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +35,8 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 
 	private QuestOutcome mQuestOutcome;
 	private MissionOutcome mMissionOutcome;
-	private Quest mQuest;
+	private Exploration mExploration;
+	private int mQuestNumber;
 	private boolean mHasMissionCompleted = false;
 	private boolean mHasPoseCompleted = false;
 	private Uri mGroupPhotoUri;
@@ -39,73 +48,78 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 		setContentView(R.layout.activity_quest_execution);
 
 		Intent intent = getIntent();
-		int questNumber = intent.getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
+		mQuestNumber = intent.getIntExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, -1);
 
-		if (questNumber == 4) {
+		if (mQuestNumber == 4) {
 			mHasMissionCompleted = true;
-			findViewById(R.id.quest_execution_capture_mission_photo).setVisibility(View.GONE);
 		}
 
-		Exploration exploration = intent.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
-		mQuest = exploration.getRoute().getQuests().get(questNumber);
+		mExploration = intent.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
 
-		mQuestOutcome = new QuestOutcome(exploration, questNumber, null, null);
-		mMissionOutcome = new MissionOutcome(exploration, questNumber, null, null);
+		mQuestOutcome = new QuestOutcome(mExploration, mQuestNumber, null, null);
+		mMissionOutcome = new MissionOutcome(mExploration, mQuestNumber, null, null);
 
-		putQuestData(questNumber, mQuest);
-
-		// TODO: case last quest
+		renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
 				R.id.quest_execution_capture_group_photo,
 				R.id.quest_execution_capture_mission_photo,
 		});
+
+		new UpdatingLoopTask().execute(mExploration);
 	}
 
-	private void putQuestData(int questNumber, Quest quest) {
-		new ActivityUtil(this)
+	private void renderQuestData(int questNumber, Exploration exploration, Quest quest) {
+		ActivityUtil setter = new ActivityUtil(this);
+		setter
 				.setText(R.id.quest_execution_pose, quest.getPose())
 				.setText(R.id.quest_execution_mission, quest.getMission())
+				.setText(R.id.quest_execution_group_photo_state, (exploration.isPhotographed()) ?
+						"éBâeçœÇ›" : "íNÇ‡éBâeÇµÇƒÇ¢Ç‹ÇπÇÒ")
+				.setText(R.id.quest_execution_mission_state,
+						exploration.getMembers().size() + "êlíÜÅA" + exploration.getMissionCompletedNumber() + "êlÇ™éBâeÇäÆóπÇµÇƒÇ¢Ç‹Ç∑")
 				.setImageBitmap(R.id.quest_execution_image, quest.decodeImageBitmap(10));
+
+		if (mHasMissionCompleted) {
+			findViewById(R.id.quest_execution_capture_mission_photo).setVisibility(View.INVISIBLE);
+		}
+
+		if (mHasPoseCompleted) {
+			findViewById(R.id.quest_execution_capture_group_photo).setVisibility(View.INVISIBLE);
+		}
+	}
+
+	private void renderCapturedMissionPhoto(MissionOutcome outcome) {
+		ActivityUtil.setImageBitmap(this,
+				R.id.quest_execution_mission_photo,
+				outcome.decodePhotoBitmap(10));
+	}
+
+	private void renderCapturedGroupPhoto(QuestOutcome outcome) {
+		ActivityUtil.setImageBitmap(this,
+				R.id.quest_execution_group_photo,
+				outcome.decodePhotoBitmap(10));
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE_CAPTURE_GROUP_PHOTO && resultCode == RESULT_OK) {
-			// TODO: notify c6t server that group photo is taken
+			new PuttingGroupPhotoTask().execute(mExploration);
 			mHasPoseCompleted = true;
 			mQuestOutcome.setPhotoedAt(new Date());
 			mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
-			ActivityUtil.setImageBitmap(this,
-					R.id.quest_execution_group_photo,
-					mQuestOutcome.decodePhotoBitmap(10));
+			renderCapturedGroupPhoto(mQuestOutcome);
 		}
 
 		if (requestCode == REQUEST_CODE_CAPTURE_MISSION_PHOTO && resultCode == RESULT_OK) {
-			// TODO: notify c6t server that mission photo is taken
+			new PuttingMissionPhotoTask().execute(mExploration);
 			mHasMissionCompleted = true;
 			mMissionOutcome.setPhotoedAt(new Date());
 			mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
-			ActivityUtil.setImageBitmap(this,
-					R.id.quest_execution_mission_photo,
-					mMissionOutcome.decodePhotoBitmap(10));
+			renderCapturedMissionPhoto(mMissionOutcome);
 		}
 
-		// FIXME: move to continuous update process
-		checkQuestCompletion();
-	}
-
-	private void checkQuestCompletion() {
-		// FIXME: change to confirm the server side quest state
-		if (mHasMissionCompleted && mHasPoseCompleted) {
-			Toast.makeText(this, "ÉNÉGÉXÉgÇäÆóπÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
-			setResult(RESULT_OK, new Intent()
-					.putExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME, mQuestOutcome)
-					.putExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME, mMissionOutcome));
-			finish();
-		}
-
-		// TODO: save captured photos to the app local collection
+		renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
 	}
 
 	@Override
@@ -138,6 +152,168 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 		default:
 			break;
 		}
+	}
 
+	private void onExplorationUpdate(Exploration exploration) {
+		mExploration = exploration;
+		if (exploration.getQuestNumber() != mQuestNumber) {
+			finishQuest(exploration, mQuestNumber);
+			return;
+		}
+
+		renderQuestData(mQuestNumber, exploration, getCurrentQuest());
+	}
+
+	private void finishQuest(Exploration exploration, int questNumber) {
+		Toast.makeText(this, "ÉNÉGÉXÉgÇäÆóπÇµÇ‹ÇµÇΩ", Toast.LENGTH_SHORT).show();
+		setResult(RESULT_OK, new Intent()
+				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, exploration)
+				.putExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME, mQuestOutcome)
+				.putExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME, mMissionOutcome));
+		finish();
+	}
+
+	private Quest getCurrentQuest() {
+		return mExploration.getRoute().getQuests().get(mQuestNumber);
+	}
+
+	private class PuttingGroupPhotoTask extends AsyncTask<Exploration, String, Void> {
+		@Override
+		protected Void doInBackground(Exploration... exploration) {
+			BasicClient client = new BasicClient();
+			HttpResponse response = null;
+			try {
+				response = client.putGroupPhoto(exploration[0], mQuestNumber);
+			}
+			catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode >= 300) {
+				publishProgress("error: " + statusCode);
+				cancel(true);
+				return null;
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(String... progressText) {
+			Toast.makeText(getApplicationContext(), progressText[0], Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		protected void onPostExecute(Void params) {
+		}
+	}
+
+	private class PuttingMissionPhotoTask extends AsyncTask<Exploration, String, Void> {
+		@Override
+		protected Void doInBackground(Exploration... exploration) {
+			BasicClient client = new BasicClient();
+			HttpResponse response = null;
+			try {
+				response = client.putMissionPhoto(exploration[0], mQuestNumber);
+			}
+			catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode >= 300) {
+				publishProgress("error: " + statusCode);
+				cancel(true);
+				return null;
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(String... progressText) {
+			Toast.makeText(getApplicationContext(), progressText[0], Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		protected void onPostExecute(Void params) {
+		}
+	}
+
+	private class UpdatingLoopTask extends AsyncTask<Exploration, String, Exploration> {
+		private static final int interval = 2000;
+
+		@Override
+		protected Exploration doInBackground(Exploration... exploration) {
+			try {
+				Thread.sleep(interval);
+			}
+			catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			try {
+				return new BasicClient().getExploration(exploration[0].getId());
+			}
+			catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Exploration exploration) {
+			if (exploration == null) {
+				throw new AssertionError("pending...");
+			}
+
+			onExplorationUpdate(exploration);
+
+			if (exploration.getQuestNumber() == mQuestNumber) {
+				new UpdatingLoopTask().execute(exploration);
+			}
+		}
 	}
 }
