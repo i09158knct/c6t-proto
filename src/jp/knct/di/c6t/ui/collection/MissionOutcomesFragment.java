@@ -60,6 +60,7 @@ public class MissionOutcomesFragment extends ListFragment {
 
 			MissionOutcome missionOutcome = mMissionOutcomes.get(position);
 			new ActivityUtil(convertView)
+					.setText(R.id.list_item_outcome_mission_route_name, missionOutcome.getRoute().getName())
 					.setText(R.id.list_item_outcome_mission_name, missionOutcome.getMission())
 					.setText(R.id.list_item_outcome_mission_photoed_at, TimeUtil.format(missionOutcome.getPhotoedAt()))
 					.setImageBitmap(R.id.list_item_outcome_mission_photo, missionOutcome.decodePhotoBitmap(10));

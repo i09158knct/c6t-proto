@@ -60,6 +60,7 @@ public class QuestOutcomesFragment extends ListFragment {
 
 			QuestOutcome questOutcome = mQuestOutcomes.get(position);
 			new ActivityUtil(convertView)
+					.setText(R.id.list_item_outcome_quest_route_name, questOutcome.getRoute().getName())
 					.setText(R.id.list_item_outcome_quest_pose_name, questOutcome.getPose())
 					.setText(R.id.list_item_outcome_quest_photoed_at, TimeUtil.format(questOutcome.getPhotoedAt()))
 					.setImageBitmap(R.id.list_item_outcome_quest_photo, questOutcome.decodePhotoBitmap(10));
