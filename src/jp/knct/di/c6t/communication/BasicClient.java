@@ -175,6 +175,38 @@ public class BasicClient {
 				.toString(), user.toJSON());
 	}
 
+	// PUT /explorations/:exploration_id/start
+	public HttpResponse startExploration(Exploration exploration)
+			throws ClientProtocolException, IOException, JSONException, ParseException {
+		return putJSONObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
+				.appendPath("" + exploration.getId())
+				.appendPath("start")
+				.build()
+				.toString(), exploration.toJSON());
+	}
+
+	// PUT /explorations/:id/:quest_number/group_photos
+	public HttpResponse putGroupPhoto(Exploration exploration, int questNumber)
+			throws ClientProtocolException, IOException, JSONException, ParseException {
+		return putJSONObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
+				.appendPath("" + exploration.getId())
+				.appendPath("" + questNumber)
+				.appendPath("group_photos")
+				.build()
+				.toString(), exploration.toJSON()); // FIXME
+	}
+
+	// PUT /explorations/:id/:quest_number/mission_photos
+	public HttpResponse putMissionPhoto(Exploration exploration, int questNumber)
+			throws ClientProtocolException, IOException, JSONException, ParseException {
+		return putJSONObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
+				.appendPath("" + exploration.getId())
+				.appendPath("" + questNumber)
+				.appendPath("mission_photos")
+				.build()
+				.toString(), exploration.toJSON()); // FIXME
+	}
+
 	/*
 	 * Route
 	 * =====
