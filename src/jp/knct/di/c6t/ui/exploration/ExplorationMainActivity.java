@@ -1,5 +1,9 @@
 package jp.knct.di.c6t.ui.exploration;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import jp.knct.di.c6t.IntentData;
@@ -11,8 +15,11 @@ import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.MapUtil;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -66,26 +73,29 @@ public class ExplorationMainActivity extends Activity
 				resultCode == RESULT_OK) {
 			mCurrentQuestNumber++;
 
+			mExploration = data.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
 			Outcome missionOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_MISSION_OUTCOME);
 			Outcome questOutcome = data.getParcelableExtra(IntentData.EXTRA_KEY_QUEST_OUTCOME);
 
-			if (mCurrentQuestNumber > 4) {
+			if (mExploration.isFinished()) {
+				if (questOutcome != null) {
+					mQuestOutcomes.add(questOutcome);
+				}
 				finishExploration();
-				mQuestOutcomes.add(questOutcome);
 			}
 			else {
+				if (questOutcome != null) {
+					mQuestOutcomes.add(questOutcome);
+				}
+				mMissionOutcomes.add(missionOutcome);
 				mLocationClient.connect();
 				setQuestImage(getCurrentQuest());
-				mMissionOutcomes.add(missionOutcome);
-				mQuestOutcomes.add(questOutcome);
 			}
 		}
 	}
 
 	private void setQuestImage(Quest quest) {
-		ActivityUtil.setImageBitmap(this,
-				R.id.exploration_main_current_quest_image,
-				quest.decodeImageBitmap(10));
+		new LoadingQuestImageTask().execute(quest);
 	}
 
 	private void finishExploration() {
@@ -144,5 +154,38 @@ public class ExplorationMainActivity extends Activity
 
 	private Quest getCurrentQuest() {
 		return mExploration.getRoute().getQuests().get(mCurrentQuestNumber);
+	}
+
+	private class LoadingQuestImageTask extends AsyncTask<Quest, String, Drawable> {
+		ImageView imageView;
+
+		@Override
+		protected void onPreExecute() {
+			imageView = ((ImageView) findViewById(R.id.exploration_main_current_quest_image));
+			imageView.setImageDrawable(null);
+		}
+
+		@Override
+		protected Drawable doInBackground(Quest... quest) {
+			try {
+				InputStream is = (InputStream) new URL(quest[0].getImage()).getContent();
+				return Drawable.createFromStream(is, "");
+			}
+			catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Drawable drawable) {
+			imageView.setImageDrawable(drawable);
+		}
 	}
 }
