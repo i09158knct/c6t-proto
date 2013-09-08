@@ -41,9 +41,11 @@ public class ExplorationEndActivity extends Activity implements OnClickListener 
 		List<MissionOutcome> missionOutcomeList = MissionOutcome.convertOutcomes(missionOutcomes);
 		List<QuestOutcome> questOutcomeList = QuestOutcome.convertOutcomes(questOutcomes);
 
-		QuestOutcome lastQuestOutcome = questOutcomeList.get(questOutcomeList.size() - 1);
-		String lastGroupPhotoPath = lastQuestOutcome.getPhotoPath();
-		saveTrophy(exploration, lastGroupPhotoPath);
+		if (!questOutcomeList.isEmpty()) {
+			QuestOutcome lastQuestOutcome = questOutcomeList.get(questOutcomeList.size() - 1);
+			String lastGroupPhotoPath = lastQuestOutcome.getPhotoPath();
+			saveTrophy(exploration, lastGroupPhotoPath);
+		}
 		saveOutcomes(exploration, missionOutcomeList, questOutcomeList);
 	}
 

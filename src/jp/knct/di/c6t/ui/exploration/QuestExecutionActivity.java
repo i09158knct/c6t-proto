@@ -56,9 +56,6 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 
 		mExploration = intent.getParcelableExtra(IntentData.EXTRA_KEY_EXPLORATION);
 
-		mQuestOutcome = new QuestOutcome(mExploration, mQuestNumber, null, null);
-		mMissionOutcome = new MissionOutcome(mExploration, mQuestNumber, null, null);
-
 		renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
 
 		ActivityUtil.setOnClickListener(this, this, new int[] {
@@ -120,16 +117,14 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 	private void completeQuest() {
 		new PuttingGroupPhotoTask().execute(mExploration);
 		mHasPoseCompleted = true;
-		mQuestOutcome.setPhotoedAt(new Date());
-		mQuestOutcome.setPhotoPath(mGroupPhotoUri.getPath());
+		mQuestOutcome = new QuestOutcome(mExploration, mQuestNumber, new Date(), mGroupPhotoUri.getPath());
 		renderCapturedGroupPhoto(mQuestOutcome);
 	}
 
 	private void completeMission() {
 		new PuttingMissionPhotoTask().execute(mExploration);
 		mHasMissionCompleted = true;
-		mMissionOutcome.setPhotoedAt(new Date());
-		mMissionOutcome.setPhotoPath(mMissionPhotoUri.getPath());
+		mMissionOutcome = new MissionOutcome(mExploration, mQuestNumber, new Date(), mMissionPhotoUri.getPath());
 		renderCapturedMissionPhoto(mMissionOutcome);
 	}
 

@@ -87,7 +87,9 @@ public class ExplorationMainActivity extends Activity
 				if (questOutcome != null) {
 					mQuestOutcomes.add(questOutcome);
 				}
-				mMissionOutcomes.add(missionOutcome);
+				if (missionOutcome != null) {
+					mMissionOutcomes.add(missionOutcome);
+				}
 				mLocationClient.connect();
 				setQuestImage(getCurrentQuest());
 			}
