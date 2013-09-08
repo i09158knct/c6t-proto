@@ -30,6 +30,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="写真を撮る" />
+
+        <Button
+            android:id="@+id/debug_route_creation_quest_form_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(debug用)写真を撮る" />
+
     </LinearLayout>
 
     <ImageView

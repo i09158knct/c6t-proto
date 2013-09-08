@@ -51,6 +51,8 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 				R.id.route_creation_quest_form_cancel,
 				R.id.route_creation_quest_form_ok,
 				R.id.route_creation_quest_form_delete,
+
+				R.id.debug_route_creation_quest_form_camera,
 		});
 	}
 
@@ -142,6 +144,11 @@ public class RouteCreationQuestFormActivity extends Activity implements OnClickL
 					.putExtra(IntentData.EXTRA_KEY_QUEST_NUMBER, mQuestNumber);
 			setResult(RESULT_OK, intent);
 			finish();
+			break;
+
+		case R.id.debug_route_creation_quest_form_camera:
+			mImageUri = Uri.parse(ImageUtil.debugGetSampleImagePath(this));
+			putQuestImage();
 			break;
 
 		default:
