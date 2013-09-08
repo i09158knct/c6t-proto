@@ -88,6 +88,7 @@ public class ExplorationStandbyActivity extends ListActivity implements OnClickL
 				.putExtra(IntentData.EXTRA_KEY_EXPLORATION, mExploration)
 				.putExtra(IntentData.EXTRA_KEY_CAMERA_POSITION, position);
 		startActivity(intent);
+		finish();
 	}
 
 	private class JoiningTask extends AsyncTask<Exploration, String, Exploration> {
