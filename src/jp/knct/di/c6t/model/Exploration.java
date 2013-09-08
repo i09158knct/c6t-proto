@@ -17,12 +17,18 @@ import android.util.Log;
 
 public class Exploration implements Parcelable {
 
+	public static final int QUEST_NUMBER_NOT_STARTED = -1;
+	public static final int QUEST_NUMBER_FINISHED = -2;
+
 	private static final String ID = "id";
 	private static final String HOST = "host";
 	private static final String ROUTE = "route";
 	private static final String START_TIME = "start_time";
 	private static final String DESCRIPTION = "description";
 	private static final String MEMBERS = "members";
+	private static final String PHOTOGRAPHED = "photographed";
+	private static final String CURRENT_QUEST_NUMBER = "current_quest_number";
+	private static final String CURRENT_MISSION_COMPLETED_NUMBER_COUNT = "current_mission_completed_number_count";
 
 	public static List<Exploration> parseExplorations(JSONArray explorations) throws JSONException, ParseException {
 		List<Exploration> explorationList = new LinkedList<Exploration>();
@@ -44,7 +50,10 @@ public class Exploration implements Parcelable {
 		Date startTime = TimeUtil.parse(exploration.getString(START_TIME));
 		String description = exploration.getString(DESCRIPTION);
 		List<User> menbers = User.parseUsers(exploration.getJSONArray(MEMBERS));
-		return new Exploration(host, route, startTime, description, menbers, id);
+		boolean photographed = exploration.getBoolean(PHOTOGRAPHED);
+		int questNumber = exploration.getInt(CURRENT_QUEST_NUMBER);
+		int missionCompletedNumber = exploration.getInt(CURRENT_MISSION_COMPLETED_NUMBER_COUNT);
+		return new Exploration(host, route, startTime, description, menbers, id, photographed, questNumber, missionCompletedNumber);
 	}
 
 	private int id = -1;
@@ -53,14 +62,24 @@ public class Exploration implements Parcelable {
 	private Date startTime;
 	private String description;
 	private List<User> menbers;
+	private boolean photographed = false;
+	private int questNumber = QUEST_NUMBER_NOT_STARTED;
+	private int missionCompletedNumber = 0;
 
-	public Exploration(User host, Route route, Date startTime, String description, List<User> menbers, int id) {
+	public Exploration(User host, Route route, Date startTime, String description, List<User> menbers, int id, boolean photographed, int questNumber, int missioncompletedNumber) {
 		setId(id);
 		setHost(host);
 		setRoute(route);
 		setStartTime(startTime);
 		setDescription(description);
 		setMembers(menbers);
+		setPhotographed(photographed);
+		setQuestNumber(questNumber);
+		setMissionCompletedNumber(missioncompletedNumber);
+	}
+
+	public Exploration(User host, Route route, Date startTime, String description, List<User> menbers, int id) {
+		this(host, route, startTime, description, menbers, -1, false, QUEST_NUMBER_NOT_STARTED, 0);
 	}
 
 	public Exploration(User host, Route route, Date startTime, String description, List<User> menbers) {
@@ -119,6 +138,22 @@ public class Exploration implements Parcelable {
 		this.menbers = menbers;
 	}
 
+	public boolean isPhotographed() {
+		return photographed;
+	}
+
+	public void setPhotographed(boolean photographed) {
+		this.photographed = photographed;
+	}
+
+	public int getQuestNumber() {
+		return questNumber;
+	}
+
+	public void setQuestNumber(int questNumber) {
+		this.questNumber = questNumber;
+	}
+
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
@@ -127,7 +162,10 @@ public class Exploration implements Parcelable {
 					.put(ROUTE, getRoute().toJSON())
 					.put(START_TIME, TimeUtil.format(getStartTime()))
 					.put(DESCRIPTION, getDescription())
-					.put(MEMBERS, User.convertUsersToJsonArray(getMembers()));
+					.put(MEMBERS, User.convertUsersToJsonArray(getMembers()))
+					.put(PHOTOGRAPHED, isPhotographed())
+					.put(CURRENT_QUEST_NUMBER, getQuestNumber())
+					.put(CURRENT_MISSION_COMPLETED_NUMBER_COUNT, getMissionCompletedNumber());
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
@@ -139,6 +177,30 @@ public class Exploration implements Parcelable {
 	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public boolean isStarted() {
+		return getQuestNumber() != QUEST_NUMBER_NOT_STARTED;
+	}
+
+	public boolean isFinished() {
+		return getQuestNumber() == QUEST_NUMBER_FINISHED;
+	}
+
+	public int getMissionCompletedNumber() {
+		return missionCompletedNumber;
+	}
+
+	public void setMissionCompletedNumber(int missionCompletedNumber) {
+		this.missionCompletedNumber = missionCompletedNumber;
+	}
+
+	public boolean isHost(User user) {
+		return user.getId() == getHost().getId();
+	}
+
+	public boolean isMissionCompleted() {
+		return getMembers().size() >= getMissionCompletedNumber();
 	}
 
 	@Override
@@ -155,6 +217,9 @@ public class Exploration implements Parcelable {
 		dest.writeSerializable(getStartTime());
 		dest.writeString(getDescription());
 		dest.writeTypedList(getMembers());
+		dest.writeByte((byte) (isPhotographed() ? 1 : 0));
+		dest.writeInt(getQuestNumber());
+		dest.writeInt(getMissionCompletedNumber());
 	}
 
 	public static final Parcelable.Creator<Exploration> CREATOR = new Parcelable.Creator<Exploration>() {
@@ -167,7 +232,10 @@ public class Exploration implements Parcelable {
 			String description = source.readString();
 			List<User> users = new LinkedList<User>();
 			source.readTypedList(users, User.CREATOR);
-			return new Exploration(host, route, startTime, description, users, id);
+			boolean photographed = source.readByte() == 1;
+			int questNumber = source.readInt();
+			int missionCompletedNumber = source.readInt();
+			return new Exploration(host, route, startTime, description, users, id, photographed, questNumber, missionCompletedNumber);
 		}
 
 		@Override
