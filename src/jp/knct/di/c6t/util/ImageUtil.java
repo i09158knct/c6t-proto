@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 public class ImageUtil {
@@ -24,7 +25,7 @@ public class ImageUtil {
 	}
 
 	public static File createTempFile() throws IOException {
-		return File.createTempFile("c6t__", ".tmp");
+		return File.createTempFile("c6t__", ".tmp", Environment.getExternalStorageDirectory());
 	}
 
 	public static Uri createTempFileUri() throws IOException {
