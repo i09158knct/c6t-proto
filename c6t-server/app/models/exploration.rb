@@ -16,9 +16,10 @@ class Exploration < ActiveRecord::Base
     end
   end
 
-  def put_group_photo!(quest_number)
-    if self.current_quest_number == quest_number
+  def put_group_photo!(quest_number, image_file)
+    if self.current_quest_number == quest_number && !self.photographed
       self.photographed = true
+      save_group_photo(quest_number, image_file)
     end
 
     change_quest_state!
@@ -42,6 +43,16 @@ class Exploration < ActiveRecord::Base
 
     def completed?
       self.current_quest_number == STATE_COMPLETED
+    end
+
+    def save_group_photo(quest_number, image_file)
+      dest_dir_path = Rails.root.to_s + '/public/explorations/' + self.id.to_s + '/images/group/'
+      dest_file_path = dest_dir_path + quest_number.to_s + '.jpg'
+
+      FileUtils.mkdir_p dest_dir_path
+      File.open(dest_file_path, 'wb') do |dest|
+        dest.write(image_file.read)
+      end
     end
 
     def change_quest_state!

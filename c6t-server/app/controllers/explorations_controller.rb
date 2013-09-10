@@ -123,7 +123,9 @@ class ExplorationsController < ApplicationController
 
   def put_group_photo
     quest_number = params[:quest_number].to_i
-    @exploration.put_group_photo!(quest_number)
+    image_file = params[:image]
+
+    @exploration.put_group_photo!(quest_number, image_file)
     @exploration.save
     render nothing: true
   end

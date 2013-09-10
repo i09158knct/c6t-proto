@@ -125,18 +125,11 @@ class RoutesController < ApplicationController
 
   def put_quest_image
     # image_file = request.body
-    image_file = params[:image]
     quest_number = params[:quest_number].to_i
+    image_file = params[:image]
 
-    dest_dir_path = Rails.root.to_s + '/public/routes/' + params[:id] + '/images/'
-    dest_file_path = dest_dir_path + quest_number.to_s + '.jpg'
-
-    FileUtils.mkdir_p dest_dir_path
-    File.open(dest_file_path, 'wb') do |dest|
-      dest.write(image_file.read)
-    end
-
-    actual_path = dest_file_path.match(/public\/(routes\/.*)$/)[1]
+    file_path = @route.save_quest_image(quest_number, image_file)
+    actual_path = file_path.match(/public\/(routes\/.*)$/)[1]
     photo_url = 'http://' + request.host_with_port + '/' + actual_path
     @route.quests[quest_number].photo = photo_url
     @route.quests[quest_number].save
