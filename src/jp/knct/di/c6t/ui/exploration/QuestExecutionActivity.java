@@ -1,6 +1,10 @@
 package jp.knct.di.c6t.ui.exploration;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -172,14 +176,36 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 		}
 	}
 
+	public void onGroupPhotoReceive(File image) {
+		mQuestOutcome = new QuestOutcome(mExploration, mQuestNumber, new Date(), image.getPath());
+		if (canQuestFinish()) {
+			finishQuest(mExploration, mQuestNumber);
+			return;
+		}
+
+		renderCapturedGroupPhoto(mQuestOutcome);
+		renderQuestData(mQuestNumber, mExploration, getCurrentQuest());
+	}
+
+	public void onServerGroupPhotoUpdate(Exploration exploration) {
+		if (mQuestOutcome == null) { // if group photo is not captured in this device
+			new LoadingGroupPhotoTask().execute(exploration);
+		}
+	}
+
 	private void onExplorationUpdate(Exploration exploration) {
 		mExploration = exploration;
-		if (exploration.getQuestNumber() != mQuestNumber) {
+		if (canQuestFinish()) {
 			finishQuest(exploration, mQuestNumber);
 			return;
 		}
 
 		renderQuestData(mQuestNumber, exploration, getCurrentQuest());
+	}
+
+	private boolean canQuestFinish() {
+		return mExploration.getQuestNumber() != mQuestNumber &&
+				mQuestOutcome != null; // a group photo should be captured or received in this device
 	}
 
 	private void finishQuest(Exploration exploration, int questNumber) {
@@ -201,7 +227,8 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 			BasicClient client = new BasicClient();
 			HttpResponse response = null;
 			try {
-				response = client.putGroupPhoto(exploration[0], mQuestNumber);
+				File image = new File(mQuestOutcome.getPhotoPath());
+				response = client.putGroupPhoto(exploration[0], mQuestNumber, image);
 			}
 			catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
@@ -287,9 +314,12 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 
 	private class UpdatingLoopTask extends AsyncTask<Exploration, String, Exploration> {
 		private static final int interval = 2000;
+		private boolean groupPhotoIsAlreadyTaken;
 
 		@Override
 		protected Exploration doInBackground(Exploration... exploration) {
+			groupPhotoIsAlreadyTaken = exploration[0].isPhotographed();
+
 			try {
 				Thread.sleep(interval);
 			}
@@ -329,9 +359,44 @@ public class QuestExecutionActivity extends Activity implements OnClickListener 
 
 			onExplorationUpdate(exploration);
 
-			if (exploration.getQuestNumber() == mQuestNumber) {
+			if (!groupPhotoIsAlreadyTaken && exploration.isPhotographed() || isQuestChanged(exploration)) {
+				onServerGroupPhotoUpdate(exploration);
+			}
+
+			if (!isQuestChanged(exploration)) {
 				new UpdatingLoopTask().execute(exploration);
 			}
+		}
+
+		private boolean isQuestChanged(Exploration exploration) {
+			return exploration.getQuestNumber() != mQuestNumber;
+		}
+	}
+
+	private class LoadingGroupPhotoTask extends AsyncTask<Exploration, String, File> {
+		@Override
+		protected File doInBackground(Exploration... exploration) {
+			try {
+				InputStream is = (InputStream) BasicClient.getGroupPhotoUrl(exploration[0], mQuestNumber).getContent();
+				File image = ImageUtil.createTempFile();
+				ImageUtil.populateStream(is, new FileOutputStream(image));
+				return image;
+			}
+			catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(File image) {
+			onGroupPhotoReceive(image);
 		}
 	}
 }

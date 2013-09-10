@@ -45,7 +45,7 @@ public class ImageUtil {
 			FileOutputStream fos;
 			try {
 				fos = new FileOutputStream(sampleFile);
-				copy(is, fos);
+				populateStream(is, fos);
 			}
 			catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -59,7 +59,7 @@ public class ImageUtil {
 		return sampleFile.getAbsolutePath();
 	}
 
-	private static void copy(InputStream is, FileOutputStream fos) throws IOException {
+	public static void populateStream(InputStream is, FileOutputStream fos) throws IOException {
 		byte[] buff = new byte[1024];
 		int read = 0;
 

@@ -3,6 +3,8 @@ package jp.knct.di.c6t.communication;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
 
@@ -70,6 +72,28 @@ public class BasicClient {
 		public static final String SCOPE_USER_NAME = "user_name";
 		public static final String ORDER_DESC = "desc";
 		public static final String ORDER_ASC = "asc";
+	}
+
+	public static URL getGroupPhotoUrl(Exploration exploration, int questNumber) {
+		try {
+			return new URL(SERVER_URL + "explorations/" + exploration.getId() + "/images/group/" + questNumber + ".jpg");
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+			throw new AssertionError();
+		}
+	}
+
+	public static HttpResponse putImage(String url, File image)
+			throws ClientProtocolException, IOException {
+		HttpPut request = new HttpPut(url);
+
+		MultipartEntity entity = new MultipartEntity();
+		entity.addPart("image", new FileBody(image));
+		request.setEntity(entity);
+
+		HttpClient client = new DefaultHttpClient();
+		return client.execute(request);
 	}
 
 	public static HttpResponse putJSONObject(String url, JSONObject object)
@@ -186,14 +210,14 @@ public class BasicClient {
 	}
 
 	// PUT /explorations/:id/:quest_number/group_photos
-	public HttpResponse putGroupPhoto(Exploration exploration, int questNumber)
+	public HttpResponse putGroupPhoto(Exploration exploration, int questNumber, File image)
 			throws ClientProtocolException, IOException, JSONException, ParseException {
-		return putJSONObject(Uri.parse(EXPLORATIONS_URL).buildUpon()
+		return putImage(Uri.parse(EXPLORATIONS_URL).buildUpon()
 				.appendPath("" + exploration.getId())
 				.appendPath("" + questNumber)
 				.appendPath("group_photos")
 				.build()
-				.toString(), exploration.toJSON()); // FIXME
+				.toString(), image);
 	}
 
 	// PUT /explorations/:id/:quest_number/mission_photos
@@ -253,20 +277,13 @@ public class BasicClient {
 	// PUT /routes/:route_id/images/:quest_number
 	public HttpResponse putQuestImage(Route route, int questNumber)
 			throws ClientProtocolException, IOException {
-		HttpPut request = new HttpPut(Uri.parse(ROUTES_URL).buildUpon()
+		File image = new File(route.getQuests().get(questNumber).getImage());
+		return putImage(Uri.parse(ROUTES_URL).buildUpon()
 				.appendPath("" + route.getId())
 				.appendPath("images")
 				.appendPath("" + questNumber)
 				.build()
-				.toString());
-
-		MultipartEntity entity = new MultipartEntity();
-		File image = new File(route.getQuests().get(questNumber).getImage());
-		entity.addPart("image", new FileBody(image));
-		request.setEntity(entity);
-
-		HttpClient client = new DefaultHttpClient();
-		return client.execute(request);
+				.toString(), image);
 	}
 
 	/*
