@@ -7,6 +7,7 @@ import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.communication.OutcomesClient;
 import jp.knct.di.c6t.model.Trophy;
 import jp.knct.di.c6t.util.ActivityUtil;
+import jp.knct.di.c6t.util.ImageUtil;
 import jp.knct.di.c6t.util.TimeUtil;
 
 import org.json.JSONException;
@@ -62,9 +63,8 @@ public class TrophiesActivity extends ListActivity {
 			Trophy trophy = mTrophies.get(position);
 			new ActivityUtil(convertView)
 					.setText(R.id.list_item_trophy_route_name, trophy.getExploration().getRoute().getName())
-					.setText(R.id.list_item_trophy_achieved_at, TimeUtil.format(trophy.getAchievedAt()));
-
-			// TODO: set images
+					.setText(R.id.list_item_trophy_achieved_at, TimeUtil.format(trophy.getAchievedAt()))
+					.setImageBitmap(R.id.list_item_trophy_group_photo, ImageUtil.decodeBitmap(trophy.getPhotoUri(), 10));
 
 			return convertView;
 		}
