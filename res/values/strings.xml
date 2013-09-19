@@ -30,4 +30,18 @@
         <item>千手観音像のポーズで撮れ</item>
     </string-array>
 
+    <string name="action_help">Help</string>
+
+    <string name="help_text_home"><![CDATA[
+<!doctype html>
+<head></head>
+<body>
+<div>
+	<h1>Home</h1>
+	<p>ホーム画面です。</p>
+</div>
+</body>
+</html>
+]]></string>
+
 </resources>

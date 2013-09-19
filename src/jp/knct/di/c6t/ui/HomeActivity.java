@@ -1,6 +1,7 @@
 package jp.knct.di.c6t.ui;
 
 import jp.knct.di.c6t.R;
+import jp.knct.di.c6t.action.HelpAction;
 import jp.knct.di.c6t.communication.BasicClient;
 import jp.knct.di.c6t.ui.collection.CollectionHomeActivity;
 import jp.knct.di.c6t.ui.exploration.ExplorationHomeActivity;
@@ -13,6 +14,7 @@ import jp.knct.di.c6t.util.ActivityUtil.ActivityLink;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 
 public class HomeActivity extends Activity {
 	@Override
@@ -32,5 +34,11 @@ public class HomeActivity extends Activity {
 				new ActivityLink(R.id.home_my_routes, MyRoutesActivity.class),
 				new ActivityLink(R.id.home_creation, RouteCreationActivity.class),
 		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		HelpAction.addHelpAction(this, menu, this.getClass());
+		return super.onCreateOptionsMenu(menu);
 	}
 }
