@@ -8,6 +8,10 @@ class Exploration < ActiveRecord::Base
     class_name: :User,
     uniq: true
 
+  scope :not_started, -> {
+    where(current_quest_number: -1)
+  }
+
   def start!
     unless started?
       self.current_quest_number = 0

@@ -14,15 +14,18 @@ class ExplorationsController < ApplicationController
       case params[:for]
       when 'route_id'
         @explorations = Exploration
+          .not_started
           .where(route_id: query)
 
       when 'route_title'
         @explorations = Exploration
+          .not_started
           .joins(:route)
           .where('routes.name like ?', "%#{query}%")
 
       when 'user_name'
         @explorations = Exploration
+          .not_started
           .joins(:host)
           .where(users: {name: query})
 
@@ -31,7 +34,7 @@ class ExplorationsController < ApplicationController
       end
 
     else
-      @explorations = Exploration.all
+      @explorations = Exploration.not_started
     end
 
     order = (params[:order] == 'asc') ? 'ASC' : 'DESC'
