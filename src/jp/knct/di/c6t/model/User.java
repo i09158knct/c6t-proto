@@ -114,8 +114,8 @@ public class User implements Parcelable {
 		@Override
 		public User createFromParcel(Parcel source) {
 			int id = source.readInt();
-			String area = source.readString();
 			String name = source.readString();
+			String area = source.readString();
 			return new User(name, area, id);
 		}
 
