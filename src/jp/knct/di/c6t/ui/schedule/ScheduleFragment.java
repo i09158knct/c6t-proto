@@ -8,17 +8,20 @@ import jp.knct.di.c6t.R;
 import jp.knct.di.c6t.model.Exploration;
 import jp.knct.di.c6t.util.ActivityUtil;
 import jp.knct.di.c6t.util.TimeUtil;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-public class ScheduleFragment extends Fragment implements OnClickListener {
+public class ScheduleFragment extends Fragment implements OnClickListener, OnDateSetListener {
 
 	private Date mCurrentDate;
 	private List<Exploration> mExplorations;
@@ -44,10 +47,27 @@ public class ScheduleFragment extends Fragment implements OnClickListener {
 
 		setDate(new Date());
 
+		Calendar calendar = Calendar.getInstance();
+		DatePickerDialog dialog = new DatePickerDialog(
+				getActivity(),
+				this,
+				calendar.get(Calendar.YEAR),
+				calendar.get(Calendar.MONTH),
+				calendar.get(Calendar.DAY_OF_MONTH));
+		dialog.getDatePicker().setSpinnersShown(false);
+		dialog.getDatePicker().setCalendarViewShown(true);
+		dialog.setTitle("“ú•t‚ðŽw’è‚µ‚Ä‚­‚¾‚³‚¢");
+		dialog.show();
+
 		ActivityUtil.setOnClickListener(mScheduleRoot, this, new int[] {
 				R.id.schedule_back,
 				R.id.schedule_next,
 		});
+	}
+
+	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+		setDate(new Date(year - 1900, monthOfYear, dayOfMonth));
 	}
 
 	public void setExplorations(List<Exploration> explorations) {
