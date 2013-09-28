@@ -101,7 +101,7 @@ public class ScheduleFragment extends Fragment implements OnClickListener {
 		ExplorationPin pin = (ExplorationPin) getActivity().getLayoutInflater()
 				.inflate(R.layout.item_scheduled_exploration, null);
 		pin.setExploration(exploration);
-		pin.setOnClickListener(mListener);
+		pin.setOnClickListener(this);
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20, 20);
 		int marginTop = (int) ((50 - 20) * (minute / 60.0)); // 50 = height of container
@@ -122,6 +122,9 @@ public class ScheduleFragment extends Fragment implements OnClickListener {
 			break;
 
 		default:
+			if (v instanceof ExplorationPin && mListener != null) {
+				mListener.onClick(v);
+			}
 			break;
 		}
 	}
