@@ -3,6 +3,7 @@
 
     <string name="app_name">C6t</string>
     <string name="action_settings">Settings</string>
+    <string name="action_choose_order">Choose Order</string>
     <string name="hello_world">Hello world!</string>
 
     <string-array name="mission_subjects">
