@@ -24,8 +24,7 @@
     <TextView
         android:id="@+id/list_item_outcome_mission_photoed_at"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/list_item_outcome_mission_photo"
@@ -43,5 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/list_item_outcome_mission_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

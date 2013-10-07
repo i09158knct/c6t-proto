@@ -56,8 +56,10 @@ public class ScheduleFragment extends Fragment implements OnClickListener, OnDat
 				calendar.get(Calendar.DAY_OF_MONTH));
 		dialog.getDatePicker().setSpinnersShown(false);
 		dialog.getDatePicker().setCalendarViewShown(true);
+		dialog.getDatePicker().setMinDate((new Date()).getTime());
 		dialog.setTitle("“ú•t‚ðŽw’è‚µ‚Ä‚­‚¾‚³‚¢");
 		dialog.show();
+		dialog.getDatePicker();
 
 		ActivityUtil.setOnClickListener(mScheduleRoot, this, new int[] {
 				R.id.schedule_back,
@@ -86,6 +88,12 @@ public class ScheduleFragment extends Fragment implements OnClickListener, OnDat
 
 		if (mExplorations != null && mCurrentDate != null) {
 			updateScheduleView();
+			if (TimeUtil.isSameDay(mCurrentDate, new Date())) {
+				mScheduleRoot.findViewById(R.id.schedule_back).setVisibility(View.INVISIBLE);
+			}
+			else {
+				mScheduleRoot.findViewById(R.id.schedule_back).setVisibility(View.VISIBLE);
+			}
 		}
 	}
 

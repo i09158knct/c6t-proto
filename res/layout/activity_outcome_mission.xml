@@ -10,7 +10,7 @@
         android:text="ルート名" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_route_name"
+        android:id="@+id/outcome_mission_route_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Large Text"
@@ -22,13 +22,12 @@
         android:text="撮影日" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_photoed_at"
+        android:id="@+id/outcome_mission_photoed_at"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="wrap_content" />
 
     <ImageView
-        android:id="@+id/list_item_outcome_quest_photo"
+        android:id="@+id/outcome_mission_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/common_signin_btn_icon_dark" />
@@ -36,17 +35,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ポーズ" />
+        android:text="ミッション" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_pose_name"
+        android:id="@+id/outcome_mission_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_comment"
+        android:id="@+id/outcome_mission_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    
+
 </LinearLayout>

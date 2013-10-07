@@ -12,4 +12,6 @@ public class IntentData {
 	public static final String EXTRA_KEY_MISSION_OUTCOME = PREFIX_PACKAGE_NAME + ".keymissionoutcome";
 	public static final String EXTRA_KEY_QUEST_OUTCOME_LIST = PREFIX_PACKAGE_NAME + ".kyequestoutcomelist";
 	public static final String EXTRA_KEY_MISSION_OUTCOME_LIST = PREFIX_PACKAGE_NAME + ".keymissionoutcomelist";
+	public static final String EXTRA_KEY_TROPHY = PREFIX_PACKAGE_NAME + ".keytrophy";
+	public static final String EXTRA_KEY_OUTCOME = PREFIX_PACKAGE_NAME + ".keyoutcome";
 }

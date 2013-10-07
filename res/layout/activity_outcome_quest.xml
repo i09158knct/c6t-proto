@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
 
     <TextView
         android:layout_width="wrap_content"
@@ -10,7 +11,7 @@
         android:text="ルート名" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_route_name"
+        android:id="@+id/outcome_quest_route_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Large Text"
@@ -22,13 +23,13 @@
         android:text="撮影日" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_photoed_at"
+        android:id="@+id/outcome_quest_photoed_at"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/list_item_outcome_quest_photo"
+        android:id="@+id/outcome_quest_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/common_signin_btn_icon_dark" />
@@ -39,13 +40,13 @@
         android:text="ポーズ" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_pose_name"
+        android:id="@+id/outcome_quest_pose_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/list_item_outcome_quest_comment"
+        android:id="@+id/outcome_quest_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     

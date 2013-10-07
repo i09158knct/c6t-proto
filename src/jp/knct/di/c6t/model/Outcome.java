@@ -23,6 +23,7 @@ public class Outcome implements Parcelable {
 	private static final String QUEST_NUMBER = "quest_number";
 	private static final String PHOTOED_AT = "photoed_at";
 	private static final String PHOTO_PATH = "photo_path";
+	private static final String COMMENT = "comment";
 
 	public static List<Outcome> parseOutcomes(JSONArray outcomes) throws JSONException, ParseException {
 		List<Outcome> outcomeList = new LinkedList<Outcome>();
@@ -50,19 +51,26 @@ public class Outcome implements Parcelable {
 		int questNumber = outcome.getInt(QUEST_NUMBER);
 		Date photoedAt = TimeUtil.parse(outcome.getString(PHOTOED_AT));
 		String photoPath = outcome.getString(PHOTO_PATH);
-		return new Outcome(exploration, questNumber, photoedAt, photoPath);
+		String comment = outcome.getString(COMMENT);
+		return new Outcome(exploration, questNumber, photoedAt, photoPath, comment);
 	}
 
 	private Exploration exploration;
 	private int questNumber;
 	private Date photoedAt;
 	private String photoPath;
+	private String comment;
 
 	public Outcome(Exploration exploration, int questNumber, Date photoedAt, String photoPath) {
+		this(exploration, questNumber, photoedAt, photoPath, "");
+	}
+
+	public Outcome(Exploration exploration, int questNumber, Date photoedAt, String photoPath, String comment) {
 		setExploration(exploration);
 		setQuestNumber(questNumber);
 		setPhotoedAt(photoedAt);
 		setPhotoPath(photoPath);
+		setComment(comment);
 	}
 
 	public Exploration getExploration() {
@@ -109,13 +117,22 @@ public class Outcome implements Parcelable {
 		return getExploration().getRoute().getQuests().get(getQuestNumber());
 	}
 
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	public JSONObject toJSON() {
 		try {
 			return new JSONObject()
 					.put(ROUTE, getExploration().toJSON())
 					.put(QUEST_NUMBER, getQuestNumber())
 					.put(PHOTOED_AT, TimeUtil.format(getPhotoedAt()))
-					.put(PHOTO_PATH, getPhotoPath());
+					.put(PHOTO_PATH, getPhotoPath())
+					.put(COMMENT, getComment());
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
@@ -136,6 +153,7 @@ public class Outcome implements Parcelable {
 		dest.writeInt(getQuestNumber());
 		dest.writeSerializable(getPhotoedAt());
 		dest.writeString(getPhotoPath());
+		dest.writeString(getComment());
 	};
 
 	public static final Parcelable.Creator<Outcome> CREATOR = new Parcelable.Creator<Outcome>() {
@@ -145,7 +163,8 @@ public class Outcome implements Parcelable {
 			int questNumber = source.readInt();
 			Date photoedAt = (Date) source.readSerializable();
 			String photoPath = source.readString();
-			return new Outcome(exploration, questNumber, photoedAt, photoPath);
+			String comment = source.readString();
+			return new Outcome(exploration, questNumber, photoedAt, photoPath, comment);
 		}
 
 		@Override

@@ -22,6 +22,7 @@ public class Trophy implements Parcelable {
 	private static final String EXPLORATIOIN = "exploration";
 	private static final String ACHIEVED_AT = "achieved_at";
 	private static final String PHOTO_URI = "photo_uri";
+	private static final String COMMENT = "comment";
 
 	public static List<Trophy> parseTrophies(String trophies) throws JSONException, ParseException {
 		return parseTrophies(new JSONArray(trophies));
@@ -52,17 +53,24 @@ public class Trophy implements Parcelable {
 		Exploration exploration = Exploration.parseJSON(trophy.getJSONObject(EXPLORATIOIN));
 		Date achievedAt = TimeUtil.parse(trophy.getString(ACHIEVED_AT));
 		String photoUri = trophy.getString(PHOTO_URI);
-		return new Trophy(exploration, achievedAt, photoUri);
+		String comment = trophy.getString(COMMENT);
+		return new Trophy(exploration, achievedAt, photoUri, comment);
 	}
 
 	private Exploration exploration;
 	private Date achievedAt;
 	private String photoUri;
+	private String comment;
 
 	public Trophy(Exploration exploration, Date achievedAt, String photoUri) {
+		this(exploration, achievedAt, photoUri, "");
+	}
+
+	public Trophy(Exploration exploration, Date achievedAt, String photoUri, String comment) {
 		setExploration(exploration);
 		setAchievedAt(achievedAt);
 		setPhotoUri(photoUri);
+		setComment(comment);
 	}
 
 	public Exploration getExploration() {
@@ -89,6 +97,14 @@ public class Trophy implements Parcelable {
 		this.photoUri = photoUri;
 	}
 
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	public Bitmap decodePhotoBitmap(int scale) {
 		return ImageUtil.decodeBitmap(getPhotoUri(), scale);
 	}
@@ -98,7 +114,8 @@ public class Trophy implements Parcelable {
 			return new JSONObject()
 					.put(EXPLORATIOIN, getExploration().toJSON())
 					.put(ACHIEVED_AT, TimeUtil.format(getAchievedAt()))
-					.put(PHOTO_URI, getPhotoUri());
+					.put(PHOTO_URI, getPhotoUri())
+					.put(COMMENT, getComment());
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
@@ -118,6 +135,7 @@ public class Trophy implements Parcelable {
 		dest.writeParcelable(getExploration(), -1);
 		dest.writeSerializable(getAchievedAt());
 		dest.writeString(getPhotoUri());
+		dest.writeString(getComment());
 	};
 
 	public static final Parcelable.Creator<Trophy> CREATOR = new Parcelable.Creator<Trophy>() {
@@ -126,7 +144,8 @@ public class Trophy implements Parcelable {
 			Exploration exploration = source.readParcelable(Exploration.class.getClassLoader());
 			Date achievedAt = (Date) source.readSerializable();
 			String photoUri = source.readString();
-			return new Trophy(exploration, achievedAt, photoUri);
+			String comment = source.readString();
+			return new Trophy(exploration, achievedAt, photoUri, comment);
 		}
 
 		@Override
